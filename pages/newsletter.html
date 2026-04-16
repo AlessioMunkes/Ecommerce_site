@@ -28,9 +28,92 @@
         </nav>
     </header>
 
-    <!-- TITLE CARD -->
-    <div class="title-container">
-        <h1>Roots</h1>
-    </div>
+    <!-- PAGE BODY -->
+    <div class="newsletter-page">
+ 
+        <!-- NEWSLETTER TITLE CARD -->
+        <div class="newsletter-title-card">
+            <h1>Community Impact — April 2026</h1>
+        </div>
+ 
+        <!-- MAIN ARTICLE -->
+        <article class="newsletter-article">
+ 
+            <!-- LEFT COLUMN: image + caption text -->
+            <div class="newsletter-left">
+                <div class="newsletter-img-wrap">
+                    <img src="../media/farm-homepage.jpg" alt="Community farm" class="newsletter-img">
+                </div>
+                <div class="newsletter-caption">
+                    <p>Farmers from the Khayelitsha collective harvested over 2 tonnes of spinach this month, with each contributing member receiving their proportional payout within 48 hours of sale.</p>
+                    <p>New irrigation channels funded by last quarter's equipment pool are already showing results, with water usage down 30% across participating plots.</p>
+                    <p>The collective welcomed 14 new farming families this April, bringing the total community membership to 312 households across 6 townships.</p>
+                    <p>Seed sharing initiative launched — members can now list surplus seeds through the platform free of charge.</p>
+                </div>
+            </div>
+ 
+            <!-- DIVIDER -->
+            <div class="newsletter-divider"></div>
+ 
+            <!-- RIGHT COLUMN: subtitle + segments -->
+            <div class="newsletter-right">
+ 
+                <!-- Subtitle block -->
+                <div class="newsletter-segment">
+                    <h2 class="newsletter-subtitle">This Month in Numbers</h2>
+                    <p>Total produce sold: <strong>4,820 kg</strong> across all collectives.</p>
+                    <p>Average payout per farmer: <strong>R1,240</strong> — up 18% from March.</p>
+                    <p>Equipment pool purchases: <strong>3 water pumps, 12 hand tool sets.</strong></p>
+                    <p>New members joined: <strong>14 households</strong> across Khayelitsha and Mitchells Plain.</p>
+                </div>
+ 
+                <!-- Segment block -->
+                <div class="newsletter-segment">
+                    <h2 class="newsletter-subtitle">Spotlight: Equipment Sharing</h2>
+                    <p>This month we piloted a tool-sharing rotation between three neighbouring plots. Farmers reported saving an average of R320 each by borrowing instead of buying.</p>
+                    <p>The rotation system is now being rolled out to all collectives. Sign up through your community dashboard to participate.</p>
+                    <p>Next month's bulk order closes on the 20th — submit your equipment requests before then to qualify for the group discount.</p>
+                </div>
+ 
+                <!-- Segment block -->
+                <div class="newsletter-segment">
+                    <h2 class="newsletter-subtitle">Upcoming Events</h2>
+                    <p>Soil health workshop — Saturday 26 April, Gugulethu Community Hall, 10:00–13:00.</p>
+                    <p>Collective payout day — Friday 2 May. All members will receive their April earnings via EFT.</p>
+                    <p>New season planting guide available now on the platform — download from your dashboard.</p>
+                </div>
+ 
+            </div>
+        </article>
+ 
+        <!-- SUBSCRIBE BANNER -->
+        <div class="newsletter-subscribe">
+            <p>Get the next issue delivered to your inbox</p>
+            <div class="subscribe-form">
+                <input type="email" placeholder="your@email.com" class="subscribe-input" id="subEmail">
+                <button class="btn btn-primary" id="subBtn">Subscribe</button>
+            </div>
+        </div>
+ 
+    </div><!-- /newsletter-page -->
+ 
+    <script src="../scripts/scripts.js"></script>
+    <script>
+        const subBtn   = document.getElementById('subBtn');
+        const subEmail = document.getElementById('subEmail');
+        subBtn.addEventListener('click', () => {
+            if (!subEmail.value.includes('@')) {
+                subEmail.style.borderColor = '#c0622a';
+                return;
+            }
+            subBtn.textContent = '✓ Subscribed!';
+            subBtn.style.backgroundColor = '#015005';
+            subEmail.value = '';
+            setTimeout(() => {
+                subBtn.textContent = 'Subscribe';
+                subBtn.style.backgroundColor = '';
+            }, 3000);
+        });
+    </script>
 </body>
 </html>
