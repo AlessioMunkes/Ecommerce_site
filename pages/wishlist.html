@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="Stylesheet" href="../styles/styles.css" />
+</head>
+<body>
+     <header class="header">
+        <div class="header-brand">
+            <h3><a href="index.html">Roots</a></h3>
+        </div>
+        <input type="checkbox" id="nav-toggle" class="nav-toggle">
+        <label for="nav-toggle" class="hamburger">
+            <span></span>
+            <span></span>
+            <span></span>
+        </label>
+        <nav class="links">
+            <a href="index.html">Home</a>
+            <a href="produce_products.html">Products</a>
+            <a href="newsletter.html">Newsletter</a>
+            <a href="about_us.html">About Us</a>
+            <a href="contact_us.html">Contact Us</a>
+            <a href="wishlist.html">Wishlist</a>
+            <a href="cart.html">Shopping Cart</a>
+        </nav>
+    </header>
+
+    <!-- TITLE CARD -->
+    <div class="title-container">
+        <h1>Roots</h1>
+    </div>
+        <div class="cart-container">
+        <h1 class="section-title-card">My Wishlist</h1>
+        <div id="wishlistItems"></div>
+    </div>
+
+    <script src="../scripts/scripts.js"></script>
+    <script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const wishlist  = getWishlist();
+        const container = document.getElementById('wishlistItems');
+
+        if (wishlist.length === 0) {
+            container.innerHTML = '<p style="text-align:center; margin-top:40px;">Your wishlist is empty.</p>';
+            return;
+        }
+
+        container.innerHTML = wishlist.map(item => `
+            <div class="cart-item">
+                <span class="cart-item-name">${item.name}</span>
+                <span class="cart-item-price">R${parseFloat(item.price).toFixed(2)}</span>
+                <button class="btn btn-primary" onclick="moveToCart('${item.id}', '${item.name}', ${item.price})">Add to Cart</button>
+                <button class="btn btn-cart"    onclick="removeFromWishlist('${item.id}')">Remove</button>
+            </div>`
+        ).join('');
+    });
+
+    function removeFromWishlist(id) {
+        const wishlist = getWishlist();
+        saveWishlist(wishlist.filter(item => item.id !== id));
+        location.reload();
+    }
+
+    function moveToCart(id, name, price) {
+        addToCart(id, name, price);
+        removeFromWishlist(id);
+    }
+    </script>
+</body>
+</html>

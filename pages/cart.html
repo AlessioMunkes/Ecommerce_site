@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="Stylesheet" href="../styles/styles.css" />
+</head>
+<body>
+     <header class="header">
+        <div class="header-brand">
+            <h3><a href="index.html">Roots</a></h3>
+        </div>
+        <input type="checkbox" id="nav-toggle" class="nav-toggle">
+        <label for="nav-toggle" class="hamburger">
+            <span></span>
+            <span></span>
+            <span></span>
+        </label>
+        <nav class="links">
+            <a href="index.html">Home</a>
+            <a href="produce_products.html">Products</a>
+            <a href="newsletter.html">Newsletter</a>
+            <a href="about_us.html">About Us</a>
+            <a href="contact_us.html">Contact Us</a>
+            <a href="wishlist.html">Wishlist</a>
+            <a href="cart.html">Shopping Cart</a>
+        </nav>
+    </header>
+
+    <!-- TITLE CARD -->
+    <div class="title-container">
+        <h1>Roots</h1>
+    </div>
+
+            <div class="cart-container">
+        <h1 class="section-title-card">Shopping Cart</h1>
+        <div id="cartItems"></div>
+        <div class="cart-total">
+            <strong>Total: <span id="cartTotal">R0.00</span></strong>
+        </div>
+        <button class="btn btn-primary" onclick="clearCart()">Clear Cart</button>
+    </div>
+
+    <script src="../scripts/scripts.js"></script>
+    <script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const cart      = getCart();
+        const container = document.getElementById('cartItems');
+        const totalEl   = document.getElementById('cartTotal');
+
+        if (cart.length === 0) {
+            container.innerHTML = '<p style="text-align:center; margin-top:40px;">Your cart is empty.</p>';
+            return;
+        }
+
+        let total = 0;
+        container.innerHTML = cart.map(item => {
+            const lineTotal = item.price * item.qty;
+            total += lineTotal;
+            return `
+            <div class="cart-item">
+                <span class="cart-item-name">${item.name}</span>
+                <span class="cart-item-qty">x${item.qty}</span>
+                <span class="cart-item-price">R${lineTotal.toFixed(2)}</span>
+                <button class="btn btn-cart" onclick="removeFromCart('${item.id}')">Remove</button>
+            </div>`;
+        }).join('');
+
+        totalEl.textContent = `R${total.toFixed(2)}`;
+    });
+
+    function removeFromCart(id) {
+        const cart    = getCart();
+        const updated = cart.filter(item => item.id !== id);
+        saveCart(updated);
+        location.reload();
+    }
+
+    function clearCart() {
+        saveCart([]);
+        location.reload();
+    }
+    </script>
+</body>
+</html>
