@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Equipment Products</title>
+    <link rel="stylesheet" href="styles.css">
+    <script src="script.js" defer></script>
+</head>
+<body>
+    <header>
+        <h1>Equipment Products</h1>
+    </header>
+    <div class="container">
+        <aside class="sidebar">
+            <h2>Filter by Category</h2>
+            <form id="filter-form">
+                <label>
+                    <input type="checkbox" id="equipment-filter" checked>
+                    Equipment
+                </label>
+                <label>
+                    <input type="checkbox" id="accessories-filter">
+                    Accessories
+                </label>
+            </form>
+        </aside>
+        <main class="product-grid">
+            <h2>All Products</h2>
+            <div id="products-list"></div>
+        </main>
+    </div>
+    <script>
+        // JavaScript to load products and apply filters
+        document.addEventListener('DOMContentLoaded', function() {
+            const equipmentFilter = document.getElementById('equipment-filter');
+            const productsList = document.getElementById('products-list');
+
+            function loadProducts() {
+                // Example: Replace with actual product loading
+                const products = [
+                    { name: 'Product 1', category: 'Equipment' },
+                    { name: 'Product 2', category: 'Accessories' },
+                    { name: 'Product 3', category: 'Equipment' }
+                ];
+
+                const filteredProducts = products.filter(product => equipmentFilter.checked && product.category === 'Equipment');
+                renderProducts(filteredProducts);
+            }
+
+            function renderProducts(products) {
+                productsList.innerHTML = '';
+                products.forEach(product => {
+                    const productElement = document.createElement('div');
+                    productElement.className = 'product-item';
+                    productElement.innerText = product.name;
+                    productsList.appendChild(productElement);
+                });
+            }
+
+            equipmentFilter.addEventListener('change', loadProducts);
+            loadProducts(); // Initial load
+        });
+    </script>
+</body>
+</html>
