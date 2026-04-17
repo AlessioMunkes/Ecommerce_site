@@ -11,6 +11,25 @@ const keywordInput = document.getElementById('keywordSearch');
 const priceFrom   = document.getElementById('priceFrom');
 const priceTo     = document.getElementById('priceTo');
 
+/* ---------- Check for filter parameter in URL ---------- */
+function initializeFiltersFromURL() {
+    const params = new URLSearchParams(window.location.search);
+    const filterCategory = params.get('filter');
+    
+    if (filterCategory) {
+        // Find and check the corresponding checkbox
+        const checkboxes = document.querySelectorAll('.filter-checkbox input');
+        checkboxes.forEach(cb => {
+            if (cb.value === filterCategory) {
+                cb.checked = true;
+            }
+        });
+        
+        // Apply filters after setting checkbox
+        setTimeout(applyFilters, 0);
+    }
+}
+
 /* ---------- Run filters ---------- */
 function applyFilters() {
     const keyword   = keywordInput.value.trim().toLowerCase();
@@ -145,7 +164,7 @@ function handleWishlist(btn) {
     btn.classList.toggle('active', added);
 }
 
-// On page load, highlight already-wishlisted items
+// On page load, highlight already-wishlisted items and initialize URL filters
 document.addEventListener('DOMContentLoaded', () => {
     const wishlist = getWishlist();
     document.querySelectorAll('.product-card').forEach(card => {
@@ -155,4 +174,7 @@ document.addEventListener('DOMContentLoaded', () => {
             btn.classList.add('active');
         }
     });
+    
+    // Initialize filters from URL parameters
+    initializeFiltersFromURL();
 });
