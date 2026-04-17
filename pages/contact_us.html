@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Contact Us - Roots</title>
     <link rel="Stylesheet" href="../styles/styles.css" />
 </head>
 <body>
@@ -30,7 +30,124 @@
 
     <!-- TITLE CARD -->
     <div class="title-container">
-        <h1>Roots</h1>
-    </div> 
+        <h1>Contact Us</h1>
+    </div>
+
+    <!-- CONTACT INFORMATION SECTION -->
+    <section class="contact-info-section">
+        <div class="section-container">
+            <h2 class="section-heading">Get In Touch</h2>
+            
+            <!-- Email Section -->
+            <div class="contact-method">
+                <h3>Send us an Email</h3>
+                <p>Have questions? Send us an email and we'll get back to you as soon as possible.</p>
+                <form class="contact-form">
+                    <div class="form-group">
+                        <label for="name">Name:</label>
+                        <input type="text" id="name" name="name" placeholder="Your full name">
+                    </div>
+                    <div class="form-group">
+                        <label for="email">Email:</label>
+                        <input type="email" id="email" name="email" placeholder="your.email@example.com">
+                    </div>
+                    <div class="form-group">
+                        <label for="subject">Subject:</label>
+                        <input type="text" id="subject" name="subject" placeholder="What is this about?">
+                    </div>
+                    <div class="form-group">
+                        <label for="message">Message:</label>
+                        <textarea id="message" name="message" rows="5" placeholder="Your message here..."></textarea>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Send Email</button>
+                </form>
+            </div>
+
+            <!-- Call Section -->
+            <div class="contact-method">
+                <h3>Call Us</h3>
+                <p>Prefer to speak directly? Give us a call!</p>
+                <div class="call-info">
+                    <p><strong>Phone:</strong> +1 (555) 123-4567</p>
+                    <p><strong>Hours:</strong> Monday - Friday, 9:00 AM - 5:00 PM (EST)</p>
+                    <p><strong>Support:</strong> We're here to help with any questions about our products and services.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- SELLER APPLICATION SECTION -->
+    <section class="seller-application-section">
+        <div class="section-container">
+            <h2 class="section-heading">Become a Seller</h2>
+            <p class="section-description">Are you a farmer interested in selling your crops with Roots? Apply now to join our community!</p>
+            
+            <form class="seller-form">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="seller-name">Full Name:</label>
+                        <input type="text" id="seller-name" name="seller-name" placeholder="Your full name">
+                    </div>
+                    <div class="form-group">
+                        <label for="seller-email">Email:</label>
+                        <input type="email" id="seller-email" name="seller-email" placeholder="your.email@example.com">
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="seller-phone">Phone:</label>
+                        <input type="tel" id="seller-phone" name="seller-phone" placeholder="(555) 123-4567">
+                    </div>
+                    <div class="form-group">
+                        <label for="farm-name">Farm Name:</label>
+                        <input type="text" id="farm-name" name="farm-name" placeholder="Your farm name">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="farm-location">Farm Location:</label>
+                    <input type="text" id="farm-location" name="farm-location" placeholder="City, State/Province">
+                </div>
+
+                <div class="form-group">
+                    <label for="crop-types">What crops do you grow? (Check all that apply)</label>
+                    <div class="checkbox-group">
+                        <label class="checkbox"><input type="checkbox" name="crop-types" value="vegetables"> Vegetables</label>
+                        <label class="checkbox"><input type="checkbox" name="crop-types" value="fruits"> Fruits</label>
+                        <label class="checkbox"><input type="checkbox" name="crop-types" value="grains"> Grains</label>
+                        <label class="checkbox"><input type="checkbox" name="crop-types" value="seeds"> Seeds</label>
+                        <label class="checkbox"><input type="checkbox" name="crop-types" value="other"> Other</label>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="farm-size">Farm Size (acres):</label>
+                    <input type="number" id="farm-size" name="farm-size" placeholder="e.g., 5">
+                </div>
+
+                <div class="form-group">
+                    <label for="years-farming">Years of Farming Experience:</label>
+                    <input type="number" id="years-farming" name="years-farming" placeholder="e.g., 10">
+                </div>
+
+                <div class="form-group">
+                    <label for="about-farm">Tell us about your farm:</label>
+                    <textarea id="about-farm" name="about-farm" rows="4" placeholder="Share information about your farm, practices, and what makes your crops special..."></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label for="why-join">Why do you want to join Roots?</label>
+                    <textarea id="why-join" name="why-join" rows="3" placeholder="Tell us your motivation..."></textarea>
+                </div>
+
+                <button type="submit" class="btn btn-primary btn-large">Submit Application</button>
+            </form>
+        </div>
+    </section>
+
+    <footer class="footer">
+        <p>Roots 2026</p>
+    </footer>
 </body>
 </html>
