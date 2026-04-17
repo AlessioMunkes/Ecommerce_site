@@ -3,64 +3,223 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Equipment Products</title>
-    <link rel="stylesheet" href="styles.css">
-    <script src="script.js" defer></script>
+    <title>Roots — Equipment</title>
+    <link rel="Stylesheet" href="../styles/styles.css" />
 </head>
 <body>
-    <header>
-        <h1>Equipment Products</h1>
+
+    <!-- NAVBAR -->
+    <header class="header">
+        <div class="header-brand">
+            <h3><a href="index.html">Roots</a></h3>
+        </div>
+        <input type="checkbox" id="nav-toggle" class="nav-toggle">
+        <label for="nav-toggle" class="hamburger">
+            <span></span>
+            <span></span>
+            <span></span>
+        </label>
+        <nav class="links">
+            <a href="index.html">Home</a>
+            <a href="produce_products.html">Products</a>
+            <a href="newsletter.html">Newsletter</a>
+            <a href="about_us.html">About Us</a>
+            <a href="contact_us.html">Contact Us</a>
+            <a href="wishlist.html">Wishlist</a>
+            <a href="cart.html">Shopping Cart</a>
+        </nav>
     </header>
-    <div class="container">
-        <aside class="sidebar">
-            <h2>Filter by Category</h2>
-            <form id="filter-form">
-                <label>
-                    <input type="checkbox" id="equipment-filter" checked>
-                    Equipment
-                </label>
-                <label>
-                    <input type="checkbox" id="accessories-filter">
-                    Accessories
-                </label>
-            </form>
+
+    <!-- PAGE BODY -->
+    <div class="products-page">
+
+        <!-- SIDEBAR FILTER -->
+        <aside class="filter-sidebar">
+            <h2 class="filter-heading">Filter</h2>
+
+            <!-- Keyword search -->
+            <div class="filter-search-wrap">
+                <input type="text" class="filter-search" placeholder="Search products..." id="keywordSearch">
+                <span class="search-icon">&#128269;</span>
+            </div>
+
+            <!-- Category checkboxes -->
+            <div class="filter-group">
+                <p class="filter-group-label">Category</p>
+                <label class="filter-checkbox"><input type="checkbox" value="vegetables"> Vegetables</label>
+                <label class="filter-checkbox"><input type="checkbox" value="fruits"> Fruits</label>
+                <label class="filter-checkbox"><input type="checkbox" value="grains"> Grains</label>
+                <label class="filter-checkbox"><input type="checkbox" value="equipment"> Equipment</label>
+                <label class="filter-checkbox"><input type="checkbox" value="seeds"> Seeds</label>
+            </div>
+
+            <hr class="filter-divider">
+
+            <!-- Price range -->
+            <div class="filter-group">
+                <p class="filter-group-label">Price Range</p>
+                <div class="price-inputs">
+                    <div class="price-field">
+                        <label>From:</label>
+                        <input type="number" class="price-input" id="priceFrom" placeholder="R0" min="0">
+                    </div>
+                    <div class="price-field">
+                        <label>To:</label>
+                        <input type="number" class="price-input" id="priceTo" placeholder="R9999" min="0">
+                    </div>
+                </div>
+            </div>
+
+            <button class="btn btn-primary filter-search-btn" id="applyFilters">Search</button>
         </aside>
-        <main class="product-grid">
-            <h2>All Products</h2>
-            <div id="products-list"></div>
+
+        <!-- MAIN CONTENT -->
+        <main class="products-main">
+
+            <!-- Page title -->
+            <div class="products-title-card">
+                <h1>Farm Equipment</h1>
+            </div>
+
+            <!-- Product grid -->
+            <div class="product-grid" id="productGrid">
+
+                <!-- Product 1 -->
+                <div class="product-card" data-category="equipment" data-price="1500" data-id="101" data-name="Garden Spade">
+                    <div class="product-card-header">
+                        <span class="product-name">Garden Spade</span>
+                        <button class="wishlist-btn" title="Add to wishlist" onclick="handleWishlist(this)">&#9733;</button>
+                    </div>
+                    <div class="product-img-wrap">
+                        <img src="../media/spade.jpg" alt="Garden Spade" class="product-img">
+                    </div>
+                    <div class="product-price">R1500.00</div>
+                    <div class="product-actions">
+                        <a href="product_detail.html?id=101" class="btn btn-primary product-btn">Info</a>
+                        <button class="btn btn-cart product-btn" onclick="handleCart(this)">Add to Cart</button>
+                    </div>
+                </div>
+
+                <!-- Product 2 -->
+                <div class="product-card" data-category="equipment" data-price="2500" data-id="102" data-name="Hand Hoe">
+                    <div class="product-card-header">
+                        <span class="product-name">Hand Hoe</span>
+                        <button class="wishlist-btn" title="Add to wishlist" onclick="handleWishlist(this)">&#9733;</button>
+                    </div>
+                    <div class="product-img-wrap">
+                        <img src="../media/hoe.jpg" alt="Hand Hoe" class="product-img">
+                    </div>
+                    <div class="product-price">R2500.00</div>
+                    <div class="product-actions">
+                        <a href="product_detail.html?id=102" class="btn btn-primary product-btn">Info</a>
+                        <button class="btn btn-cart product-btn" onclick="handleCart(this)">Add to Cart</button>
+                    </div>
+                </div>
+
+                <!-- Product 3 -->
+                <div class="product-card" data-category="equipment" data-price="3200" data-id="103" data-name="Wheelbarrow">
+                    <div class="product-card-header">
+                        <span class="product-name">Wheelbarrow</span>
+                        <button class="wishlist-btn" title="Add to wishlist" onclick="handleWishlist(this)">&#9733;</button>
+                    </div>
+                    <div class="product-img-wrap">
+                        <img src="../media/wheelbarrow.jpg" alt="Wheelbarrow" class="product-img">
+                    </div>
+                    <div class="product-price">R3200.00</div>
+                    <div class="product-actions">
+                        <a href="product_detail.html?id=103" class="btn btn-primary product-btn">Info</a>
+                        <button class="btn btn-cart product-btn" onclick="handleCart(this)">Add to Cart</button>
+                    </div>
+                </div>
+
+                <!-- Product 4 -->
+                <div class="product-card" data-category="equipment" data-price="1200" data-id="104" data-name="Garden Rake">
+                    <div class="product-card-header">
+                        <span class="product-name">Garden Rake</span>
+                        <button class="wishlist-btn" title="Add to wishlist" onclick="handleWishlist(this)">&#9733;</button>
+                    </div>
+                    <div class="product-img-wrap">
+                        <img src="../media/rake.jpg" alt="Garden Rake" class="product-img">
+                    </div>
+                    <div class="product-price">R1200.00</div>
+                    <div class="product-actions">
+                        <a href="product_detail.html?id=104" class="btn btn-primary product-btn">Info</a>
+                        <button class="btn btn-cart product-btn" onclick="handleCart(this)">Add to Cart</button>
+                    </div>
+                </div>
+
+                <!-- Product 5 -->
+                <div class="product-card" data-category="equipment" data-price="4500" data-id="105" data-name="Pruning Shears (Professional)">
+                    <div class="product-card-header">
+                        <span class="product-name">Pruning Shears (Professional)</span>
+                        <button class="wishlist-btn" title="Add to wishlist" onclick="handleWishlist(this)">&#9733;</button>
+                    </div>
+                    <div class="product-img-wrap">
+                        <img src="../media/pruning_shears.jpg" alt="Pruning Shears" class="product-img">
+                    </div>
+                    <div class="product-price">R4500.00</div>
+                    <div class="product-actions">
+                        <a href="product_detail.html?id=105" class="btn btn-primary product-btn">Info</a>
+                        <button class="btn btn-cart product-btn" onclick="handleCart(this)">Add to Cart</button>
+                    </div>
+                </div>
+
+                <!-- Product 6 -->
+                <div class="product-card" data-category="equipment" data-price="2800" data-id="106" data-name="Watering Can (10L)">
+                    <div class="product-card-header">
+                        <span class="product-name">Watering Can (10L)</span>
+                        <button class="wishlist-btn" title="Add to wishlist" onclick="handleWishlist(this)">&#9733;</button>
+                    </div>
+                    <div class="product-img-wrap">
+                        <img src="../media/watering_can.jpg" alt="Watering Can" class="product-img">
+                    </div>
+                    <div class="product-price">R2800.00</div>
+                    <div class="product-actions">
+                        <a href="product_detail.html?id=106" class="btn btn-primary product-btn">Info</a>
+                        <button class="btn btn-cart product-btn" onclick="handleCart(this)">Add to Cart</button>
+                    </div>
+                </div>
+
+                <!-- Product 7 -->
+                <div class="product-card" data-category="equipment" data-price="6500" data-id="107" data-name="Tiller Machine">
+                    <div class="product-card-header">
+                        <span class="product-name">Tiller Machine</span>
+                        <button class="wishlist-btn" title="Add to wishlist" onclick="handleWishlist(this)">&#9733;</button>
+                    </div>
+                    <div class="product-img-wrap">
+                        <img src="../media/tiller.jpg" alt="Tiller Machine" class="product-img">
+                    </div>
+                    <div class="product-price">R6500.00</div>
+                    <div class="product-actions">
+                        <a href="product_detail.html?id=107" class="btn btn-primary product-btn">Info</a>
+                        <button class="btn btn-cart product-btn" onclick="handleCart(this)">Add to Cart</button>
+                    </div>
+                </div>
+
+                <!-- Product 8 -->
+                <div class="product-card" data-category="equipment" data-price="1800" data-id="108" data-name="Garden Fork">
+                    <div class="product-card-header">
+                        <span class="product-name">Garden Fork</span>
+                        <button class="wishlist-btn" title="Add to wishlist" onclick="handleWishlist(this)">&#9733;</button>
+                    </div>
+                    <div class="product-img-wrap">
+                        <img src="../media/garden_fork.jpg" alt="Garden Fork" class="product-img">
+                    </div>
+                    <div class="product-price">R1800.00</div>
+                    <div class="product-actions">
+                        <a href="product_detail.html?id=108" class="btn btn-primary product-btn">Info</a>
+                        <button class="btn btn-cart product-btn" onclick="handleCart(this)">Add to Cart</button>
+                    </div>
+                </div>
+
+            </div><!-- /product-grid -->
+
+            <!-- No results message -->
+            <p class="no-results" id="noResults" style="display:none;">No products match your filters.</p>
+
         </main>
-    </div>
-    <script>
-        // JavaScript to load products and apply filters
-        document.addEventListener('DOMContentLoaded', function() {
-            const equipmentFilter = document.getElementById('equipment-filter');
-            const productsList = document.getElementById('products-list');
+    </div><!-- /products-page -->
 
-            function loadProducts() {
-                // Example: Replace with actual product loading
-                const products = [
-                    { name: 'Product 1', category: 'Equipment' },
-                    { name: 'Product 2', category: 'Accessories' },
-                    { name: 'Product 3', category: 'Equipment' }
-                ];
-
-                const filteredProducts = products.filter(product => equipmentFilter.checked && product.category === 'Equipment');
-                renderProducts(filteredProducts);
-            }
-
-            function renderProducts(products) {
-                productsList.innerHTML = '';
-                products.forEach(product => {
-                    const productElement = document.createElement('div');
-                    productElement.className = 'product-item';
-                    productElement.innerText = product.name;
-                    productsList.appendChild(productElement);
-                });
-            }
-
-            equipmentFilter.addEventListener('change', loadProducts);
-            loadProducts(); // Initial load
-        });
-    </script>
+    <script src="../scripts/scripts.js"></script>
 </body>
 </html>
