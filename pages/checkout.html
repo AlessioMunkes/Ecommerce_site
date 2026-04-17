@@ -3,11 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-    <link rel="Stylesheet" href="../styles/styles.css" />
+    <title>Checkout — Roots</title>
+    <link rel="stylesheet" href="../styles/styles.css" />
+
 </head>
 <body>
-     <header class="header">
+
+    <header class="header">
         <div class="header-brand">
             <h3><a href="index.html">Roots</a></h3>
         </div>
@@ -28,9 +30,340 @@
         </nav>
     </header>
 
-    <!-- TITLE CARD -->
-    <div class="title-container">
-        <h1>Roots</h1>
+    <!-- EMPTY CART STATE -->
+    <div id="emptyState" class="empty-checkout" style="display:none;">
+        <div class="empty-icon">🛒</div>
+        <p>Your cart is empty.</p>
+        <a href="produce_products.html" class="btn btn-primary">Browse Products</a>
     </div>
+
+    <!-- CHECKOUT WRAPPER -->
+    <div class="checkout-page" id="checkoutPage">
+
+        <!-- PROGRESS BAR -->
+        <div class="progress-bar">
+            <div class="progress-step active" id="step-ind-1">
+                <div class="step-circle">1</div>
+                <span>Order</span>
+            </div>
+            <div class="progress-line"></div>
+            <div class="progress-step" id="step-ind-2">
+                <div class="step-circle">2</div>
+                <span>Delivery</span>
+            </div>
+            <div class="progress-line"></div>
+            <div class="progress-step" id="step-ind-3">
+                <div class="step-circle">3</div>
+                <span>Payment</span>
+            </div>
+            <div class="progress-line"></div>
+            <div class="progress-step" id="step-ind-4">
+                <div class="step-circle">4</div>
+                <span>Confirm</span>
+            </div>
+        </div>
+
+        <!-- ═══════════════════════════════
+             STEP 1 — ORDER SUMMARY
+        ═══════════════════════════════ -->
+        <section class="checkout-step active" id="step1">
+            <h2 class="step-title">Order Summary</h2>
+
+            <div class="order-items" id="orderItems"></div>
+
+            <div class="order-totals" id="orderTotals"></div>
+
+            <div class="step-actions">
+                <div></div>
+                <button class="btn btn-primary" onclick="goToStep(2)">Continue to Delivery &rarr;</button>
+            </div>
+        </section>
+
+        <!-- ═══════════════════════════════
+             STEP 2 — DELIVERY OPTIONS
+        ═══════════════════════════════ -->
+        <section class="checkout-step" id="step2">
+            <h2 class="step-title">Delivery Options</h2>
+
+            <!-- Contact details — always shown -->
+            <div class="form-card">
+                <h3 class="form-card-title">Contact Details</h3>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>First Name *</label>
+                        <input type="text" id="firstName" placeholder="e.g. Sipho">
+                    </div>
+                    <div class="form-group">
+                        <label>Last Name *</label>
+                        <input type="text" id="lastName" placeholder="e.g. Dlamini">
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Email *</label>
+                        <input type="email" id="email" placeholder="you@example.com">
+                    </div>
+                    <div class="form-group">
+                        <label>Phone *</label>
+                        <input type="tel" id="phone" placeholder="+27 82 000 0000">
+                    </div>
+                </div>
+            </div>
+
+            <!-- Fulfilment toggle -->
+            <div class="form-card">
+                <h3 class="form-card-title">How would you like to receive your order?</h3>
+                <div class="fulfilment-options">
+                    <label class="fulfilment-card" id="label-collect">
+                        <input type="radio" name="fulfilment" value="collect" id="opt-collect" checked onchange="switchFulfilment()">
+                        <div class="fulfilment-text">
+                            <strong>Collect</strong>
+                            <span>Free — pick up from distribution centre</span>
+                        </div>
+                        <span class="fulfilment-price-tag free">FREE</span>
+                    </label>
+                    <label class="fulfilment-card" id="label-deliver">
+                        <input type="radio" name="fulfilment" value="deliver" id="opt-deliver" onchange="switchFulfilment()">
+                        <div class="fulfilment-text">
+                            <strong>Deliver</strong>
+                            <span>R80 flat rate — 2–4 business days</span>
+                        </div>
+                        <span class="fulfilment-price-tag paid">+R80</span>
+                    </label>
+                </div>
+            </div>
+
+            <!-- Collection address (shown when collect) -->
+            <div class="form-card info-card" id="collectInfo">
+                <div>
+                    <h3 class="form-card-title" style="margin-bottom:6px;">Collection Address</h3>
+                    <p><strong>Roots Distribution Centre</strong></p>
+                    <p>12 Harvest Road, Khayelitsha, Cape Town, 7784</p>
+                    <p>Mon–Fri &nbsp;|&nbsp; 07:00 – 17:00</p>
+                    <p>Sat &nbsp;|&nbsp; 08:00 – 13:00</p>
+                    <p class="info-note">Bring your order confirmation email and a valid ID.</p>
+                </div>
+            </div>
+
+            <!-- Delivery address form (shown when deliver) -->
+            <div class="form-card" id="deliveryForm" style="display:none;">
+                <h3 class="form-card-title">Delivery Address</h3>
+                <div class="form-group">
+                    <label>Street Address *</label>
+                    <input type="text" id="street" placeholder="e.g. 45 Main Road">
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Suburb *</label>
+                        <input type="text" id="suburb" placeholder="e.g. Mitchells Plain">
+                    </div>
+                    <div class="form-group">
+                        <label>City *</label>
+                        <input type="text" id="city" placeholder="e.g. Cape Town">
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Province *</label>
+                        <select id="province">
+                            <option value="">Select province</option>
+                            <option>Western Cape</option>
+                            <option>Eastern Cape</option>
+                            <option>KwaZulu-Natal</option>
+                            <option>Gauteng</option>
+                            <option>Limpopo</option>
+                            <option>Mpumalanga</option>
+                            <option>North West</option>
+                            <option>Northern Cape</option>
+                            <option>Free State</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Postal Code *</label>
+                        <input type="text" id="postalCode" placeholder="e.g. 7785" maxlength="4">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>Delivery Instructions <span class="optional">(optional)</span></label>
+                    <textarea id="deliveryNote" rows="2" placeholder="Gate code, landmark, etc."></textarea>
+                </div>
+            </div>
+
+            <!-- Live order total preview -->
+            <div class="mini-total" id="deliveryMiniTotal"></div>
+
+            <div class="step-actions">
+                <button class="btn btn-back" onclick="goToStep(1)">&larr; Back</button>
+                <button class="btn btn-primary" onclick="validateDelivery()">Continue to Payment &rarr;</button>
+            </div>
+        </section>
+
+        <!-- ═══════════════════════════════
+             STEP 3 — PAYMENT
+        ═══════════════════════════════ -->
+        <section class="checkout-step" id="step3">
+            <h2 class="step-title">Payment</h2>
+
+            <div class="form-card">
+                <h3 class="form-card-title">Payment Method</h3>
+                <div class="payment-tabs">
+                    <button class="pay-tab active" onclick="switchPayTab('card', this)"> Card</button>
+                    <button class="pay-tab" onclick="switchPayTab('eft', this)"> EFT</button>
+                    <button class="pay-tab" onclick="switchPayTab('wallet', this)"> Wallet</button>
+                </div>
+
+                <!-- Card -->
+                <div id="pay-card" class="pay-panel">
+                    <div class="card-preview" id="cardPreview">
+                        <div class="card-chip"></div>
+                        <div class="card-number-display" id="cardNumDisplay">•••• •••• •••• ••••</div>
+                        <div class="card-meta">
+                            <div>
+                                <div class="card-label">Card holder</div>
+                                <div class="card-value" id="cardNameDisplay">YOUR NAME</div>
+                            </div>
+                            <div>
+                                <div class="card-label">Expires</div>
+                                <div class="card-value" id="cardExpDisplay">MM/YY</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>Name on Card *</label>
+                        <input type="text" id="cardName" placeholder="As it appears on the card"
+                            oninput="document.getElementById('cardNameDisplay').textContent = this.value.toUpperCase() || 'YOUR NAME'">
+                    </div>
+                    <div class="form-group">
+                        <label>Card Number *</label>
+                        <input type="text" id="cardNumber" placeholder="0000 0000 0000 0000"
+                            maxlength="19" oninput="formatCardNumber(this)">
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Expiry Date *</label>
+                            <input type="text" id="cardExpiry" placeholder="MM/YY" maxlength="5"
+                                oninput="formatExpiry(this)">
+                        </div>
+                        <div class="form-group">
+                            <label>CVV *</label>
+                            <input type="text" id="cardCVV" placeholder="•••" maxlength="4"
+                                oninput="this.value = this.value.replace(/\D/g,'')">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- EFT -->
+                <div id="pay-eft" class="pay-panel" style="display:none;">
+                    <div class="eft-details">
+                        <p>Transfer your payment to the following account. Use your order number as the reference.</p>
+                        <div class="eft-table">
+                            <div class="eft-row"><span>Bank</span><strong>FNB</strong></div>
+                            <div class="eft-row"><span>Account Name</span><strong>Roots Collective (Pty) Ltd</strong></div>
+                            <div class="eft-row"><span>Account Number</span><strong>62 000 123 456</strong></div>
+                            <div class="eft-row"><span>Branch Code</span><strong>250 655</strong></div>
+                            <div class="eft-row"><span>Account Type</span><strong>Cheque</strong></div>
+                            <div class="eft-row"><span>Reference</span><strong id="eftRef">ORDER-XXXX</strong></div>
+                        </div>
+                        <p class="info-note">Orders are processed within 24 hours of payment confirmation.</p>
+                    </div>
+                </div>
+
+                <!-- Wallet / SnapScan -->
+                <div id="pay-wallet" class="pay-panel" style="display:none;">
+                    <div class="wallet-options">
+                        <div class="wallet-option selected" id="wallet-snapscan" onclick="selectWallet(this, 'snapscan')">
+                            <div class="wallet-logo snap">S</div>
+                            <span>SnapScan</span>
+                        </div>
+                        <div class="wallet-option" id="wallet-ozow" onclick="selectWallet(this, 'ozow')">
+                            <div class="wallet-logo ozow">O</div>
+                            <span>Ozow</span>
+                        </div>
+                        <div class="wallet-option" id="wallet-zapper" onclick="selectWallet(this, 'zapper')">
+                            <div class="wallet-logo zap">Z</div>
+                            <span>Zapper</span>
+                        </div>
+                    </div>
+                    <div class="qr-placeholder">
+                        <div class="qr-grid" id="qrGrid"></div>
+                        <p class="qr-label" id="qrLabel">Scan with SnapScan to pay</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Order total -->
+            <div class="mini-total" id="paymentMiniTotal"></div>
+
+            <div class="step-actions">
+                <button class="btn btn-back" onclick="goToStep(2)">&larr; Back</button>
+                <button class="btn btn-primary" onclick="validatePayment()" id="payBtn">Review Order &rarr;</button>
+            </div>
+        </section>
+
+        <!-- ═══════════════════════════════
+             STEP 4 — REVIEW & CONFIRM
+        ═══════════════════════════════ -->
+        <section class="checkout-step" id="step4">
+            <h2 class="step-title">Review &amp; Confirm</h2>
+
+            <div class="review-grid">
+                <div class="review-card">
+                    <div class="review-card-header">
+                        <span>Order Items</span>
+                        <button class="edit-btn" onclick="goToStep(1)">Edit</button>
+                    </div>
+                    <div id="reviewItems"></div>
+                </div>
+                <div class="review-card">
+                    <div class="review-card-header">
+                        <span>Delivery</span>
+                        <button class="edit-btn" onclick="goToStep(2)">Edit</button>
+                    </div>
+                    <div id="reviewDelivery"></div>
+                </div>
+                <div class="review-card">
+                    <div class="review-card-header">
+                        <span>Payment</span>
+                        <button class="edit-btn" onclick="goToStep(3)">Edit</button>
+                    </div>
+                    <div id="reviewPayment"></div>
+                </div>
+            </div>
+
+            <div class="final-total" id="finalTotal"></div>
+
+            <label class="terms-check">
+                <input type="checkbox" id="termsCheck">
+                I agree to the <a href="#" onclick="return false;">Terms & Conditions</a> and <a href="#" onclick="return false;">Privacy Policy</a>
+            </label>
+
+            <div class="step-actions">
+                <button class="btn btn-back" onclick="goToStep(3)">&larr; Back</button>
+                <button class="btn btn-pay" onclick="placeOrder()" id="placeOrderBtn">
+                    Place Order
+                </button>
+            </div>
+        </section>
+
+    </div><!-- /checkout-page -->
+
+    <!-- ═══════════════════════════════
+         SUCCESS POPUP
+    ═══════════════════════════════ -->
+    <div class="popup-overlay" id="successPopup">
+        <div class="popup-box">
+            <div class="popup-tick">&#10003;</div>
+            <h2>Order Placed!</h2>
+            <p>Thank you for your order. A confirmation has been sent to <strong id="popupEmail"></strong>.</p>
+            <div class="popup-order-ref">
+                Order ref: <strong id="popupRef"></strong>
+            </div>
+            <p class="popup-sub">Your order will be ready for <span id="popupMethod"></span>.</p>
+            <button class="btn btn-primary" onclick="finishOrder()">Back to Home</button>
+        </div>
+    </div>
+
+    <script src="../scripts/scripts.js"></script>
+    
 </body>
 </html>

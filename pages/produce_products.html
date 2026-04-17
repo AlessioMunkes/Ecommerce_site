@@ -4,11 +4,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Roots — Products</title>
-    <link rel="Stylesheet" href="../styles/styles.css" />
+    <link rel="stylesheet" href="../styles/styles.css" />
+    <link rel="stylesheet" href="../styles/products.css" />
 </head>
 <body>
 
-    <!-- NAVBAR -->
     <header class="header">
         <div class="header-brand">
             <h3><a href="index.html">Roots</a></h3>
@@ -30,20 +30,14 @@
         </nav>
     </header>
 
-    <!-- PAGE BODY -->
     <div class="products-page">
 
-        <!-- SIDEBAR FILTER -->
         <aside class="filter-sidebar">
             <h2 class="filter-heading">Filter</h2>
-
-            <!-- Keyword search -->
             <div class="filter-search-wrap">
                 <input type="text" class="filter-search" placeholder="Search products..." id="keywordSearch">
                 <span class="search-icon">&#128269;</span>
             </div>
-
-            <!-- Category checkboxes -->
             <div class="filter-group">
                 <p class="filter-group-label">Category</p>
                 <label class="filter-checkbox"><input type="checkbox" value="vegetables"> Vegetables</label>
@@ -52,10 +46,7 @@
                 <label class="filter-checkbox"><input type="checkbox" value="equipment"> Equipment</label>
                 <label class="filter-checkbox"><input type="checkbox" value="seeds"> Seeds</label>
             </div>
-
             <hr class="filter-divider">
-
-            <!-- Price range -->
             <div class="filter-group">
                 <p class="filter-group-label">Price Range</p>
                 <div class="price-inputs">
@@ -69,124 +60,167 @@
                     </div>
                 </div>
             </div>
-
             <button class="btn btn-primary filter-search-btn" id="applyFilters">Search</button>
         </aside>
 
-        <!-- MAIN CONTENT -->
         <main class="products-main">
 
-            <!-- Page title -->
             <div class="products-title-card">
                 <h1>Products</h1>
             </div>
 
-            <!-- Product grid -->
             <div class="product-grid" id="productGrid">
 
-                <!-- Product 1 -->
-                <div class="product-card" data-category="vegetables" data-price="45">
-                    <div class="product-card-header">
+                <div class="product-card" data-id="1" data-name="Spinach Bundle" data-category="vegetables" data-price="45">
+                    <div class="product-img-wrap">
+                        <img src="../media/spinach.jpg" alt="Spinach Bundle" class="product-img">
+                        <button class="wishlist-btn" title="Add to wishlist" onclick="handleWishlist(this)">&#9733;</button>
+                        <span class="product-badge">Vegetables</span>
+                    </div>
+                    <div class="product-body">
                         <span class="product-name">Spinach Bundle</span>
-                        <button class="wishlist-btn" title="Add to wishlist" onclick="handleWishlist(this)">&#9733;</button>
+                        <span class="product-price">R45.00</span>
                     </div>
-                    <div class="product-img-wrap">
-                        <img src="media/spinach.jpg" alt="Spinach Bundle" class="product-img">
+                    <div class="product-qty-row">
+                        <div class="qty-control">
+                            <button class="qty-btn" onclick="changeCardQty(this, -1)">&#8722;</button>
+                            <span class="qty-display">1</span>
+                            <button class="qty-btn" onclick="changeCardQty(this, 1)">&#43;</button>
+                        </div>
+                        <span class="qty-subtotal">R45.00</span>
                     </div>
-                    <div class="product-price">R45.00</div>
                     <div class="product-actions">
-                        <a href="product_detail.html?id=1" class="btn btn-primary product-btn">Info</a>
+                        <a href="product_detail.html?id=1" class="btn btn-info product-btn">Info</a>
                         <button class="btn btn-cart product-btn" onclick="handleCart(this)">Add to Cart</button>
                     </div>
                 </div>
 
-                <!-- Product 2 -->
-                <div class="product-card" data-category="vegetables" data-price="30">
-                    <div class="product-card-header">
+                <div class="product-card" data-id="2" data-name="Tomatoes (1kg)" data-category="vegetables" data-price="30">
+                    <div class="product-img-wrap">
+                        <img src="../media/tomatoes.jpg" alt="Tomatoes" class="product-img">
+                        <button class="wishlist-btn" title="Add to wishlist" onclick="handleWishlist(this)">&#9733;</button>
+                        <span class="product-badge">Vegetables</span>
+                    </div>
+                    <div class="product-body">
                         <span class="product-name">Tomatoes (1kg)</span>
-                        <button class="wishlist-btn" title="Add to wishlist" onclick="handleWishlist(this)">&#9733;</button>
+                        <span class="product-price">R30.00</span>
                     </div>
-                    <div class="product-img-wrap">
-                        <img src="media/tomatoes.jpg" alt="Tomatoes" class="product-img">
+                    <div class="product-qty-row">
+                        <div class="qty-control">
+                            <button class="qty-btn" onclick="changeCardQty(this, -1)">&#8722;</button>
+                            <span class="qty-display">1</span>
+                            <button class="qty-btn" onclick="changeCardQty(this, 1)">&#43;</button>
+                        </div>
+                        <span class="qty-subtotal">R30.00</span>
                     </div>
-                    <div class="product-price">R30.00</div>
                     <div class="product-actions">
-                        <a href="product_detail.html?id=2" class="btn btn-primary product-btn">Info</a>
+                        <a href="product_detail.html?id=2" class="btn btn-info product-btn">Info</a>
                         <button class="btn btn-cart product-btn" onclick="handleCart(this)">Add to Cart</button>
                     </div>
                 </div>
 
-                <!-- Product 3 -->
-                <div class="product-card" data-category="fruits" data-price="60">
-                    <div class="product-card-header">
+                <div class="product-card" data-id="3" data-name="Mixed Citrus Box" data-category="fruits" data-price="60">
+                    <div class="product-img-wrap">
+                        <img src="../media/citrus.jpg" alt="Mixed Citrus" class="product-img">
+                        <button class="wishlist-btn" title="Add to wishlist" onclick="handleWishlist(this)">&#9733;</button>
+                        <span class="product-badge">Fruits</span>
+                    </div>
+                    <div class="product-body">
                         <span class="product-name">Mixed Citrus Box</span>
-                        <button class="wishlist-btn" title="Add to wishlist" onclick="handleWishlist(this)">&#9733;</button>
+                        <span class="product-price">R60.00</span>
                     </div>
-                    <div class="product-img-wrap">
-                        <img src="media/citrus.jpg" alt="Mixed Citrus" class="product-img">
+                    <div class="product-qty-row">
+                        <div class="qty-control">
+                            <button class="qty-btn" onclick="changeCardQty(this, -1)">&#8722;</button>
+                            <span class="qty-display">1</span>
+                            <button class="qty-btn" onclick="changeCardQty(this, 1)">&#43;</button>
+                        </div>
+                        <span class="qty-subtotal">R60.00</span>
                     </div>
-                    <div class="product-price">R60.00</div>
                     <div class="product-actions">
-                        <a href="product_detail.html?id=3" class="btn btn-primary product-btn">Info</a>
+                        <a href="product_detail.html?id=3" class="btn btn-info product-btn">Info</a>
                         <button class="btn btn-cart product-btn" onclick="handleCart(this)">Add to Cart</button>
                     </div>
                 </div>
 
-                <!-- Product 4 -->
-                <div class="product-card" data-category="grains" data-price="55">
-                    <div class="product-card-header">
+                <div class="product-card" data-id="4" data-name="Maize Meal (2kg)" data-category="grains" data-price="55">
+                    <div class="product-img-wrap">
+                        <img src="../media/maize.jpg" alt="Maize Meal" class="product-img">
+                        <button class="wishlist-btn" title="Add to wishlist" onclick="handleWishlist(this)">&#9733;</button>
+                        <span class="product-badge">Grains</span>
+                    </div>
+                    <div class="product-body">
                         <span class="product-name">Maize Meal (2kg)</span>
-                        <button class="wishlist-btn" title="Add to wishlist" onclick="handleWishlist(this)">&#9733;</button>
+                        <span class="product-price">R55.00</span>
                     </div>
-                    <div class="product-img-wrap">
-                        <img src="media/maize.jpg" alt="Maize Meal" class="product-img">
+                    <div class="product-qty-row">
+                        <div class="qty-control">
+                            <button class="qty-btn" onclick="changeCardQty(this, -1)">&#8722;</button>
+                            <span class="qty-display">1</span>
+                            <button class="qty-btn" onclick="changeCardQty(this, 1)">&#43;</button>
+                        </div>
+                        <span class="qty-subtotal">R55.00</span>
                     </div>
-                    <div class="product-price">R55.00</div>
                     <div class="product-actions">
-                        <a href="product_detail.html?id=4" class="btn btn-primary product-btn">Info</a>
+                        <a href="product_detail.html?id=4" class="btn btn-info product-btn">Info</a>
                         <button class="btn btn-cart product-btn" onclick="handleCart(this)">Add to Cart</button>
                     </div>
                 </div>
 
-                <!-- Product 5 -->
-                <div class="product-card" data-category="vegetables" data-price="25">
-                    <div class="product-card-header">
+                <div class="product-card" data-id="5" data-name="Butternut Squash" data-category="vegetables" data-price="25">
+                    <div class="product-img-wrap">
+                        <img src="../media/butternut.jpg" alt="Butternut Squash" class="product-img">
+                        <button class="wishlist-btn" title="Add to wishlist" onclick="handleWishlist(this)">&#9733;</button>
+                        <span class="product-badge">Vegetables</span>
+                    </div>
+                    <div class="product-body">
                         <span class="product-name">Butternut Squash</span>
+                        <span class="product-price">R25.00</span>
+                    </div>
+                    <div class="product-qty-row">
+                        <div class="qty-control">
+                            <button class="qty-btn" onclick="changeCardQty(this, -1)">&#8722;</button>
+                            <span class="qty-display">1</span>
+                            <button class="qty-btn" onclick="changeCardQty(this, 1)">&#43;</button>
+                        </div>
+                        <span class="qty-subtotal">R25.00</span>
+                    </div>
+                    <div class="product-actions">
+                        <a href="product_detail.html?id=5" class="btn btn-info product-btn">Info</a>
+                        <button class="btn btn-cart product-btn" onclick="handleCart(this)">Add to Cart</button>
+                    </div>
+                </div>
+
+                <div class="product-card" data-id="6" data-name="Seed Pack — Greens" data-category="seeds" data-price="35">
+                    <div class="product-img-wrap">
+                        <img src="../media/seeds.jpg" alt="Seed Pack" class="product-img">
                         <button class="wishlist-btn" title="Add to wishlist" onclick="handleWishlist(this)">&#9733;</button>
+                        <span class="product-badge">Seeds</span>
                     </div>
-                    <div class="product-img-wrap">
-                        <img src="media/butternut.jpg" alt="Butternut Squash" class="product-img">
-                    </div>
-                    <div class="product-price">R25.00</div>
-                    <div class="product-actions">
-                        <a href="product_detail.html?id=5" class="btn btn-primary product-btn">Info</a>
-                        <button class="btn btn-cart product-btn" onclick="handleCart(this)">Add to Cart</button>
-                    </div>
-                </div>
-
-                <!-- Product 6 -->
-                <div class="product-card" data-category="seeds" data-price="35">
-                    <div class="product-card-header">
+                    <div class="product-body">
                         <span class="product-name">Seed Pack — Greens</span>
-                        <button class="wishlist-btn" title="Add to wishlist" onclick="handleWishlist(this)  ">&#9733;</button>
+                        <span class="product-price">R35.00</span>
                     </div>
-                    <div class="product-img-wrap">
-                        <img src="media/seeds.jpg" alt="Seed Pack" class="product-img">
+                    <div class="product-qty-row">
+                        <div class="qty-control">
+                            <button class="qty-btn" onclick="changeCardQty(this, -1)">&#8722;</button>
+                            <span class="qty-display">1</span>
+                            <button class="qty-btn" onclick="changeCardQty(this, 1)">&#43;</button>
+                        </div>
+                        <span class="qty-subtotal">R35.00</span>
                     </div>
-                    <div class="product-price">R35.00</div>
                     <div class="product-actions">
-                        <a href="product_detail.html?id=6" class="btn btn-primary product-btn">Info</a>
+                        <a href="product_detail.html?id=6" class="btn btn-info product-btn">Info</a>
                         <button class="btn btn-cart product-btn" onclick="handleCart(this)">Add to Cart</button>
                     </div>
                 </div>
 
-            </div><!-- /product-grid -->
+            </div>
 
-            <!-- No results message -->
             <p class="no-results" id="noResults" style="display:none;">No products match your filters.</p>
 
         </main>
-    </div><!-- /products-page -->
+    </div>
 
     <script src="../scripts/scripts.js"></script>
 </body>

@@ -3,11 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-    <link rel="Stylesheet" href="../styles/styles.css" />
+    <title>Shopping Cart — Roots</title>
+    <link rel="stylesheet" href="../styles/styles.css" />
 </head>
 <body>
-     <header class="header">
+    <header class="header">
         <div class="header-brand">
             <h3><a href="index.html">Roots</a></h3>
         </div>
@@ -28,24 +28,53 @@
         </nav>
     </header>
 
-            <div class="cart-container">
-        <h1 class="section-title-card">Shopping Cart</h1>
-        <div id="cartItems"></div>
-        <div class="cart-total">
-            <strong>Total: <span id="cartTotal">R0.00</span></strong>
+    <div class="page-container">
+
+        <div class="page-title-card">
+            <h1>Shopping Cart</h1>
         </div>
-        <button class="btn btn-primary" onclick="clearCart()">Clear Cart</button>
+
+        <!-- Cart items render here -->
+        <div id="cartItems" class="item-list"></div>
+
+        <!-- Summary bar — hidden when cart is empty -->
+        <div class="cart-summary" id="cartSummary">
+            <div class="cart-summary-row">
+                <span class="summary-label">Subtotal</span>
+                <span class="summary-value" id="cartSubtotal">R0.00</span>
+            </div>
+            <div class="cart-summary-row summary-total-row">
+                <span class="summary-label">Total</span>
+                <span class="summary-value green" id="cartTotal">R0.00</span>
+            </div>
+            <div class="cart-actions">
+                <button class="btn btn-cart-danger" onclick="clearCart()">Clear Cart</button>
+                <a href="checkout.html" class="btn btn-primary">Checkout →</a>
+            </div>
+        </div>
+
     </div>
 
     <script src="../scripts/scripts.js"></script>
     <script>
     document.addEventListener('DOMContentLoaded', () => {
+        renderCart();
+    });
+
+    function renderCart() {
         const cart      = getCart();
         const container = document.getElementById('cartItems');
+        const summary   = document.getElementById('cartSummary');
         const totalEl   = document.getElementById('cartTotal');
+        const subEl     = document.getElementById('cartSubtotal');
 
         if (cart.length === 0) {
-            container.innerHTML = '<p style="text-align:center; margin-top:40px;">Your cart is empty.</p>';
+            summary.style.display = 'none';
+            container.innerHTML = `
+                <div class="empty-state">
+                    <p>Your cart is empty.</p>
+                    <a href="produce_products.html" class="btn btn-primary">Browse Products</a>
+                </div>`;
             return;
         }
 
@@ -54,27 +83,47 @@
             const lineTotal = item.price * item.qty;
             total += lineTotal;
             return `
-            <div class="cart-item">
-                <span class="cart-item-name">${item.name}</span>
-                <span class="cart-item-qty">x${item.qty}</span>
-                <span class="cart-item-price">R${lineTotal.toFixed(2)}</span>
-                <button class="btn btn-cart" onclick="removeFromCart('${item.id}')">Remove</button>
+            <div class="item-card">
+                <div class="item-info">
+                    <span class="item-name">${item.name}</span>
+                    <span class="item-unit-price">R${parseFloat(item.price).toFixed(2)} each</span>
+                </div>
+                <div class="item-controls">
+                    <button class="qty-btn" onclick="changeQty('${item.id}', -1)">−</button>
+                    <span class="item-qty">${item.qty}</span>
+                    <button class="qty-btn" onclick="changeQty('${item.id}', 1)">+</button>
+                </div>
+                <span class="item-line-total">R${lineTotal.toFixed(2)}</span>
+                <button class="remove-btn" onclick="removeFromCart('${item.id}')" title="Remove">✕</button>
             </div>`;
         }).join('');
 
+        subEl.textContent   = `R${total.toFixed(2)}`;
         totalEl.textContent = `R${total.toFixed(2)}`;
-    });
+        summary.style.display = 'block';
+    }
+
+    function changeQty(id, delta) {
+        const cart = getCart();
+        const item = cart.find(i => i.id === id);
+        if (!item) return;
+        item.qty += delta;
+        if (item.qty <= 0) {
+            saveCart(cart.filter(i => i.id !== id));
+        } else {
+            saveCart(cart);
+        }
+        renderCart();
+    }
 
     function removeFromCart(id) {
-        const cart    = getCart();
-        const updated = cart.filter(item => item.id !== id);
-        saveCart(updated);
-        location.reload();
+        saveCart(getCart().filter(item => item.id !== id));
+        renderCart();
     }
 
     function clearCart() {
         saveCart([]);
-        location.reload();
+        renderCart();
     }
     </script>
 </body>
