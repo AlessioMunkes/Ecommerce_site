@@ -36,7 +36,7 @@
             <h2 class="filter-heading">Filter</h2>
             <div class="filter-search-wrap">
                 <input type="text" class="filter-search" placeholder="Search products..." id="keywordSearch">
-                <span class="search-icon">&#128269;</span>
+
             </div>
             <div class="filter-group">
                 <p class="filter-group-label">Category</p>
@@ -65,20 +65,23 @@
 
         <main class="products-main">
 
+                <div class="title-container">
+                    <h1>Products</h1>
+                </div>
             <div class="products-title-card">
-                <h1>Products</h1>
+                <h1>Shop Equipment & Produce</h1>
             </div>
 
             <div class="product-grid" id="productGrid">
 
-                <div class="product-card" data-id="1" data-name="Spinach Bundle" data-category="vegetables" data-price="45">
+                <div class="product-card" data-id="1" data-name="Spinach (1kg)" data-category="vegetables" data-price="45">
                     <div class="product-img-wrap">
-                        <img src="../media/spinach.jpg" alt="Spinach Bundle" class="product-img">
+                        <img src="../media/spinach-products.jpg" alt="Spinach (1kg)" class="product-img">
                         <button class="wishlist-btn" title="Add to wishlist" onclick="handleWishlist(this)">&#9733;</button>
                         <span class="product-badge">Vegetables</span>
                     </div>
                     <div class="product-body">
-                        <span class="product-name">Spinach Bundle</span>
+                        <span class="product-name">Spinach (1kg)</span>
                         <span class="product-price">R45.00</span>
                     </div>
                     <div class="product-qty-row">
@@ -97,7 +100,7 @@
 
                 <div class="product-card" data-id="2" data-name="Tomatoes (1kg)" data-category="vegetables" data-price="30">
                     <div class="product-img-wrap">
-                        <img src="../media/tomatoes.jpg" alt="Tomatoes" class="product-img">
+                        <img src="../media/tomatoes-products.jpg" alt="Tomatoes (1kg)" class="product-img">
                         <button class="wishlist-btn" title="Add to wishlist" onclick="handleWishlist(this)">&#9733;</button>
                         <span class="product-badge">Vegetables</span>
                     </div>
@@ -119,14 +122,14 @@
                     </div>
                 </div>
 
-                <div class="product-card" data-id="3" data-name="Mixed Citrus Box" data-category="fruits" data-price="60">
+                <div class="product-card" data-id="3" data-name="Lemons (1kg)" data-category="fruits" data-price="60">
                     <div class="product-img-wrap">
-                        <img src="../media/citrus.jpg" alt="Mixed Citrus" class="product-img">
+                        <img src="../media/lemons-products.jpeg" alt="Lemons (1kg)" class="product-img">
                         <button class="wishlist-btn" title="Add to wishlist" onclick="handleWishlist(this)">&#9733;</button>
                         <span class="product-badge">Fruits</span>
                     </div>
                     <div class="product-body">
-                        <span class="product-name">Mixed Citrus Box</span>
+                        <span class="product-name">Lemons (1kg)</span>
                         <span class="product-price">R60.00</span>
                     </div>
                     <div class="product-qty-row">
@@ -145,7 +148,7 @@
 
                 <div class="product-card" data-id="4" data-name="Maize Meal (2kg)" data-category="grains" data-price="55">
                     <div class="product-img-wrap">
-                        <img src="../media/maize.jpg" alt="Maize Meal" class="product-img">
+                        <img src="../media/maize-meal-products.jpeg" alt="Maize Meal" class="product-img">
                         <button class="wishlist-btn" title="Add to wishlist" onclick="handleWishlist(this)">&#9733;</button>
                         <span class="product-badge">Grains</span>
                     </div>
@@ -167,15 +170,15 @@
                     </div>
                 </div>
 
-                <div class="product-card" data-id="5" data-name="Butternut Squash" data-category="vegetables" data-price="25">
+                <div class="product-card" data-id="5" data-name="Butternut Squash (1kg)" data-category="vegetables" data-price="70">
                     <div class="product-img-wrap">
-                        <img src="../media/butternut.jpg" alt="Butternut Squash" class="product-img">
+                        <img src="../media/butternut-products.jpeg" alt="Butternut Squash (1kg)" class="product-img">
                         <button class="wishlist-btn" title="Add to wishlist" onclick="handleWishlist(this)">&#9733;</button>
                         <span class="product-badge">Vegetables</span>
                     </div>
                     <div class="product-body">
-                        <span class="product-name">Butternut Squash</span>
-                        <span class="product-price">R25.00</span>
+                        <span class="product-name">Butternut Squash (1kg)</span>
+                        <span class="product-price">R70.00</span>
                     </div>
                     <div class="product-qty-row">
                         <div class="qty-control">
@@ -183,7 +186,7 @@
                             <span class="qty-display">1</span>
                             <button class="qty-btn" onclick="changeCardQty(this, 1)">&#43;</button>
                         </div>
-                        <span class="qty-subtotal">R25.00</span>
+                        <span class="qty-subtotal">R70.00</span>
                     </div>
                     <div class="product-actions">
                         <a href="product_detail.html?id=5" class="btn btn-info product-btn">Info</a>
@@ -193,7 +196,7 @@
 
                 <div class="product-card" data-id="6" data-name="Seed Pack — Greens" data-category="seeds" data-price="35">
                     <div class="product-img-wrap">
-                        <img src="../media/seeds.jpg" alt="Seed Pack" class="product-img">
+                        <img src="../media/greens-seedpack-products.jpeg" alt="Seed Pack" class="product-img">
                         <button class="wishlist-btn" title="Add to wishlist" onclick="handleWishlist(this)">&#9733;</button>
                         <span class="product-badge">Seeds</span>
                     </div>
@@ -211,6 +214,102 @@
                     </div>
                     <div class="product-actions">
                         <a href="product_detail.html?id=6" class="btn btn-info product-btn">Info</a>
+                        <button class="btn btn-cart product-btn" onclick="handleCart(this)">Add to Cart</button>
+                    </div>
+                </div>
+
+                <div class="product-card" data-id="7" data-name="gloves" data-category="equipment" data-price="50">
+                    <div class="product-img-wrap">
+                        <img src="../media/equipment-products-1.jpg" alt="gloves" class="product-img">
+                        <button class="wishlist-btn" title="Add to wishlist" onclick="handleWishlist(this)">&#9733;</button>
+                        <span class="product-badge">Equipment</span>
+                    </div>
+                    <div class="product-body">
+                        <span class="product-name">gloves</span>
+                        <span class="product-price">R50.00</span>
+                    </div>
+                    <div class="product-qty-row">
+                        <div class="qty-control">
+                            <button class="qty-btn" onclick="changeCardQty(this, -1)">&#8722;</button>
+                            <span class="qty-display">1</span>
+                            <button class="qty-btn" onclick="changeCardQty(this, 1)">&#43;</button>
+                        </div>
+                        <span class="qty-subtotal">R50.00</span>
+                    </div>
+                    <div class="product-actions">
+                        <a href="product_detail.html?id=7" class="btn btn-info product-btn">Info</a>
+                        <button class="btn btn-cart product-btn" onclick="handleCart(this)">Add to Cart</button>
+                    </div>
+                </div>
+
+                <div class="product-card" data-id="8" data-name="Wooden handle hoe" data-category="equipment" data-price="100">
+                    <div class="product-img-wrap">
+                        <img src="../media/hoe-products.jpeg" alt="Wooden handle hoe" class="product-img">
+                        <button class="wishlist-btn" title="Add to wishlist" onclick="handleWishlist(this)">&#9733;</button>
+                        <span class="product-badge">Equipment</span>
+                    </div>
+                    <div class="product-body">
+                        <span class="product-name">Wooden handle hoe</span>
+                        <span class="product-price">R100.00</span>
+                    </div>
+                    <div class="product-qty-row">
+                        <div class="qty-control">
+                            <button class="qty-btn" onclick="changeCardQty(this, -1)">&#8722;</button>
+                            <span class="qty-display">1</span>
+                            <button class="qty-btn" onclick="changeCardQty(this, 1)">&#43;</button>
+                        </div>
+                        <span class="qty-subtotal">R100.00</span>
+                    </div>
+                    <div class="product-actions">
+                        <a href="product_detail.html?id=8" class="btn btn-info product-btn">Info</a>
+                        <button class="btn btn-cart product-btn" onclick="handleCart(this)">Add to Cart</button>
+                    </div>
+                </div>
+
+                <div class="product-card" data-id="9" data-name="Sorghum (1kg)" data-category="grains" data-price="80">
+                    <div class="product-img-wrap">
+                        <img src="../media/sorghum-products.jpg" alt="Sorghum" class="product-img">
+                        <button class="wishlist-btn" title="Add to wishlist" onclick="handleWishlist(this)">&#9733;</button>
+                        <span class="product-badge">Grains</span>
+                    </div>
+                    <div class="product-body">
+                        <span class="product-name">Sorghum (1kg)</span>
+                        <span class="product-price">R80.00</span>
+                    </div>
+                    <div class="product-qty-row">
+                        <div class="qty-control">
+                            <button class="qty-btn" onclick="changeCardQty(this, -1)">&#8722;</button>
+                            <span class="qty-display">1</span>
+                            <button class="qty-btn" onclick="changeCardQty(this, 1)">&#43;</button>
+                        </div>
+                        <span class="qty-subtotal">R80.00</span>
+                    </div>
+                    <div class="product-actions">
+                        <a href="product_detail.html?id=9" class="btn btn-info product-btn">Info</a>
+                        <button class="btn btn-cart product-btn" onclick="handleCart(this)">Add to Cart</button>
+                    </div>
+                </div>
+
+                <div class="product-card" data-id="10" data-name="Cabbage (1kg)" data-category="vegetables" data-price="100">
+                    <div class="product-img-wrap">
+                        <img src="../media/cabbage-products.jpeg" alt="Cabbage" class="product-img">
+                        <button class="wishlist-btn" title="Add to wishlist" onclick="handleWishlist(this)">&#9733;</button>
+                        <span class="product-badge">Vegetables</span>
+                    </div>
+                    <div class="product-body">
+                        <span class="product-name">Cabbage (1kg)</span>
+                        <span class="product-price">R100.00</span>
+                    </div>
+                    <div class="product-qty-row">
+                        <div class="qty-control">
+                            <button class="qty-btn" onclick="changeCardQty(this, -1)">&#8722;</button>
+                            <span class="qty-display">1</span>
+                            <button class="qty-btn" onclick="changeCardQty(this, 1)">&#43;</button>
+                        </div>
+                        <span class="qty-subtotal">R100.00</span>
+                    </div>
+                    <div class="product-actions">
+                        <a href="product_detail.html?id=10" class="btn btn-info product-btn">Info</a>
                         <button class="btn btn-cart product-btn" onclick="handleCart(this)">Add to Cart</button>
                     </div>
                 </div>

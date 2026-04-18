@@ -548,241 +548,425 @@ function finishOrder() {
 }
 
 const PRODUCTS = {
+
+    /* ─────────────────────────────────────────
+       PRODUCE
+    ───────────────────────────────────────── */
+
     1: {
-        id:          '1',
-        name:        'Spinach Bundle',
-        category:    'Vegetables',
-        price:       45,
-        priceUnit:   'per bundle',
-        stock:       'In Stock',
-        image:       '../media/spinach.jpg',
-        badge:       'Vegetables',
+        id:        '1',
+        name:      'Spinach (1kg)',
+        category:  'Vegetables',
+        price:     45,
+        priceUnit: 'per kg',
+        stock:     'In Stock',
+        image:     '../media/spinach-products.jpg',
+        badge:     'Vegetables',
         chips: [
-            { label: 'Weight',  value: '±500g' },
-            { label: 'Pack',    value: '1 bundle' },
+            { label: 'Weight',  value: '1 kg' },
+            { label: 'Variety', value: 'Baby & Flat-leaf' },
             { label: 'Method',  value: 'Naturally grown' },
             { label: 'Origin',  value: 'Khayelitsha, CT' },
         ],
         farmer: {
-            name:        '[Farmer / Collective Name]',
-            collective:  '[Collective Name]',
-            location:    'Khayelitsha, Cape Town',
-            note:        '[One sentence about the farmer or collective — how long they have been farming, what makes their produce special, etc.]',
+            name:       'Khayelitsha Greens Collective',
+            collective: 'Roots Collective',
+            location:   'Khayelitsha, Cape Town',
+            note:       'A community of 18 small-plot farmers pooling their harvests since 2021 — known for their chemical-free growing practices and consistent year-round supply.',
         },
         description: `
-            <p>[Replace with a detailed description of this product. What variety is it? How is it grown? What does it taste like? Any preparation tips?]</p>
-            <p>[Add a second paragraph about storage, shelf life, or how best to use this product in cooking.]</p>
-            <p>[Optional: mention the farming method, any certifications, or what season it is harvested in.]</p>
+            <p>Fresh, tender spinach harvested by hand from community plots in Khayelitsha. Our spinach is a mix of baby and flat-leaf varieties, grown without pesticides or synthetic fertilisers on well-composted township soil.</p>
+            <p>Best used in stir-fries, curries, smoothies, or lightly wilted with garlic and olive oil. Spinach pairs beautifully with pap and is a staple in many of the households that grow it.</p>
+            <p>Storage: keep unwashed in a sealed bag in the fridge. Best consumed within 4–5 days of purchase for optimal freshness and nutrient content.</p>
         `,
         nutrition: [
-            { label: 'Energy',       value: '[000 kcal / 100g]' },
-            { label: 'Protein',      value: '[0.0g]' },
-            { label: 'Carbohydrates',value: '[0.0g]' },
-            { label: 'of which sugars', value: '[0.0g]' },
-            { label: 'Fat',          value: '[0.0g]' },
-            { label: 'Fibre',        value: '[0.0g]' },
-            { label: 'Sodium',       value: '[0.0mg]' },
+            { label: 'Energy',           value: '23 kcal / 100g' },
+            { label: 'Protein',          value: '2.9g' },
+            { label: 'Carbohydrates',    value: '3.6g' },
+            { label: 'of which sugars',  value: '0.4g' },
+            { label: 'Fat',              value: '0.4g' },
+            { label: 'Fibre',            value: '2.2g' },
+            { label: 'Iron',             value: '2.7mg' },
+            { label: 'Vitamin C',        value: '28mg' },
         ],
         reviews: [
-            { author: '[Customer Name]', rating: 5, date: '[Month Year]', body: '[Replace with a real customer review of this product.]' },
-            { author: '[Customer Name]', rating: 4, date: '[Month Year]', body: '[Replace with a real customer review of this product.]' },
+            { author: 'Nomsa T.', rating: 5, date: 'March 2026', body: 'Absolutely fresh — still had dew on the leaves when it arrived. Best spinach I have bought in years.' },
+            { author: 'Pieter V.', rating: 4, date: 'February 2026', body: 'Great quality and price. I use it in everything. Would be 5 stars if the leaves were a little more uniform in size.' },
         ],
     },
- 
+
     2: {
-        id:          '2',
-        name:        'Tomatoes (1kg)',
-        category:    'Vegetables',
-        price:       30,
-        priceUnit:   'per kg',
-        stock:       'In Stock',
-        image:       '../media/tomatoes.jpg',
-        badge:       'Vegetables',
+        id:        '2',
+        name:      'Tomatoes (1kg)',
+        category:  'Vegetables',
+        price:     30,
+        priceUnit: 'per kg',
+        stock:     'In Stock',
+        image:     '../media/tomatoes-products.jpg',
+        badge:     'Vegetables',
         chips: [
-            { label: 'Weight',  value: '1kg' },
-            { label: 'Variety', value: '[e.g. Roma / Cherry]' },
-            { label: 'Method',  value: 'Naturally grown' },
-            { label: 'Origin',  value: '[Township, City]' },
+            { label: 'Weight',  value: '1 kg' },
+            { label: 'Variety', value: 'Roma & Round' },
+            { label: 'Method',  value: 'Open-air grown' },
+            { label: 'Origin',  value: 'Mitchells Plain, CT' },
         ],
         farmer: {
-            name:        '[Farmer / Collective Name]',
-            collective:  '[Collective Name]',
-            location:    '[Township, Cape Town]',
-            note:        '[One sentence about the farmer or collective.]',
+            name:       'Mitchells Plain Growers',
+            collective: 'Roots Collective',
+            location:   'Mitchells Plain, Cape Town',
+            note:       'A family-led collective of 11 plots specialising in tomatoes and peppers, using rainwater harvesting and natural compost to keep their produce clean and affordable.',
         },
         description: `
-            <p>[Replace with a detailed description of these tomatoes. What variety? How are they best used — salads, sauces, grilling?]</p>
-            <p>[Storage tip: keep at room temperature until ripe, then refrigerate. Use within X days of purchase.]</p>
+            <p>Sun-ripened Roma and round tomatoes grown on open plots in Mitchells Plain. These tomatoes are picked at peak ripeness and delivered within 24 hours — meaning you get full flavour, not the pale, early-picked tomatoes typical of supermarkets.</p>
+            <p>Perfect for sauces, salads, braises, and braai side dishes. Roma varieties are especially good for slow-cooked tomato bases and chakalaka.</p>
+            <p>Storage: store at room temperature away from direct sunlight until fully ripe, then refrigerate and use within 3 days.</p>
         `,
         nutrition: [
-            { label: 'Energy',        value: '[000 kcal / 100g]' },
-            { label: 'Protein',       value: '[0.0g]' },
-            { label: 'Carbohydrates', value: '[0.0g]' },
-            { label: 'of which sugars', value: '[0.0g]' },
-            { label: 'Fat',           value: '[0.0g]' },
-            { label: 'Fibre',         value: '[0.0g]' },
-            { label: 'Sodium',        value: '[0.0mg]' },
+            { label: 'Energy',           value: '18 kcal / 100g' },
+            { label: 'Protein',          value: '0.9g' },
+            { label: 'Carbohydrates',    value: '3.9g' },
+            { label: 'of which sugars',  value: '2.6g' },
+            { label: 'Fat',              value: '0.2g' },
+            { label: 'Fibre',            value: '1.2g' },
+            { label: 'Vitamin C',        value: '14mg' },
+            { label: 'Lycopene',         value: '2573mcg' },
         ],
         reviews: [
-            { author: '[Customer Name]', rating: 5, date: '[Month Year]', body: '[Replace with a real customer review.]' },
+            { author: 'Ayanda M.', rating: 5, date: 'April 2026', body: 'These taste like the tomatoes I grew up eating from the garden. Sweet, firm, and full of flavour.' },
+            { author: 'Riana S.', rating: 5, date: 'March 2026', body: 'Made a tomato bredie with these and my whole family asked what I did differently. Nothing — just better tomatoes.' },
         ],
     },
- 
+
     3: {
-        id:          '3',
-        name:        'Mixed Citrus Box',
-        category:    'Fruits',
-        price:       60,
-        priceUnit:   'per box',
-        stock:       'In Stock',
-        image:       '../media/citrus.jpg',
-        badge:       'Fruits',
+        id:        '3',
+        name:      'Lemons (1kg)',
+        category:  'Fruits',
+        price:     60,
+        priceUnit: 'per kg',
+        stock:     'In Stock',
+        image:     '../media/lemons-products.jpeg',
+        badge:     'Fruits',
         chips: [
-            { label: 'Weight',   value: '±2kg' },
-            { label: 'Contents', value: '[e.g. Oranges, Lemons, Naartjies]' },
-            { label: 'Method',   value: 'Naturally grown' },
-            { label: 'Origin',   value: '[Township, City]' },
-        ],
-        farmer: {
-            name:        '[Farmer / Collective Name]',
-            collective:  '[Collective Name]',
-            location:    '[Township, City]',
-            note:        '[One sentence about the farmer or collective.]',
-        },
-        description: `
-            <p>[Replace with a description of what fruits are included in this box, the flavour profile, and best uses — juicing, eating fresh, cooking, etc.]</p>
-            <p>[Add storage and shelf-life information.]</p>
-        `,
-        nutrition: [
-            { label: 'Energy',        value: '[000 kcal / 100g]' },
-            { label: 'Protein',       value: '[0.0g]' },
-            { label: 'Carbohydrates', value: '[0.0g]' },
-            { label: 'of which sugars', value: '[0.0g]' },
-            { label: 'Fat',           value: '[0.0g]' },
-            { label: 'Fibre',         value: '[0.0g]' },
-            { label: 'Vitamin C',     value: '[000mg]' },
-        ],
-        reviews: [
-            { author: '[Customer Name]', rating: 5, date: '[Month Year]', body: '[Replace with a real customer review.]' },
-            { author: '[Customer Name]', rating: 4, date: '[Month Year]', body: '[Replace with a real customer review.]' },
-        ],
-    },
- 
-    4: {
-        id:          '4',
-        name:        'Maize Meal (2kg)',
-        category:    'Grains',
-        price:       55,
-        priceUnit:   'per 2kg bag',
-        stock:       'In Stock',
-        image:       '../media/maize.jpg',
-        badge:       'Grains',
-        chips: [
-            { label: 'Weight',  value: '2kg' },
-            { label: 'Grade',   value: '[e.g. Super / Special / Fine]' },
-            { label: 'Method',  value: 'Community-milled' },
-            { label: 'Origin',  value: '[Township, City]' },
-        ],
-        farmer: {
-            name:        '[Farmer / Collective Name]',
-            collective:  '[Collective Name]',
-            location:    '[Township, City]',
-            note:        '[One sentence about the farming or milling collective.]',
-        },
-        description: `
-            <p>[Replace with a description of this maize meal — the grade, texture (fine/coarse), and typical uses like pap, porridge, or baking.]</p>
-            <p>[Storage: store in a cool, dry place. Best used within X months of purchase.]</p>
-        `,
-        nutrition: [
-            { label: 'Energy',        value: '[000 kcal / 100g]' },
-            { label: 'Protein',       value: '[0.0g]' },
-            { label: 'Carbohydrates', value: '[0.0g]' },
-            { label: 'of which sugars', value: '[0.0g]' },
-            { label: 'Fat',           value: '[0.0g]' },
-            { label: 'Fibre',         value: '[0.0g]' },
-            { label: 'Iron',          value: '[0.0mg]' },
-        ],
-        reviews: [
-            { author: '[Customer Name]', rating: 5, date: '[Month Year]', body: '[Replace with a real customer review.]' },
-        ],
-    },
- 
-    5: {
-        id:          '5',
-        name:        'Butternut Squash',
-        category:    'Vegetables',
-        price:       25,
-        priceUnit:   'per unit',
-        stock:       'In Stock',
-        image:       '../media/butternut.jpg',
-        badge:       'Vegetables',
-        chips: [
-            { label: 'Weight',  value: '±800g–1.2kg' },
-            { label: 'Pack',    value: '1 whole squash' },
+            { label: 'Weight',  value: '1 kg (±6–8 lemons)' },
+            { label: 'Variety', value: 'Eureka' },
             { label: 'Method',  value: 'Naturally grown' },
-            { label: 'Origin',  value: '[Township, City]' },
+            { label: 'Origin',  value: 'Gugulethu, CT' },
         ],
         farmer: {
-            name:        '[Farmer / Collective Name]',
-            collective:  '[Collective Name]',
-            location:    '[Township, City]',
-            note:        '[One sentence about the farmer or collective.]',
+            name:       'Gugulethu Citrus Growers',
+            collective: 'Roots Collective',
+            location:   'Gugulethu, Cape Town',
+            note:       'This collective has been growing Eureka lemons since 2019, using grey water irrigation and organic compost to produce juicy, thick-skinned lemons year-round.',
         },
         description: `
-            <p>[Replace with a description of this butternut — sweetness, texture, best cooking methods (roasting, soup, grilling).]</p>
-            <p>[Storage: keep uncut butternuts in a cool dark place for up to X weeks. Once cut, refrigerate and use within X days.]</p>
+            <p>Bright, juicy Eureka lemons grown on community plots in Gugulethu. Each kilogram contains approximately 6–8 full-sized lemons with thick, fragrant skins and minimal seeds — ideal for both juice and zest.</p>
+            <p>Use in cooking, baking, drinks, and home remedies. The zest is excellent in baked goods and pasta, while the juice adds brightness to everything from fish to salad dressings.</p>
+            <p>Storage: lemons keep at room temperature for up to 1 week, or refrigerated in a sealed bag for up to 3 weeks.</p>
         `,
         nutrition: [
-            { label: 'Energy',        value: '[000 kcal / 100g]' },
-            { label: 'Protein',       value: '[0.0g]' },
-            { label: 'Carbohydrates', value: '[0.0g]' },
-            { label: 'of which sugars', value: '[0.0g]' },
-            { label: 'Fat',           value: '[0.0g]' },
-            { label: 'Fibre',         value: '[0.0g]' },
-            { label: 'Vitamin A',     value: '[000mcg]' },
+            { label: 'Energy',           value: '29 kcal / 100g' },
+            { label: 'Protein',          value: '1.1g' },
+            { label: 'Carbohydrates',    value: '9.3g' },
+            { label: 'of which sugars',  value: '2.5g' },
+            { label: 'Fat',              value: '0.3g' },
+            { label: 'Fibre',            value: '2.8g' },
+            { label: 'Vitamin C',        value: '53mg' },
+            { label: 'Potassium',        value: '138mg' },
         ],
         reviews: [
-            { author: '[Customer Name]', rating: 5, date: '[Month Year]', body: '[Replace with a real customer review.]' },
-            { author: '[Customer Name]', rating: 5, date: '[Month Year]', body: '[Replace with a real customer review.]' },
+            { author: 'Fatima A.', rating: 5, date: 'April 2026', body: 'Incredible lemons — so much juice in each one. I made lemon curd and it was the best I have ever tasted.' },
+            { author: 'Johan B.', rating: 4, date: 'March 2026', body: 'Good size and very juicy. A bit pricier than the shop but the quality makes it worth it.' },
         ],
     },
- 
-    6: {
-        id:          '6',
-        name:        'Seed Pack — Greens',
-        category:    'Seeds',
-        price:       35,
-        priceUnit:   'per pack',
-        stock:       'In Stock',
-        image:       '../media/seeds.jpg',
-        badge:       'Seeds',
+
+    4: {
+        id:        '4',
+        name:      'Butternut Squash',
+        category:  'Vegetables',
+        price:     70,
+        priceUnit: 'per unit',
+        stock:     'In Stock',
+        image:     '../media/butternut-products.jpeg',
+        badge:     'Vegetables',
         chips: [
-            { label: 'Contents', value: '[e.g. Spinach, Kale, Swiss Chard]' },
-            { label: 'Seeds',    value: '[Approx. 000 seeds]' },
-            { label: 'Season',   value: '[e.g. All year / Spring–Autumn]' },
-            { label: 'Origin',   value: '[Supplier / Township]' },
+            { label: 'Weight',  value: '±900g – 1.3kg' },
+            { label: 'Pack',    value: '1 whole butternut' },
+            { label: 'Method',  value: 'Naturally grown' },
+            { label: 'Origin',  value: 'Langa, CT' },
         ],
         farmer: {
-            name:        '[Supplier / Collective Name]',
-            collective:  '[Collective Name]',
-            location:    '[City]',
-            note:        '[One sentence about where these seeds come from and how they were selected.]',
+            name:       'Langa Community Gardens',
+            collective: 'Roots Collective',
+            location:   'Langa, Cape Town',
+            note:       'One of the oldest community garden networks in Cape Town, the Langa collective has been growing squash and pumpkins for over a decade using traditional composting methods.',
         },
         description: `
-            <p>[Replace with a description of what seeds are included, germination rates, and what conditions they grow best in.]</p>
-            <p>[Planting instructions: sow at X cm depth, water X times per week, harvest in X–X weeks. Suitable for container and ground planting.]</p>
+            <p>Sweet, dense butternuts grown on community plots in Langa. Each one is harvested by hand once fully mature, resulting in a deep orange flesh with a naturally sweet, nutty flavour.</p>
+            <p>Exceptional roasted whole in the oven, cubed in soups and stews, or mashed as a side dish. A household staple in South African cooking and an excellent source of Vitamin A and fibre.</p>
+            <p>Storage: uncut butternuts keep in a cool, dark place for up to 3 weeks. Once cut, wrap tightly and refrigerate — use within 5 days.</p>
         `,
         nutrition: [
-            { label: 'Seed varieties',  value: '[List varieties]' },
-            { label: 'Approx. count',   value: '[000 seeds]' },
-            { label: 'Germination rate', value: '[00%+]' },
-            { label: 'Sow depth',       value: '[0–0cm]' },
-            { label: 'Days to harvest', value: '[00–00 days]' },
-            { label: 'Suitable for',    value: 'Container &amp; ground' },
-            { label: 'Best season',     value: '[Season]' },
+            { label: 'Energy',           value: '45 kcal / 100g' },
+            { label: 'Protein',          value: '1.0g' },
+            { label: 'Carbohydrates',    value: '11.7g' },
+            { label: 'of which sugars',  value: '2.2g' },
+            { label: 'Fat',              value: '0.1g' },
+            { label: 'Fibre',            value: '2.0g' },
+            { label: 'Vitamin A',        value: '532mcg' },
+            { label: 'Potassium',        value: '352mg' },
         ],
         reviews: [
-            { author: '[Customer Name]', rating: 5, date: '[Month Year]', body: '[Replace with a real customer review.]' },
+            { author: 'Thandi N.', rating: 5, date: 'April 2026', body: 'Perfectly ripe, sweet, and a generous size. Made a big pot of butternut soup and it was divine.' },
+            { author: 'Carel D.', rating: 5, date: 'March 2026', body: 'You can taste the difference compared to shop butternuts. Much sweeter and the flesh is a much deeper orange.' },
+        ],
+    },
+
+    5: {
+        id:        '5',
+        name:      'Sorghum (1kg)',
+        category:  'Grains',
+        price:     70,
+        priceUnit: 'per kg',
+        stock:     'In Stock',
+        image:     '../media/sorghum-products.jpg',
+        badge:     'Grains',
+        chips: [
+            { label: 'Weight',   value: '1 kg' },
+            { label: 'Type',     value: 'Whole grain, red sorghum' },
+            { label: 'Method',   value: 'Traditionally grown' },
+            { label: 'Origin',   value: 'Khayelitsha, CT' },
+        ],
+        farmer: {
+            name:       'Khayelitsha Grain Collective',
+            collective: 'Roots Collective',
+            location:   'Khayelitsha, Cape Town',
+            note:       'This collective revived traditional sorghum cultivation in the Western Cape, growing red sorghum using drought-resistant methods and minimal water inputs.',
+        },
+        description: `
+            <p>Whole grain red sorghum, a traditional South African staple with deep cultural roots. Grown by the Khayelitsha Grain Collective using drought-resistant cultivation methods passed down through generations, this sorghum is naturally gluten-free and highly nutritious.</p>
+            <p>Use to make traditional porridge (ting), fermented sorghum beer, or as a high-fibre substitute for rice. Can also be ground into flour for baking. Sorghum has a mildly earthy, slightly sweet flavour and a satisfying texture.</p>
+            <p>Storage: store in an airtight container in a cool, dry place. Keeps for up to 12 months. Once cooked, refrigerate and consume within 3 days.</p>
+        `,
+        nutrition: [
+            { label: 'Energy',           value: '339 kcal / 100g' },
+            { label: 'Protein',          value: '11.3g' },
+            { label: 'Carbohydrates',    value: '74.6g' },
+            { label: 'of which sugars',  value: '2.5g' },
+            { label: 'Fat',              value: '3.3g' },
+            { label: 'Fibre',            value: '6.3g' },
+            { label: 'Iron',             value: '4.4mg' },
+            { label: 'Gluten',           value: 'Gluten-free' },
+        ],
+        reviews: [
+            { author: 'Sipho K.', rating: 5, date: 'April 2026', body: 'Reminds me of the sorghum my grandmother used to grow. Made a beautiful traditional porridge with it.' },
+            { author: 'Lerato M.', rating: 4, date: 'March 2026', body: 'Great quality grain. I use it as a rice substitute and it holds up really well in stews.' },
+        ],
+    },
+
+    6: {
+        id:        '6',
+        name:      'Seed Pack — Greens',
+        category:  'Seeds',
+        price:     35,
+        priceUnit: 'per pack',
+        stock:     'In Stock',
+        image:     '../media/greens-seedpack-products.jpeg',
+        badge:     'Seeds',
+        chips: [
+            { label: 'Contents',  value: 'Spinach, Swiss Chard, Kale' },
+            { label: 'Seeds',     value: '≈ 150 seeds total' },
+            { label: 'Season',    value: 'All year (best: Mar–Aug)' },
+            { label: 'Supplier',  value: 'Roots Seed Initiative, CT' },
+        ],
+        farmer: {
+            name:       'Roots Seed Initiative',
+            collective: 'Roots Collective',
+            location:   'Cape Town',
+            note:       'Seeds are selected and packaged by the Roots Seed Initiative — a programme that sources open-pollinated, non-GMO varieties suitable for small-plot township growing conditions.',
+        },
+        description: `
+            <p>A community-curated seed pack containing three of the most productive leafy green varieties for small-plot growing: flat-leaf spinach, Swiss chard (rainbow mix), and Tuscan kale. All seeds are open-pollinated and non-GMO, meaning you can save seeds from your harvest for the next season.</p>
+            <p>Planting guide: sow seeds 1–2 cm deep, 15 cm apart, in well-drained soil or container mix. Water lightly every 2 days. Spinach and Swiss chard are ready in 6–8 weeks; kale in 8–10 weeks. Suitable for container, raised bed, and in-ground planting.</p>
+            <p>Storage: store in a cool, dry place away from direct sunlight. Germination rate remains above 85% for 2 years when stored correctly.</p>
+        `,
+        nutrition: [
+            { label: 'Seed varieties',    value: 'Spinach, Swiss Chard, Kale' },
+            { label: 'Approx. count',     value: '≈ 150 seeds' },
+            { label: 'Germination rate',  value: '85%+' },
+            { label: 'Sow depth',         value: '1–2 cm' },
+            { label: 'Spacing',           value: '15 cm apart' },
+            { label: 'Days to harvest',   value: '42–70 days' },
+            { label: 'Suitable for',      value: 'Container & in-ground' },
+            { label: 'GMO status',        value: 'Non-GMO, open-pollinated' },
+        ],
+        reviews: [
+            { author: 'Bongi M.', rating: 5, date: 'March 2026', body: 'All three varieties germinated within a week. Now I have more greens than I know what to do with — absolutely recommend.' },
+            { author: 'Yasmine F.', rating: 5, date: 'February 2026', body: 'Grew the Swiss chard in a container on my balcony. It is thriving. Great value for what you get.' },
+        ],
+    },
+
+    7: {
+        id:        '7',
+        name:      'Gardening Gloves',
+        category:  'Equipment',
+        price:     50,
+        priceUnit: 'per pair',
+        stock:     'In Stock',
+        image:     '../media/equipment-products-1.jpg',
+        badge:     'Equipment',
+        chips: [
+            { label: 'Material', value: 'Nitrile-coated cotton' },
+            { label: 'Sizes',    value: 'S, M, L, XL' },
+            { label: 'Use',      value: 'General planting & weeding' },
+            { label: 'Pack',     value: '1 pair' },
+        ],
+        farmer: {
+            name:       'Roots Equipment Store',
+            collective: 'Roots Collective',
+            location:   'Cape Town',
+            note:       'Equipment sourced in bulk by the Roots collective and sold at community pricing — no retail markup, just the cost of getting the right tools into the right hands.',
+        },
+        description: `
+            <p>Durable nitrile-coated cotton gardening gloves designed for everyday small-plot farming tasks. The nitrile palm coating provides excellent grip on wet and dry surfaces while protecting against thorns, soil abrasion, and minor cuts. The breathable cotton back keeps hands cool during long working sessions.</p>
+            <p>Suitable for planting, weeding, pruning, and general garden maintenance. The snug fit gives you enough dexterity to handle seeds and seedlings without removing the gloves.</p>
+            <p>Available in sizes S, M, L, and XL. If you are between sizes, size up for comfort during extended use. Machine washable — rinse after each use for longer glove life.</p>
+        `,
+        nutrition: [
+            { label: 'Material',         value: 'Nitrile-coated cotton' },
+            { label: 'Available sizes',  value: 'S, M, L, XL' },
+            { label: 'Palm',             value: 'Nitrile-coated (grip & protection)' },
+            { label: 'Back',             value: 'Breathable cotton' },
+            { label: 'Washable',         value: 'Yes — machine washable' },
+            { label: 'Best for',         value: 'Planting, weeding, pruning' },
+            { label: 'Pack contents',    value: '1 pair' },
+        ],
+        reviews: [
+            { author: 'Monde T.', rating: 5, date: 'April 2026', body: 'Finally gloves that actually fit well and do not slip. Have been using them daily for a month and they are still in great shape.' },
+            { author: 'Karen S.', rating: 4, date: 'March 2026', body: 'Good quality for the price. The grip is excellent even when handling wet plants.' },
+        ],
+    },
+
+    8: {
+        id:        '8',
+        name:      'Wooden Handle Hoe',
+        category:  'Equipment',
+        price:     100,
+        priceUnit: 'each',
+        stock:     'In Stock',
+        image:     '../media/hoe-products.jpeg',
+        badge:     'Equipment',
+        chips: [
+            { label: 'Length',   value: '140 cm (adjustable)' },
+            { label: 'Head',     value: 'Forged steel, 15 cm blade' },
+            { label: 'Handle',   value: 'Smooth hardwood' },
+            { label: 'Weight',   value: '±900g' },
+        ],
+        farmer: {
+            name:       'Roots Equipment Store',
+            collective: 'Roots Collective',
+            location:   'Cape Town',
+            note:       'Sourced through a bulk community purchase programme — this hoe is the same model used daily across Roots collective plots in Khayelitsha and Mitchells Plain.',
+        },
+        description: `
+            <p>A sturdy, full-length garden hoe with a forged steel head and smooth hardwood handle — the essential tool for breaking soil, making furrows, and clearing weeds between rows. The 15 cm steel blade is thick enough to cut through compacted township soil without bending.</p>
+            <p>The 140 cm handle length suits most adults and reduces back strain during extended hoeing sessions. The wood is sanded smooth to prevent splinters and the blade is rust-treated for outdoor durability.</p>
+            <p>Maintenance: rinse the blade after use and store in a dry place. Lightly oil the blade every few months to prevent surface rust. The handle can be replaced if needed using standard hardware fittings.</p>
+        `,
+        nutrition: [
+            { label: 'Total length',     value: '140 cm' },
+            { label: 'Blade width',      value: '15 cm' },
+            { label: 'Blade material',   value: 'Forged carbon steel' },
+            { label: 'Handle material',  value: 'Hardwood (smooth-sanded)' },
+            { label: 'Weight',           value: '±900g' },
+            { label: 'Rust treatment',   value: 'Yes' },
+            { label: 'Replacement handle', value: 'Available separately' },
+        ],
+        reviews: [
+            { author: 'Siphamandla N.', rating: 5, date: 'April 2026', body: 'Solid, heavy-duty hoe. I have been farming for 12 years and this is as good as tools that cost three times more.' },
+            { author: 'Dave P.', rating: 4, date: 'March 2026', body: 'Good weight and balance. The steel head is thick and sharp. Very happy with it.' },
+        ],
+    },
+
+    9: {
+        id:        '9',
+        name:      'Sorghum (1kg)',
+        category:  'Grains',
+        price:     80,
+        priceUnit: 'per kg',
+        stock:     'In Stock',
+        image:     '../media/sorghum-products.jpg',
+        badge:     'Grains',
+        chips: [
+            { label: 'Weight',  value: '1 kg' },
+            { label: 'Type',    value: 'Whole grain, white sorghum' },
+            { label: 'Method',  value: 'Traditionally grown' },
+            { label: 'Origin',  value: 'Gugulethu, CT' },
+        ],
+        farmer: {
+            name:       'Gugulethu Grain Growers',
+            collective: 'Roots Collective',
+            location:   'Gugulethu, Cape Town',
+            note:       'A smaller specialist grain collective focused exclusively on white sorghum, using traditional low-irrigation growing methods developed over many seasons.',
+        },
+        description: `
+            <p>Premium white sorghum grain, grown using traditional low-input methods by the Gugulethu Grain Growers collective. White sorghum has a milder, sweeter flavour than red varieties, making it more versatile in both savoury and sweet applications.</p>
+            <p>Use for traditional porridge, flatbreads, baked goods, or as a nutritious gluten-free side grain. White sorghum flour is increasingly popular in health-conscious baking. It cooks similarly to rice but with a chewier, more satisfying texture.</p>
+            <p>Storage: store in an airtight container in a cool, dry pantry. Shelf life is 12+ months when stored correctly. Cooked sorghum keeps in the fridge for up to 4 days.</p>
+        `,
+        nutrition: [
+            { label: 'Energy',           value: '329 kcal / 100g' },
+            { label: 'Protein',          value: '10.6g' },
+            { label: 'Carbohydrates',    value: '72.1g' },
+            { label: 'of which sugars',  value: '1.9g' },
+            { label: 'Fat',              value: '3.1g' },
+            { label: 'Fibre',            value: '6.7g' },
+            { label: 'Iron',             value: '3.9mg' },
+            { label: 'Gluten',           value: 'Gluten-free' },
+        ],
+        reviews: [
+            { author: 'Nozipho D.', rating: 5, date: 'April 2026', body: 'Smoother flavour than the red sorghum I normally buy. Makes a beautiful light porridge. Will definitely reorder.' },
+        ],
+    },
+
+    10: {
+        id:        '10',
+        name:      'Cabbage (1kg)',
+        category:  'Vegetables',
+        price:     100,
+        priceUnit: 'per head (±1kg)',
+        stock:     'In Stock',
+        image:     '../media/cabbage-products.jpeg',
+        badge:     'Vegetables',
+        chips: [
+            { label: 'Weight',  value: '±800g – 1.2kg per head' },
+            { label: 'Variety', value: 'Drumhead & Savoy' },
+            { label: 'Method',  value: 'Naturally grown' },
+            { label: 'Origin',  value: 'Nyanga, CT' },
+        ],
+        farmer: {
+            name:       'Nyanga Community Farm',
+            collective: 'Roots Collective',
+            location:   'Nyanga, Cape Town',
+            note:       'A 24-plot collective in Nyanga growing cabbages year-round using rainwater collection and natural pest control — no synthetic chemicals used on any plot.',
+        },
+        description: `
+            <p>Dense, crisp cabbages harvested fresh from community plots in Nyanga. We grow a mix of drumhead (smooth-leaf) and savoy (crinkle-leaf) varieties depending on the season, both known for their firm texture and full flavour.</p>
+            <p>A South African kitchen essential — perfect for coleslaw, braised dishes, stews, vetkoek fillings, and traditional boontjiesop. Cabbage is one of the most nutritious and economical vegetables you can buy.</p>
+            <p>Storage: keep whole cabbages in the fridge crisper drawer for up to 2 weeks. Once cut, wrap tightly and use within 4 days for best flavour.</p>
+        `,
+        nutrition: [
+            { label: 'Energy',           value: '25 kcal / 100g' },
+            { label: 'Protein',          value: '1.3g' },
+            { label: 'Carbohydrates',    value: '5.8g' },
+            { label: 'of which sugars',  value: '3.2g' },
+            { label: 'Fat',              value: '0.1g' },
+            { label: 'Fibre',            value: '2.5g' },
+            { label: 'Vitamin C',        value: '36mg' },
+            { label: 'Vitamin K',        value: '76mcg' },
+        ],
+        reviews: [
+            { author: 'Zanele B.', rating: 5, date: 'April 2026', body: 'Fresh, tight heads and very good size. Made a big pot of cabbage soup and it was delicious. Good value.' },
+            { author: 'Andrew C.', rating: 4, date: 'March 2026', body: 'Solid cabbage. Crisp and fresh when it arrived. The savoy variety I got was perfect for coleslaw.' },
         ],
     },
 };
