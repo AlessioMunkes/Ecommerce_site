@@ -84,7 +84,7 @@
     </section>
 
     <!-- SELLER APPLICATION SECTION -->
-    <section class="seller-application-section">
+    <section class="seller-application-section" id="become-a-seller">
         <div class="section-container">
             <h2 class="section-heading">Become a Seller</h2>
             <p class="section-description">Are you a farmer interested in selling your crops with Roots? Apply now to join our community collective.</p>
@@ -107,8 +107,8 @@
                         <input type="tel" id="seller-phone" name="seller-phone" placeholder="+27 82 000 0000">
                     </div>
                     <div class="form-group">
-                        <label for="farm-name">Farm / Collective Name</label>
-                        <input type="text" id="farm-name" name="farm-name" placeholder="Your farm or collective name">
+                        <label for="farm-name">Farm Name</label>
+                        <input type="text" id="farm-name" name="farm-name" placeholder="Your farm name">
                     </div>
                 </div>
 
@@ -130,7 +130,7 @@
 
                 <div class="form-row">
                     <div class="form-group">
-                        <label for="farm-size">Farm Size (hectares)</label>
+                        <label for="farm-size">Farm Size (meters)</label>
                         <input type="number" id="farm-size" name="farm-size" placeholder="e.g., 2">
                     </div>
                     <div class="form-group">
@@ -159,6 +159,31 @@
     </footer>
 
     <script src="../scripts/scripts.js"></script>
+    <script>
+    /* ── Scroll to & highlight seller form if arriving from #become-a-seller ── */
+    if (window.location.hash === '#become-a-seller') {
+        window.addEventListener('load', () => {
+            const section = document.getElementById('become-a-seller');
+            const firstInput = document.getElementById('seller-name');
+
+            if (section) {
+                // Small delay so the page is fully painted before scrolling
+                setTimeout(() => {
+                    section.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }, 120);
+            }
+
+            if (firstInput) {
+                setTimeout(() => {
+                    firstInput.focus();
+                    firstInput.classList.add('input-highlight');
+                    // Remove the highlight glow after 2.5 s
+                    setTimeout(() => firstInput.classList.remove('input-highlight'), 2500);
+                }, 600);
+            }
+        });
+    }
+    </script>
     <script>
         // Contact form feedback
         document.getElementById('contactForm').addEventListener('submit', function(e) {

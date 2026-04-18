@@ -546,3 +546,565 @@ function placeOrder() {
 function finishOrder() {
     window.location.href = 'index.html';
 }
+
+const PRODUCTS = {
+    1: {
+        id:          '1',
+        name:        'Spinach Bundle',
+        category:    'Vegetables',
+        price:       45,
+        priceUnit:   'per bundle',
+        stock:       'In Stock',
+        image:       '../media/spinach.jpg',
+        badge:       'Vegetables',
+        chips: [
+            { label: 'Weight',  value: '±500g' },
+            { label: 'Pack',    value: '1 bundle' },
+            { label: 'Method',  value: 'Naturally grown' },
+            { label: 'Origin',  value: 'Khayelitsha, CT' },
+        ],
+        farmer: {
+            name:        '[Farmer / Collective Name]',
+            collective:  '[Collective Name]',
+            location:    'Khayelitsha, Cape Town',
+            note:        '[One sentence about the farmer or collective — how long they have been farming, what makes their produce special, etc.]',
+        },
+        description: `
+            <p>[Replace with a detailed description of this product. What variety is it? How is it grown? What does it taste like? Any preparation tips?]</p>
+            <p>[Add a second paragraph about storage, shelf life, or how best to use this product in cooking.]</p>
+            <p>[Optional: mention the farming method, any certifications, or what season it is harvested in.]</p>
+        `,
+        nutrition: [
+            { label: 'Energy',       value: '[000 kcal / 100g]' },
+            { label: 'Protein',      value: '[0.0g]' },
+            { label: 'Carbohydrates',value: '[0.0g]' },
+            { label: 'of which sugars', value: '[0.0g]' },
+            { label: 'Fat',          value: '[0.0g]' },
+            { label: 'Fibre',        value: '[0.0g]' },
+            { label: 'Sodium',       value: '[0.0mg]' },
+        ],
+        reviews: [
+            { author: '[Customer Name]', rating: 5, date: '[Month Year]', body: '[Replace with a real customer review of this product.]' },
+            { author: '[Customer Name]', rating: 4, date: '[Month Year]', body: '[Replace with a real customer review of this product.]' },
+        ],
+    },
+ 
+    2: {
+        id:          '2',
+        name:        'Tomatoes (1kg)',
+        category:    'Vegetables',
+        price:       30,
+        priceUnit:   'per kg',
+        stock:       'In Stock',
+        image:       '../media/tomatoes.jpg',
+        badge:       'Vegetables',
+        chips: [
+            { label: 'Weight',  value: '1kg' },
+            { label: 'Variety', value: '[e.g. Roma / Cherry]' },
+            { label: 'Method',  value: 'Naturally grown' },
+            { label: 'Origin',  value: '[Township, City]' },
+        ],
+        farmer: {
+            name:        '[Farmer / Collective Name]',
+            collective:  '[Collective Name]',
+            location:    '[Township, Cape Town]',
+            note:        '[One sentence about the farmer or collective.]',
+        },
+        description: `
+            <p>[Replace with a detailed description of these tomatoes. What variety? How are they best used — salads, sauces, grilling?]</p>
+            <p>[Storage tip: keep at room temperature until ripe, then refrigerate. Use within X days of purchase.]</p>
+        `,
+        nutrition: [
+            { label: 'Energy',        value: '[000 kcal / 100g]' },
+            { label: 'Protein',       value: '[0.0g]' },
+            { label: 'Carbohydrates', value: '[0.0g]' },
+            { label: 'of which sugars', value: '[0.0g]' },
+            { label: 'Fat',           value: '[0.0g]' },
+            { label: 'Fibre',         value: '[0.0g]' },
+            { label: 'Sodium',        value: '[0.0mg]' },
+        ],
+        reviews: [
+            { author: '[Customer Name]', rating: 5, date: '[Month Year]', body: '[Replace with a real customer review.]' },
+        ],
+    },
+ 
+    3: {
+        id:          '3',
+        name:        'Mixed Citrus Box',
+        category:    'Fruits',
+        price:       60,
+        priceUnit:   'per box',
+        stock:       'In Stock',
+        image:       '../media/citrus.jpg',
+        badge:       'Fruits',
+        chips: [
+            { label: 'Weight',   value: '±2kg' },
+            { label: 'Contents', value: '[e.g. Oranges, Lemons, Naartjies]' },
+            { label: 'Method',   value: 'Naturally grown' },
+            { label: 'Origin',   value: '[Township, City]' },
+        ],
+        farmer: {
+            name:        '[Farmer / Collective Name]',
+            collective:  '[Collective Name]',
+            location:    '[Township, City]',
+            note:        '[One sentence about the farmer or collective.]',
+        },
+        description: `
+            <p>[Replace with a description of what fruits are included in this box, the flavour profile, and best uses — juicing, eating fresh, cooking, etc.]</p>
+            <p>[Add storage and shelf-life information.]</p>
+        `,
+        nutrition: [
+            { label: 'Energy',        value: '[000 kcal / 100g]' },
+            { label: 'Protein',       value: '[0.0g]' },
+            { label: 'Carbohydrates', value: '[0.0g]' },
+            { label: 'of which sugars', value: '[0.0g]' },
+            { label: 'Fat',           value: '[0.0g]' },
+            { label: 'Fibre',         value: '[0.0g]' },
+            { label: 'Vitamin C',     value: '[000mg]' },
+        ],
+        reviews: [
+            { author: '[Customer Name]', rating: 5, date: '[Month Year]', body: '[Replace with a real customer review.]' },
+            { author: '[Customer Name]', rating: 4, date: '[Month Year]', body: '[Replace with a real customer review.]' },
+        ],
+    },
+ 
+    4: {
+        id:          '4',
+        name:        'Maize Meal (2kg)',
+        category:    'Grains',
+        price:       55,
+        priceUnit:   'per 2kg bag',
+        stock:       'In Stock',
+        image:       '../media/maize.jpg',
+        badge:       'Grains',
+        chips: [
+            { label: 'Weight',  value: '2kg' },
+            { label: 'Grade',   value: '[e.g. Super / Special / Fine]' },
+            { label: 'Method',  value: 'Community-milled' },
+            { label: 'Origin',  value: '[Township, City]' },
+        ],
+        farmer: {
+            name:        '[Farmer / Collective Name]',
+            collective:  '[Collective Name]',
+            location:    '[Township, City]',
+            note:        '[One sentence about the farming or milling collective.]',
+        },
+        description: `
+            <p>[Replace with a description of this maize meal — the grade, texture (fine/coarse), and typical uses like pap, porridge, or baking.]</p>
+            <p>[Storage: store in a cool, dry place. Best used within X months of purchase.]</p>
+        `,
+        nutrition: [
+            { label: 'Energy',        value: '[000 kcal / 100g]' },
+            { label: 'Protein',       value: '[0.0g]' },
+            { label: 'Carbohydrates', value: '[0.0g]' },
+            { label: 'of which sugars', value: '[0.0g]' },
+            { label: 'Fat',           value: '[0.0g]' },
+            { label: 'Fibre',         value: '[0.0g]' },
+            { label: 'Iron',          value: '[0.0mg]' },
+        ],
+        reviews: [
+            { author: '[Customer Name]', rating: 5, date: '[Month Year]', body: '[Replace with a real customer review.]' },
+        ],
+    },
+ 
+    5: {
+        id:          '5',
+        name:        'Butternut Squash',
+        category:    'Vegetables',
+        price:       25,
+        priceUnit:   'per unit',
+        stock:       'In Stock',
+        image:       '../media/butternut.jpg',
+        badge:       'Vegetables',
+        chips: [
+            { label: 'Weight',  value: '±800g–1.2kg' },
+            { label: 'Pack',    value: '1 whole squash' },
+            { label: 'Method',  value: 'Naturally grown' },
+            { label: 'Origin',  value: '[Township, City]' },
+        ],
+        farmer: {
+            name:        '[Farmer / Collective Name]',
+            collective:  '[Collective Name]',
+            location:    '[Township, City]',
+            note:        '[One sentence about the farmer or collective.]',
+        },
+        description: `
+            <p>[Replace with a description of this butternut — sweetness, texture, best cooking methods (roasting, soup, grilling).]</p>
+            <p>[Storage: keep uncut butternuts in a cool dark place for up to X weeks. Once cut, refrigerate and use within X days.]</p>
+        `,
+        nutrition: [
+            { label: 'Energy',        value: '[000 kcal / 100g]' },
+            { label: 'Protein',       value: '[0.0g]' },
+            { label: 'Carbohydrates', value: '[0.0g]' },
+            { label: 'of which sugars', value: '[0.0g]' },
+            { label: 'Fat',           value: '[0.0g]' },
+            { label: 'Fibre',         value: '[0.0g]' },
+            { label: 'Vitamin A',     value: '[000mcg]' },
+        ],
+        reviews: [
+            { author: '[Customer Name]', rating: 5, date: '[Month Year]', body: '[Replace with a real customer review.]' },
+            { author: '[Customer Name]', rating: 5, date: '[Month Year]', body: '[Replace with a real customer review.]' },
+        ],
+    },
+ 
+    6: {
+        id:          '6',
+        name:        'Seed Pack — Greens',
+        category:    'Seeds',
+        price:       35,
+        priceUnit:   'per pack',
+        stock:       'In Stock',
+        image:       '../media/seeds.jpg',
+        badge:       'Seeds',
+        chips: [
+            { label: 'Contents', value: '[e.g. Spinach, Kale, Swiss Chard]' },
+            { label: 'Seeds',    value: '[Approx. 000 seeds]' },
+            { label: 'Season',   value: '[e.g. All year / Spring–Autumn]' },
+            { label: 'Origin',   value: '[Supplier / Township]' },
+        ],
+        farmer: {
+            name:        '[Supplier / Collective Name]',
+            collective:  '[Collective Name]',
+            location:    '[City]',
+            note:        '[One sentence about where these seeds come from and how they were selected.]',
+        },
+        description: `
+            <p>[Replace with a description of what seeds are included, germination rates, and what conditions they grow best in.]</p>
+            <p>[Planting instructions: sow at X cm depth, water X times per week, harvest in X–X weeks. Suitable for container and ground planting.]</p>
+        `,
+        nutrition: [
+            { label: 'Seed varieties',  value: '[List varieties]' },
+            { label: 'Approx. count',   value: '[000 seeds]' },
+            { label: 'Germination rate', value: '[00%+]' },
+            { label: 'Sow depth',       value: '[0–0cm]' },
+            { label: 'Days to harvest', value: '[00–00 days]' },
+            { label: 'Suitable for',    value: 'Container &amp; ground' },
+            { label: 'Best season',     value: '[Season]' },
+        ],
+        reviews: [
+            { author: '[Customer Name]', rating: 5, date: '[Month Year]', body: '[Replace with a real customer review.]' },
+        ],
+    },
+};
+ 
+/* -------------------------------------------------------
+   PAGE STATE
+------------------------------------------------------- */
+let currentProduct = null;
+let currentQty     = 1;
+ 
+/* -------------------------------------------------------
+   INIT
+------------------------------------------------------- */
+document.addEventListener('DOMContentLoaded', () => {
+    const id      = new URLSearchParams(window.location.search).get('id');
+    const product = PRODUCTS[id];
+ 
+    if (!product) {
+        document.getElementById('notFound').style.display  = 'flex';
+        document.getElementById('detailPage').style.display = 'none';
+        return;
+    }
+ 
+    currentProduct = product;
+    document.title = product.name + ' — Roots';
+    document.getElementById('detailPage').style.display = 'block';
+ 
+    renderBreadcrumb(product);
+    renderHero(product);
+    renderChips(product);
+    renderFarmerCard(product);
+    renderTabs(product);
+    renderRelated(product);
+    updateLineTotal();
+    syncWishlistStar();
+});
+ 
+/* -------------------------------------------------------
+   BREADCRUMB
+------------------------------------------------------- */
+function renderBreadcrumb(p) {
+    document.getElementById('breadcrumb').innerHTML = `
+        <a href="index.html">Home</a>
+        <span class="bc-sep">›</span>
+        <a href="produce_products.html">Products</a>
+        <span class="bc-sep">›</span>
+        <a href="produce_products.html?filter=${p.category.toLowerCase()}">${p.category}</a>
+        <span class="bc-sep">›</span>
+        <span class="bc-current">${p.name}</span>`;
+}
+ 
+/* -------------------------------------------------------
+   HERO (image + info)
+------------------------------------------------------- */
+function renderHero(p) {
+    document.getElementById('detailMainImg').src  = p.image;
+    document.getElementById('detailMainImg').alt  = p.name;
+    document.getElementById('detailName').textContent     = p.name;
+    document.getElementById('detailBadge').textContent    = p.badge;
+    document.getElementById('detailCategory').textContent = p.category;
+    document.getElementById('detailPrice').textContent    = 'R' + p.price.toFixed(2);
+    document.getElementById('detailPriceUnit').textContent = p.priceUnit;
+    document.getElementById('detailDescription').innerHTML = p.description;
+ 
+    const stockEl = document.getElementById('detailStock');
+    stockEl.textContent = p.stock;
+    stockEl.className   = 'detail-stock ' + (p.stock === 'In Stock' ? 'in-stock' : 'out-stock');
+ 
+    // Thumbnail strip — only shows if product has an `images` array
+    const thumbsEl = document.getElementById('detailThumbs');
+    if (p.images && p.images.length > 1) {
+        thumbsEl.innerHTML = p.images.map((src, i) => `
+            <img src="${src}" alt="${p.name} image ${i+1}" class="detail-thumb ${i === 0 ? 'active' : ''}"
+                onclick="switchMainImage(this, '${src}')">`
+        ).join('');
+    }
+}
+ 
+function switchMainImage(thumb, src) {
+    document.getElementById('detailMainImg').src = src;
+    document.querySelectorAll('.detail-thumb').forEach(t => t.classList.remove('active'));
+    thumb.classList.add('active');
+}
+ 
+/* -------------------------------------------------------
+   CHIPS
+------------------------------------------------------- */
+function renderChips(p) {
+    document.getElementById('detailChips').innerHTML =
+        p.chips.map(c => `
+        <div class="detail-chip">
+            <div class="chip-text">
+                <span class="chip-label">${c.label}</span>
+                <span class="chip-value">${c.value}</span>
+            </div>
+        </div>`).join('');
+}
+ 
+/* -------------------------------------------------------
+   FARMER CARD
+------------------------------------------------------- */
+function renderFarmerCard(p) {
+    document.getElementById('detailFarmerCard').innerHTML = `
+        <div class="farmer-info">
+            <span class="farmer-label">Grown by</span>
+            <span class="farmer-name">${p.farmer.name}</span>
+            <span class="farmer-collective">${p.farmer.collective} &middot; ${p.farmer.location}</span>
+            <p class="farmer-note">${p.farmer.note}</p>
+        </div>`;
+}
+ 
+/* -------------------------------------------------------
+   QUANTITY
+------------------------------------------------------- */
+function detailChangeQty(delta) {
+    currentQty = Math.max(1, Math.min(99, currentQty + delta));
+    document.getElementById('detailQtyDisplay').textContent = currentQty;
+    updateLineTotal();
+}
+ 
+function updateLineTotal() {
+    if (!currentProduct) return;
+    document.getElementById('detailLineTotal').textContent =
+        'R' + (currentProduct.price * currentQty).toFixed(2);
+}
+ 
+/* -------------------------------------------------------
+   WISHLIST
+------------------------------------------------------- */
+function syncWishlistStar() {
+    const btn = document.getElementById('detailWishlistBtn');
+    const wl  = getWishlist();
+    const active = wl.some(i => i.id === currentProduct.id);
+    btn.classList.toggle('active', active);
+}
+ 
+function detailToggleWishlist() {
+    const p = currentProduct;
+    toggleWishlist(p.id, p.name, p.price);
+    syncWishlistStar();
+}
+ 
+/* -------------------------------------------------------
+   ADD TO CART
+------------------------------------------------------- */
+function detailAddToCart() {
+    const p   = currentProduct;
+    const btn = document.getElementById('detailCartBtn');
+    addToCart(p.id, p.name, p.price, currentQty);
+    btn.textContent = currentQty > 1 ? `✓ ${currentQty} Added!` : '✓ Added!';
+    btn.style.backgroundColor = '#015005';
+    setTimeout(() => {
+        btn.textContent = 'Add to Cart';
+        btn.style.backgroundColor = '';
+    }, 2000);
+}
+ 
+/* -------------------------------------------------------
+   TABS
+------------------------------------------------------- */
+function renderTabs(p) {
+    // Description
+    document.getElementById('tab-description').innerHTML = `
+        <div class="tab-content-body">${p.description}</div>`;
+ 
+    // Nutrition / Details
+    document.getElementById('tab-nutrition').innerHTML = `
+        <div class="nutrition-table">
+            ${p.nutrition.map(row => `
+            <div class="nutrition-row">
+                <span class="nutrition-label">${row.label}</span>
+                <span class="nutrition-value">${row.value}</span>
+            </div>`).join('')}
+        </div>`;
+ 
+    // Reviews
+    const avgRating = p.reviews.reduce((s, r) => s + r.rating, 0) / p.reviews.length;
+    document.getElementById('tab-reviews').innerHTML = `
+        <div class="reviews-header">
+            <div class="reviews-avg">
+                <span class="avg-number">${avgRating.toFixed(1)}</span>
+                <div class="avg-stars">${renderStars(avgRating)}</div>
+                <span class="avg-count">${p.reviews.length} review${p.reviews.length !== 1 ? 's' : ''}</span>
+            </div>
+        </div>
+        <div class="reviews-list">
+            ${p.reviews.map(r => `
+            <div class="review-card">
+                <div class="review-top">
+                    <span class="review-author">${r.author}</span>
+                    <span class="review-stars">${renderStars(r.rating)}</span>
+                    <span class="review-date">${r.date}</span>
+                </div>
+                <p class="review-body">${r.body}</p>
+            </div>`).join('')}
+        </div>`;
+}
+ 
+function renderStars(rating) {
+    return Array.from({ length: 5 }, (_, i) =>
+        `<span class="${i < Math.round(rating) ? 'star filled' : 'star'}">★</span>`
+    ).join('');
+}
+ 
+function switchDetailTab(name, btn) {
+    document.querySelectorAll('.detail-tab').forEach(b => b.classList.remove('active'));
+    document.querySelectorAll('.detail-tab-panel').forEach(p => p.style.display = 'none');
+    btn.classList.add('active');
+    document.getElementById('tab-' + name).style.display = 'block';
+}
+ 
+/* -------------------------------------------------------
+   RELATED PRODUCTS
+------------------------------------------------------- */
+function renderRelated(p) {
+    const related = Object.values(PRODUCTS)
+        .filter(prod => prod.id !== p.id && prod.category === p.category)
+        .slice(0, 4);
+ 
+    // If not enough in same category, fill from others
+    if (related.length < 3) {
+        const others = Object.values(PRODUCTS)
+            .filter(prod => prod.id !== p.id && prod.category !== p.category)
+            .slice(0, 4 - related.length);
+        related.push(...others);
+    }
+ 
+    document.getElementById('relatedGrid').innerHTML = related.map(prod => `
+        <div class="related-card">
+            <a href="product_detail.html?id=${prod.id}" class="related-img-link">
+                <div class="related-img-wrap">
+                    <img src="${prod.image}" alt="${prod.name}" class="related-img">
+                    <span class="product-badge">${prod.badge}</span>
+                </div>
+            </a>
+            <div class="related-body">
+                <span class="related-name">${prod.name}</span>
+                <span class="related-price">R${prod.price.toFixed(2)}</span>
+            </div>
+            <div class="related-actions">
+                <a href="product_detail.html?id=${prod.id}" class="btn btn-info related-btn">View</a>
+                <button class="btn btn-cart related-btn"
+                    onclick="addToCart('${prod.id}','${prod.name}',${prod.price},1); this.textContent='✓'; setTimeout(()=>this.textContent='Add',1800)">
+                    Add
+                </button>
+            </div>
+        </div>`).join('');
+}
+
+/* =====================================================
+   LOW DATA MODE
+   Persists via localStorage across all pages.
+   Injects the toggle button into every page automatically.
+   ===================================================== */
+ 
+(function () {
+    const LD_KEY = 'roots-low-data';
+ 
+    /* --- Apply saved preference immediately (before paint) --- */
+    if (localStorage.getItem(LD_KEY) === 'on') {
+        document.body.classList.add('low-data');
+    }
+ 
+    /* --- Inject the floating toggle button --- */
+    function injectToggle() {
+        const btn = document.createElement('div');
+        btn.className   = 'low-data-toggle';
+        btn.title       = 'Toggle Low Data Mode';
+        btn.setAttribute('role', 'button');
+        btn.setAttribute('aria-pressed', isOn() ? 'true' : 'false');
+        btn.innerHTML = `
+            <span class="low-data-toggle-label">Low Data</span>
+            <div class="low-data-switch"></div>`;
+        btn.addEventListener('click', toggleLowData);
+        document.body.appendChild(btn);
+    }
+ 
+    /* --- Inject image placeholders next to every <img> --- */
+    function injectPlaceholders() {
+        document.querySelectorAll('img').forEach(img => {
+            if (img.dataset.ldDone) return;
+            img.dataset.ldDone = 'true';
+ 
+            const ph = document.createElement('div');
+            ph.className = 'image-placeholder-ld';
+            ph.textContent = img.alt || 'Image';
+ 
+            /* Mirror the img's size constraints where possible */
+            if (img.classList.contains('image')) {
+                ph.style.maxWidth  = '880px';
+                ph.style.minHeight = '200px';
+            } else if (img.classList.contains('product-img') ||
+                       img.classList.contains('detail-main-img') ||
+                       img.classList.contains('related-img')) {
+                ph.style.minHeight = '180px';
+            }
+ 
+            img.parentNode.insertBefore(ph, img.nextSibling);
+        });
+    }
+ 
+    function isOn() {
+        return document.body.classList.contains('low-data');
+    }
+ 
+    function toggleLowData() {
+        const on = isOn();
+        document.body.classList.toggle('low-data', !on);
+        localStorage.setItem(LD_KEY, !on ? 'on' : 'off');
+ 
+        /* Update aria-pressed */
+        const btn = document.querySelector('.low-data-toggle');
+        if (btn) btn.setAttribute('aria-pressed', !on ? 'true' : 'false');
+ 
+        /* When turning ON — stop the scroll gradient JS from running */
+        if (!on) {
+            document.body.style.backgroundPosition = '';
+        }
+    }
+ 
+    document.addEventListener('DOMContentLoaded', () => {
+        injectToggle();
+        injectPlaceholders();
+    });
+})();

@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Product — Roots</title>
+    <link rel="stylesheet" href="../styles/styles.css" />
+</head>
+<body>
+
+    <!-- NAVBAR -->
+    <header class="header">
+        <div class="header-brand">
+            <h3><a href="index.html">Roots</a></h3>
+        </div>
+        <input type="checkbox" id="nav-toggle" class="nav-toggle">
+        <label for="nav-toggle" class="hamburger">
+            <span></span>
+            <span></span>
+            <span></span>
+        </label>
+        <nav class="links">
+            <a href="index.html">Home</a>
+            <a href="produce_products.html">Products</a>
+            <a href="newsletter.html">Newsletter</a>
+            <a href="about_us.html">About Us</a>
+            <a href="contact_us.html">Contact Us</a>
+            <a href="wishlist.html">Wishlist</a>
+            <a href="cart.html">Shopping Cart</a>
+        </nav>
+    </header>
+
+    <!-- NOT FOUND STATE -->
+    <div id="notFound" class="not-found" style="display:none;">
+        <div class="not-found-icon">&#128269;</div>
+        <p>Product not found.</p>
+        <a href="produce_products.html" class="btn btn-primary">Back to Products</a>
+    </div>
+
+    <!-- DETAIL PAGE — filled by JS -->
+    <div class="detail-page" id="detailPage" style="display:none;">
+
+        <!-- BREADCRUMB -->
+        <nav class="breadcrumb" id="breadcrumb"></nav>
+
+        <!-- MAIN LAYOUT: image left, info right -->
+        <div class="detail-main">
+
+            <!-- LEFT — images -->
+            <div class="detail-img-col">
+                <div class="detail-img-wrap">
+                    <img id="detailMainImg" src="" alt="" class="detail-main-img">
+                    <button class="detail-wishlist-btn" id="detailWishlistBtn" title="Add to wishlist"
+                        onclick="detailToggleWishlist()">&#9733;</button>
+                    <span class="detail-badge" id="detailBadge"></span>
+                </div>
+                <!-- Thumbnail strip — shown if product has multiple images -->
+                <div class="detail-thumbs" id="detailThumbs"></div>
+            </div>
+
+            <!-- RIGHT — product info -->
+            <div class="detail-info-col">
+
+                <h1 class="detail-name" id="detailName"></h1>
+
+                <div class="detail-meta-row">
+                    <span class="detail-category" id="detailCategory"></span>
+                    <span class="detail-stock" id="detailStock"></span>
+                </div>
+
+                <div class="detail-price-row">
+                    <span class="detail-price" id="detailPrice"></span>
+                    <span class="detail-price-unit" id="detailPriceUnit"></span>
+                </div>
+
+                <p class="detail-description" id="detailDescription"></p>
+
+                <!-- Key details chips -->
+                <div class="detail-chips" id="detailChips"></div>
+
+                <!-- Farmer / collective info -->
+                <div class="detail-farmer-card" id="detailFarmerCard"></div>
+
+                <!-- Quantity + cart -->
+                <div class="detail-purchase">
+                    <div class="qty-control detail-qty">
+                        <button class="qty-btn" onclick="detailChangeQty(-1)">&#8722;</button>
+                        <span class="qty-display" id="detailQtyDisplay">1</span>
+                        <button class="qty-btn" onclick="detailChangeQty(1)">&#43;</button>
+                    </div>
+                    <span class="detail-line-total" id="detailLineTotal"></span>
+                </div>
+
+                <div class="detail-action-btns">
+                    <button class="btn btn-primary detail-cart-btn" id="detailCartBtn"
+                        onclick="detailAddToCart()">Add to Cart</button>
+                    <a href="checkout.html" class="btn btn-outline-green detail-buy-btn">Buy Now</a>
+                </div>
+
+                <!-- Delivery info strip -->
+                <div class="detail-delivery-strip">
+                    <div class="delivery-item">
+
+                        <span>Collect free from distribution centre</span>
+                    </div>
+                    <div class="delivery-item">
+
+                        <span>Delivery from R80 — 2–4 business days</span>
+                    </div>
+                    <div class="delivery-item">
+
+                        <span>Community-grown &amp; quality checked</span>
+                    </div>
+                </div>
+
+            </div><!-- /detail-info-col -->
+        </div><!-- /detail-main -->
+
+        <!-- TABS: Description / Nutrition / Reviews -->
+        <div class="detail-tabs-section">
+            <div class="detail-tabs" id="detailTabs">
+                <button class="detail-tab active" onclick="switchDetailTab('description', this)">Description</button>
+                <button class="detail-tab" onclick="switchDetailTab('nutrition', this)">Nutrition / Details</button>
+                <button class="detail-tab" onclick="switchDetailTab('reviews', this)">Reviews</button>
+            </div>
+
+            <div class="detail-tab-panel" id="tab-description"></div>
+            <div class="detail-tab-panel" id="tab-nutrition"  style="display:none;"></div>
+            <div class="detail-tab-panel" id="tab-reviews"   style="display:none;"></div>
+        </div>
+
+        <!-- RELATED PRODUCTS -->
+        <div class="related-section">
+            <div class="section-title-card">You Might Also Like</div>
+            <div class="related-grid" id="relatedGrid"></div>
+        </div>
+
+    </div><!-- /detail-page -->
+
+    <footer class="footer">
+        <p>Roots &copy; 2026 — Growing Together</p>
+    </footer>
+
+    <script src="../scripts/scripts.js"></script>
+</body>
+</html>
