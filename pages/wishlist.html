@@ -3,13 +3,25 @@
 <head>
   <meta charset="UTF-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Wishlist — Roots</title>
+  <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@400;600;700&family=Lora:ital,wght@0,400;0,500;0,600;1,400&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@400;600;700&family=Lora:ital,wght@0,400;0,500;0,600;1,400&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet">
   <script src="https://cdn.tailwindcss.com"></script>
-  <script>tailwind.config={theme:{extend:{colors:{green:{400:'#4ade80',700:'#15803d',800:'#015005'},soil:{700:'#382f26',800:'#1a3a2a',900:'#0f2417'}}}}}</script>
-  <style>
-    body{background:linear-gradient(to bottom,#0f2417,#1a3a2a,#0e3d20,#1a3a2a,#0f2417);background-size:100% 400%;min-height:100vh;color:#f9faf8;font-family:system-ui,sans-serif}
-    body.low-data{background:#0f2417!important}
-    ::-webkit-scrollbar{width:5px}::-webkit-scrollbar-track{background:#0f2417}::-webkit-scrollbar-thumb{background:#015005;border-radius:3px}
-  </style>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            parchment: { 50:'#fdf8f0', 100:'#f7eed8', 200:'#eedfc0', 300:'#e0c99a' },
+            bark:      { 700:'#5c3d1e', 800:'#3d2810', 900:'#261808' },
+            moss:      { 400:'#7aad5a', 600:'#4a7c35', 700:'#345c24', 800:'#1e3a14' },
+            soil:      { 600:'#8b6340', 700:'#6b4a28', 800:'#4a3018' },
+          }
+        }
+      }
+    }
+  </script>
+  <link rel="stylesheet" href="../styles/roots.css">
+  
 </head>
 <body>
 <div id="navbar-root"></div>
@@ -93,6 +105,8 @@ ReactDOM.createRoot(document.getElementById('app-root')).render(
     ReactDOM.createPortal(e(RootsComponents.Navbar),        navRoot),
     ReactDOM.createPortal(e(RootsComponents.Footer),        footRoot),
     ReactDOM.createPortal(e(RootsComponents.LowDataToggle), toggleRoot),
+    e(RootsComponents.RevealObserver),
+    e(RootsComponents.ParallaxHandler),
     e(WishlistApp)
   )
 );
