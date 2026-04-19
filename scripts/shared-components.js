@@ -112,9 +112,8 @@ function useStore() {
   return useContext(StoreContext);
 }
 
-
 /* ----------------------------------------------------------
-   NAVBAR  — parchment / organic theme
+   NAVBAR
 ---------------------------------------------------------- */
 var NAV_LINKS = [
   { href: 'index.html',            label: 'Home' },
@@ -125,110 +124,82 @@ var NAV_LINKS = [
 ];
 
 function Navbar() {
-  var openState = useState(false);
-  var open      = openState[0];
-  var setOpen   = openState[1];
-  var store     = useStore();
-  var cartCount = store.cartCount;
-  var wishlist  = store.wishlist;
-  var current   = window.location.pathname.split('/').pop() || 'index.html';
+  var openState  = useState(false);
+  var open       = openState[0];
+  var setOpen    = openState[1];
+  var store      = useStore();
+  var cartCount  = store.cartCount;
+  var wishlist   = store.wishlist;
+  var current    = window.location.pathname.split('/').pop() || 'index.html';
 
-  var navStyle = {
-    position: 'sticky', top: 0, zIndex: 50,
-    background: 'rgba(247,238,216,0.92)',
-    borderBottom: '1px solid rgba(92,61,30,0.12)',
-    backdropFilter: 'blur(10px)',
-    WebkitBackdropFilter: 'blur(10px)',
-  };
-  var innerStyle = { maxWidth:'1280px', margin:'0 auto', padding:'0 20px', height:'64px', display:'flex', alignItems:'center', justifyContent:'space-between', gap:'16px' };
-
-  function linkClass(href) {
-    var base = 'px-3 py-1.5 rounded-full text-sm font-medium transition-colors ';
-    return href === current
-      ? base + 'bg-moss-600/12 text-moss-700'
-      : base + 'text-bark-700 hover:bg-bark-700/8 hover:text-bark-900';
-  }
-
-  return e('header', { style: navStyle },
-    e('div', { style: innerStyle },
-
+  return e('header', { className: 'sticky top-0 z-50 bg-black/50 backdrop-blur-md border-b border-white/10' },
+    /* Main bar */
+    e('div', { className: 'max-w-7xl mx-auto px-4 sm:px-6 h-16 flex items-center justify-between gap-4' },
       /* Brand */
-      e('a', { href: 'index.html', style: { textDecoration:'none', display:'flex', alignItems:'center', gap:'2px', flexShrink:0 } },
-        e('span', { style: { fontFamily:"'Caveat',cursive", fontSize:'26px', fontWeight:700, color:'#3d2810', lineHeight:1 } }, 'Roots'),
-        e('span', { style: { fontFamily:"'Caveat',cursive", fontSize:'26px', fontWeight:700, color:'#4a7c35', lineHeight:1 } }, '.')
+      e('a', { href: 'index.html', className: 'text-xl font-black tracking-tight shrink-0' },
+        e('span', { className: 'text-white' }, 'Roots'),
+        e('span', { className: 'text-green-400' }, '.')
       ),
 
       /* Desktop links */
-      e('nav', { style: { display:'none', gap:'2px' }, className: 'hidden md:flex items-center' },
+      e('nav', { className: 'hidden md:flex items-center gap-1' },
         NAV_LINKS.map(function(link) {
           var isActive = current === link.href;
           return e('a', {
-            key: link.href, href: link.href,
-            style: {
-              padding: '7px 14px',
-              borderRadius: '50px',
-              fontSize: '14px',
-              fontFamily: "'DM Sans',sans-serif",
-              fontWeight: 500,
-              textDecoration: 'none',
-              color: isActive ? '#345c24' : '#6b4a28',
-              background: isActive ? 'rgba(74,124,53,0.1)' : 'transparent',
-              transition: 'all 0.15s',
-            }
+            key: link.href,
+            href: link.href,
+            className: 'px-3 py-2 rounded-lg text-sm font-medium transition-colors ' +
+              (isActive ? 'bg-green-800/60 text-green-400' : 'text-gray-300 hover:text-white hover:bg-white/10')
           }, link.label);
         })
       ),
 
       /* Right icons */
-      e('div', { style: { display:'flex', alignItems:'center', gap:'4px' } },
+      e('div', { className: 'flex items-center gap-1' },
 
         /* Wishlist */
-        e('a', { href: 'wishlist.html', style: { position:'relative', padding:'8px', borderRadius:'50%', display:'flex', alignItems:'center', justifyContent:'center', color:'#6b4a28', textDecoration:'none', background:'transparent', transition:'background 0.15s' } },
-          e('span', { style: { fontSize:'18px', lineHeight:1, fontFamily:"'Lora',serif" } }, '\u2605'),
+        e('a', {
+          href: 'wishlist.html',
+          className: 'relative p-2.5 rounded-lg text-gray-300 hover:text-yellow-400 hover:bg-white/10 transition-colors'
+        },
+          e('span', { className: 'text-base leading-none font-bold', 'aria-label': 'Wishlist' }, '[ ]'),
           wishlist.length > 0 && e('span', {
-            style: { position:'absolute', top:0, right:0, background:'#b45309', color:'#fdf8f0', fontSize:'9px', fontWeight:700, width:'16px', height:'16px', borderRadius:'50%', display:'flex', alignItems:'center', justifyContent:'center', fontFamily:"'DM Sans',sans-serif" }
+            className: 'absolute -top-0.5 -right-0.5 bg-yellow-400 text-black text-[10px] font-black w-4 h-4 rounded-full flex items-center justify-center'
           }, wishlist.length)
         ),
 
         /* Cart */
-        e('a', { href: 'cart.html', style: { position:'relative', padding:'8px 10px', borderRadius:'50px', display:'flex', alignItems:'center', gap:'5px', color:'#fdf8f0', textDecoration:'none', background:'linear-gradient(135deg,#345c24,#4a7c35)', fontSize:'13px', fontFamily:"'DM Sans',sans-serif", fontWeight:600, boxShadow:'0 2px 8px rgba(52,92,36,0.22)', transition:'transform 0.15s' } },
-          e('span', null, 'Cart'),
+        e('a', {
+          href: 'cart.html',
+          className: 'relative p-2.5 rounded-lg text-gray-300 hover:text-green-400 hover:bg-white/10 transition-colors'
+        },
+          e('span', { className: 'text-base leading-none font-bold', 'aria-label': 'Cart' }, '[C]'),
           cartCount > 0 && e('span', {
-            style: { background:'rgba(253,248,240,0.25)', borderRadius:'50px', padding:'1px 7px', fontSize:'11px', fontWeight:700 }
+            className: 'absolute -top-0.5 -right-0.5 bg-green-400 text-black text-[10px] font-black w-4 h-4 rounded-full flex items-center justify-center'
           }, cartCount > 9 ? '9+' : cartCount)
         ),
 
         /* Hamburger */
         e('button', {
-          style: { display:'flex', flexDirection:'column', gap:'5px', cursor:'pointer', padding:'6px', background:'none', border:'none', marginLeft:'4px' },
+          className: 'md:hidden p-2.5 rounded-lg text-gray-300 hover:text-white hover:bg-white/10 transition-colors',
           onClick: function() { setOpen(!open); },
-          'aria-label': 'Toggle menu',
-          className: 'md:hidden'
-        },
-          e('span', { style: { display:'block', width:'22px', height:'2px', background:'#3d2810', borderRadius:'2px', transition:'all 0.25s', transform: open ? 'translateY(7px) rotate(45deg)' : 'none' } }),
-          e('span', { style: { display:'block', width:'22px', height:'2px', background:'#3d2810', borderRadius:'2px', transition:'all 0.25s', opacity: open ? 0 : 1 } }),
-          e('span', { style: { display:'block', width:'22px', height:'2px', background:'#3d2810', borderRadius:'2px', transition:'all 0.25s', transform: open ? 'translateY(-7px) rotate(-45deg)' : 'none' } })
-        )
+          'aria-label': 'Toggle menu'
+        }, open ? 'X' : '=')
       )
     ),
 
     /* Mobile menu */
     open && e('div', {
-      style: { borderTop:'1px solid rgba(92,61,30,0.1)', background:'rgba(247,238,216,0.98)', padding:'12px 20px 20px' },
-      className: 'md:hidden'
+      className: 'md:hidden border-t border-white/10 bg-black/70 backdrop-blur-md px-4 pb-4 pt-2'
     },
       NAV_LINKS.map(function(link) {
         var isActive = current === link.href;
         return e('a', {
-          key: link.href, href: link.href,
+          key: link.href,
+          href: link.href,
           onClick: function() { setOpen(false); },
-          style: {
-            display: 'block', padding: '10px 14px', borderRadius: '12px',
-            marginBottom: '4px', textDecoration: 'none',
-            fontFamily: "'DM Sans',sans-serif", fontSize: '14px', fontWeight: 500,
-            color: isActive ? '#345c24' : '#6b4a28',
-            background: isActive ? 'rgba(74,124,53,0.1)' : 'transparent',
-          }
+          className: 'block px-3 py-2.5 rounded-lg text-sm font-medium mb-1 transition-colors ' +
+            (isActive ? 'bg-green-800/60 text-green-400' : 'text-gray-300 hover:text-white hover:bg-white/10')
         }, link.label);
       })
     )
@@ -251,35 +222,35 @@ function Footer() {
     ['Become a Seller', 'contact_us.html#become-a-seller'],
   ];
 
-  return e('footer', { style: { background:'#261808', borderTop:'1px solid rgba(122,173,90,0.15)', marginTop:'60px' } },
-    e('div', { style: { maxWidth:'1280px', margin:'0 auto', padding:'48px 20px', display:'grid', gridTemplateColumns:'repeat(auto-fit,minmax(180px,1fr))', gap:'32px' } },
+  return e('footer', { className: 'border-t border-white/10 bg-black/20 mt-20' },
+    e('div', { className: 'max-w-7xl mx-auto px-4 sm:px-6 py-12 grid grid-cols-1 sm:grid-cols-3 gap-8' },
       e('div', null,
-        e('div', { style: { fontFamily:"'Caveat',cursive", fontSize:'28px', fontWeight:700, marginBottom:'10px' } },
-          e('span', { style: { color:'#fdf8f0' } }, 'Roots'),
-          e('span', { style: { color:'#7aad5a' } }, '.')
+        e('span', { className: 'text-xl font-black' },
+          e('span', { className: 'text-white' }, 'Roots'),
+          e('span', { className: 'text-green-400' }, '.')
         ),
-        e('p', { style: { fontFamily:"'Lora',serif", fontSize:'13px', color:'#c4b49a', lineHeight:'1.7' } },
+        e('p', { className: 'mt-2 text-sm text-gray-400 leading-relaxed' },
           'Rooted in community. Growing together. Every purchase supports township farmers directly.'
         )
       ),
       e('div', null,
-        e('h4', { style: { fontFamily:"'DM Sans',sans-serif", fontSize:'10px', fontWeight:600, letterSpacing:'0.12em', textTransform:'uppercase', color:'#7aad5a', marginBottom:'14px' } }, 'Shop'),
-        e('div', { style: { display:'flex', flexDirection:'column', gap:'10px' } },
+        e('h4', { className: 'text-xs font-bold text-gray-400 uppercase tracking-widest mb-3' }, 'Shop'),
+        e('div', { className: 'flex flex-col gap-2' },
           shopLinks.map(function(item) {
-            return e('a', { key: item[0], href: item[1], style: { fontFamily:"'Lora',serif", fontSize:'13px', color:'#c4b49a', textDecoration:'none', transition:'color 0.2s' } }, item[0]);
+            return e('a', { key: item[0], href: item[1], className: 'text-sm text-gray-300 hover:text-green-400 transition-colors' }, item[0]);
           })
         )
       ),
       e('div', null,
-        e('h4', { style: { fontFamily:"'DM Sans',sans-serif", fontSize:'10px', fontWeight:600, letterSpacing:'0.12em', textTransform:'uppercase', color:'#7aad5a', marginBottom:'14px' } }, 'Info'),
-        e('div', { style: { display:'flex', flexDirection:'column', gap:'10px' } },
+        e('h4', { className: 'text-xs font-bold text-gray-400 uppercase tracking-widest mb-3' }, 'Info'),
+        e('div', { className: 'flex flex-col gap-2' },
           infoLinks.map(function(item) {
-            return e('a', { key: item[0], href: item[1], style: { fontFamily:"'Lora',serif", fontSize:'13px', color:'#c4b49a', textDecoration:'none', transition:'color 0.2s' } }, item[0]);
+            return e('a', { key: item[0], href: item[1], className: 'text-sm text-gray-300 hover:text-green-400 transition-colors' }, item[0]);
           })
         )
       )
     ),
-    e('div', { style: { borderTop:'1px solid rgba(122,173,90,0.1)', padding:'16px 20px', textAlign:'center', fontFamily:"'DM Sans',sans-serif", fontSize:'11px', color:'rgba(196,180,154,0.5)' } },
+    e('div', { className: 'border-t border-white/10 px-4 py-4 text-center text-xs text-gray-500' },
       '2026 Roots Collective. Built with care for township communities.'
     )
   );
@@ -289,9 +260,9 @@ function Footer() {
    LOW DATA TOGGLE
 ---------------------------------------------------------- */
 function LowDataToggle() {
-  var onState = useState(false);
-  var on      = onState[0];
-  var setOn   = onState[1];
+  var onState  = useState(false);
+  var on       = onState[0];
+  var setOn    = onState[1];
 
   useEffect(function() {
     var saved = localStorage.getItem('roots-low-data') === 'on';
@@ -308,97 +279,43 @@ function LowDataToggle() {
 
   return e('button', {
     onClick: toggle,
-    style: {
-      position:'fixed', bottom:'20px', right:'20px', zIndex:50,
-      display:'flex', alignItems:'center', gap:'10px',
-      padding:'10px 16px', borderRadius:'50px',
-      background: on ? 'rgba(74,124,53,0.12)' : 'rgba(247,238,216,0.94)',
-      border: on ? '1.5px solid rgba(74,124,53,0.35)' : '1.5px solid rgba(92,61,30,0.18)',
-      boxShadow: '0 4px 20px rgba(58,35,12,0.12)',
-      backdropFilter: 'blur(8px)',
-      cursor: 'pointer',
-      transition: 'all 0.2s',
-    },
+    className: 'fixed bottom-5 right-5 z-50 flex items-center gap-2.5 px-3.5 py-2.5 rounded-full border backdrop-blur-sm shadow-xl transition-all ' +
+      (on ? 'bg-green-900/80 border-green-400/50' : 'bg-black/70 border-white/15 hover:border-green-400/30'),
     title: 'Toggle Low Data Mode'
   },
-    e('span', { style: { fontFamily:"'DM Sans',sans-serif", fontSize:'11px', fontWeight:700, letterSpacing:'0.08em', textTransform:'uppercase', color: on ? '#345c24' : '#8b6340' } }, 'Low Data'),
-    e('div', { style: { width:'32px', height:'18px', borderRadius:'50px', position:'relative', background: on ? '#4a7c35' : 'rgba(92,61,30,0.15)', border: on ? 'none' : '1px solid rgba(92,61,30,0.2)', transition:'background 0.2s' } },
-      e('div', { style: { position:'absolute', top:'3px', width:'12px', height:'12px', borderRadius:'50%', background: on ? '#fdf8f0' : '#8b6340', left: on ? '17px' : '3px', transition:'left 0.2s' } })
+    e('span', { className: 'text-xs font-black ' + (on ? 'text-green-400' : 'text-gray-500') }, 'LD'),
+    e('span', { className: 'text-xs font-bold uppercase tracking-wide ' + (on ? 'text-green-400' : 'text-gray-400') }, 'Low Data'),
+    e('div', {
+      className: 'w-8 h-4 rounded-full relative transition-colors ' +
+        (on ? 'bg-green-400/30 border border-green-400' : 'bg-white/10 border border-white/20')
+    },
+      e('div', {
+        className: 'absolute top-0.5 w-3 h-3 rounded-full transition-all ' +
+          (on ? 'left-4 bg-green-400' : 'left-0.5 bg-gray-500')
+      })
     )
   );
 }
 
 /* ----------------------------------------------------------
-   SCROLL GRADIENT — not needed on parchment theme,
-   but kept for completeness (no-op on non-gradient pages)
+   SCROLL GRADIENT
 ---------------------------------------------------------- */
-function ScrollGradient() { return null; }
-
-/* ----------------------------------------------------------
-   REVEAL — attach IntersectionObserver after mount
----------------------------------------------------------- */
-function RevealObserver() {
+function ScrollGradient() {
   useEffect(function() {
-    var reveals = document.querySelectorAll('.reveal');
-    if ('IntersectionObserver' in window) {
-      var io = new IntersectionObserver(function(entries) {
-        entries.forEach(function(entry) {
-          if (entry.isIntersecting) { entry.target.classList.add('revealed'); io.unobserve(entry.target); }
-        });
-      }, { threshold: 0.08 });
-      reveals.forEach(function(el) { io.observe(el); });
-    } else {
-      reveals.forEach(function(el) { el.classList.add('revealed'); });
-    }
-  }, []);
-  return null;
-}
-
-/* ----------------------------------------------------------
-   PARALLAX — panel images + generic parallax
----------------------------------------------------------- */
-function ParallaxHandler() {
-  useEffect(function() {
-    function onScroll() {
+    function handler() {
       if (document.body.classList.contains('low-data')) return;
-
-      /* Hero bg */
-      var heroBg = document.getElementById('heroBg');
-      if (heroBg) heroBg.style.transform = 'translateY(' + (window.pageYOffset * 0.38) + 'px)';
-
-      /* Producer section */
-      var producerBg  = document.getElementById('producerBg');
-      var producerSec = document.getElementById('producerSection');
-      if (producerBg && producerSec) {
-        var rect   = producerSec.getBoundingClientRect();
-        var offset = (rect.top + rect.height / 2 - window.innerHeight / 2) * 0.22;
-        producerBg.style.transform = 'translateY(' + offset + 'px)';
-      }
-
-      /* Panel images */
-      document.querySelectorAll('.panel-wrap img[data-parallax]').forEach(function(img) {
-        var factor = parseFloat(img.dataset.parallax) || 0.12;
-        var wrap   = img.closest('.panel-wrap');
-        if (!wrap) return;
-        var r  = wrap.getBoundingClientRect();
-        var cx = r.top + r.height / 2 - window.innerHeight / 2;
-        img.style.transform = 'translateY(' + (cx * factor) + 'px) scale(1.14)';
-      });
+      var max = document.body.scrollHeight - window.innerHeight;
+      if (max <= 0) return;
+      document.body.style.backgroundPosition = '0% ' + ((window.scrollY / max) * 100) + '%';
     }
-
-    window.addEventListener('scroll', onScroll, { passive: true });
-    window.addEventListener('resize', onScroll, { passive: true });
-    onScroll();
-    return function() {
-      window.removeEventListener('scroll', onScroll);
-      window.removeEventListener('resize', onScroll);
-    };
+    window.addEventListener('scroll', handler, { passive: true });
+    return function() { window.removeEventListener('scroll', handler); };
   }, []);
   return null;
 }
 
 /* ----------------------------------------------------------
-   EXPOSE globals
+   EXPOSE globals for use in page scripts
 ---------------------------------------------------------- */
 window.RootsStore = {
   StoreProvider: StoreProvider,
@@ -406,10 +323,8 @@ window.RootsStore = {
 };
 
 window.RootsComponents = {
-  Navbar:          Navbar,
-  Footer:          Footer,
-  LowDataToggle:   LowDataToggle,
-  ScrollGradient:  ScrollGradient,
-  RevealObserver:  RevealObserver,
-  ParallaxHandler: ParallaxHandler,
+  Navbar:         Navbar,
+  Footer:         Footer,
+  LowDataToggle:  LowDataToggle,
+  ScrollGradient: ScrollGradient,
 };
