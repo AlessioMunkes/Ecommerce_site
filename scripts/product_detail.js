@@ -330,4 +330,35 @@ var PRODUCTS = {
             { author: 'Andrew C.', rating: 4, date: 'March 2026', body: 'Solid cabbage. Crisp and fresh when it arrived. The savoy variety I got was perfect for coleslaw.' },
         ],
     },
+
+        10: {
+        id:        '10',
+        name:      'Gardening Gloves',
+        category:  'Equipment',
+        price:     50,
+        priceUnit: 'per pair',
+        stock:     'In Stock',
+        image:     'media/equipment-products-1.jpg',
+        badge:     'Equipment',
+        chips: [
+            { label: 'Material', value: 'Latex' },
+            { label: 'Origin',   value: 'South Africa' },
+        ],
+        farmer: {
+            name:       'Roots Tools',
+            location:   'Cape Town, Western Cape',
+            note:       'We source durable, locally made hand tools from South African manufacturers and distribute them directly to community gardeners at fair prices.',
+        },
+        description: 'A sturdy, locally made gloves suitable for community plots and home gardens. The latex coating provides good grip and protection while allowing for dexterity. Ideal for weeding, planting, and general garden maintenance. Built to last with proper care.',
+        nutrition: [
+
+            { label: 'Made in',    value: 'South Africa' },
+        ],
+        reviews: [
+            { author: 'Zandile S.', rating: 5, date: 'April 2026', body: 'Great Gloves, very comfortable and durable.' },
+            { author: 'Mark F.',  rating: 4, date: 'March 2026', body: 'Well made and comfortable to use.' },
+        ],
+    },
 };
+
+
