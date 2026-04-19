@@ -3,19 +3,113 @@
 <head>
   <meta charset="UTF-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Shopping Cart — Roots</title>
+  <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@400;600;700&family=Lora:ital,wght@0,400;0,500;0,600;1,400&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
   <script src="https://cdn.tailwindcss.com"></script>
-  <script>tailwind.config={theme:{extend:{colors:{green:{400:'#4ade80',700:'#15803d',800:'#015005'},soil:{700:'#382f26',800:'#1a3a2a',900:'#0f2417'}}}}}</script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            parchment: { 50:'#fdf8f0', 100:'#f7eed8', 200:'#eedfc0', 300:'#e0c99a' },
+            bark:      { 700:'#5c3d1e', 800:'#3d2810', 900:'#261808' },
+            moss:      { 400:'#7aad5a', 600:'#4a7c35', 700:'#345c24', 800:'#1e3a14' },
+            soil:      { 600:'#8b6340', 700:'#6b4a28', 800:'#4a3018' },
+          },
+          fontFamily: {
+            sans: ['"DM Sans"', 'sans-serif'],
+            serif: ['Lora', 'Georgia', 'serif'],
+            caveat: ['Caveat', 'cursive'],
+          }
+        }
+      }
+    }
+  </script>
   <style>
-    body{background:linear-gradient(to bottom,#0f2417,#1a3a2a,#0e3d20,#1a3a2a,#0f2417);background-size:100% 400%;min-height:100vh;color:#f9faf8;font-family:system-ui,sans-serif}
-    body.low-data{background:#0f2417!important}
-    ::-webkit-scrollbar{width:5px}::-webkit-scrollbar-track{background:#0f2417}::-webkit-scrollbar-thumb{background:#015005;border-radius:3px}
+    /* ── Base ── */
+    html { scroll-behavior: smooth; }
+    body {
+      background-color: #f7eed8;
+      color: #3d2810;
+      font-family: 'Lora', Georgia, serif;
+      overflow-x: hidden;
+    }
+    body.low-data { background: #c9b686 !important; }
+    body.low-data img { display: none !important; }
+
+    /* ── Scrollbar ── */
+    ::-webkit-scrollbar { width: 6px; }
+    ::-webkit-scrollbar-track { background: #eedfc0; }
+    ::-webkit-scrollbar-thumb { background: #4a7c35; border-radius: 3px; }
+
+    /* ── Grain texture ── */
+    .grain::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)' opacity='0.03'/%3E%3C/svg%3E");
+      pointer-events: none;
+      z-index: 1;
+    }
+
+    /* ── Tag pill ── */
+    .tag-pill {
+      display:inline-block; font-family:'DM Sans',sans-serif;
+      font-size:11px; font-weight:700; letter-spacing:0.12em; text-transform:uppercase;
+      background:rgba(122,173,90,0.16); color:#345c24;
+      border:1px solid rgba(122,173,90,0.35); padding:6px 16px; border-radius:50px;
+    }
+
+    /* ── Navbar/footer colour overrides ── */
+    #navbar-root header {
+      background:rgba(247,238,216,0.9) !important;
+      border-bottom:1px solid rgba(92,61,30,0.12) !important;
+      backdrop-filter:blur(10px) !important;
+    }
+    #navbar-root .text-white   { color:#3d2810 !important; }
+    #navbar-root .text-gray-300 { color:#6b4a28 !important; }
+    #navbar-root .text-green-400 { color:#4a7c35 !important; }
+    #navbar-root .bg-green-400  { background:#4a7c35 !important; }
+    #navbar-root .text-black    { color:#fdf8f0 !important; }
+    #navbar-root .hover\:text-white:hover { color:#3d2810 !important; }
+    #navbar-root .hover\:bg-white\/10:hover { background:rgba(92,61,30,0.08) !important; }
+    #navbar-root .bg-green-800\/60 { background:rgba(74,124,53,0.15) !important; }
+    #navbar-root .border-white\/10 { border-color:rgba(92,61,30,0.1) !important; }
+    #navbar-root .bg-black\/50 { background:rgba(247,238,216,0.9) !important; }
+
+    #footer-root footer { background:#261808 !important; border-top:1px solid rgba(122,173,90,0.15) !important; }
+    #footer-root * { color:#c4b49a !important; }
+    #footer-root .text-green-400 { color:#7aad5a !important; }
+
+    #toggle-root button {
+      background:rgba(247,238,216,0.92) !important;
+      border-color:rgba(92,61,30,0.2) !important;
+    }
+    #toggle-root .text-gray-500 { color:#8b6340 !important; }
+    #toggle-root .text-gray-400 { color:#6b4a28 !important; }
+    /* ── Disable all animations in Low Data mode ── */
+    body.low-data *, 
+    body.low-data *::before, 
+    body.low-data *::after {
+      animation: none !important;
+      transition: none !important;
+    }
+
+    /* Force reveal and fade elements to be visible instantly */
+    body.low-data .reveal,
+    body.low-data .fade-up,
+    body.low-data .fade-up-2,
+    body.low-data .fade-up-3 {
+      opacity: 1 !important;
+      transform: translateY(0) !important;
+    }
   </style>
 </head>
-<body>
+<body class="bg-linen flex flex-col min-h-screen">
 <div id="navbar-root"></div>
-<div id="app-root" class="min-h-screen"></div>
+<div id="app-root" class="flex-1 flex flex-col pt-28"></div>
 <div id="footer-root"></div>
 <div id="toggle-root"></div>
+
 <script src="https://unpkg.com/react@18/umd/react.production.min.js" crossorigin></script>
 <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js" crossorigin></script>
 <script src="../scripts/shared-components.js"></script>
@@ -32,63 +126,82 @@ function CartApp() {
   var setQty         = store.setQty;
   var clearCart      = store.clearCart;
 
+  /* Empty state */
   if (cart.length === 0) {
-    return e('div', { className: 'max-w-2xl mx-auto px-4 py-24 text-center' },
-      e('div', { className: 'w-20 h-20 rounded-full bg-white/5 border border-white/10 flex items-center justify-center text-3xl font-black text-gray-600 mx-auto mb-6' }, '0'),
-      e('h2', { className: 'text-2xl font-black text-white mb-2' }, 'Your cart is empty'),
-      e('p', { className: 'text-gray-400 mb-8' }, 'Add some community-grown products to get started.'),
-      e('a', { href: 'produce_products.html', className: 'inline-block bg-green-800 hover:bg-green-700 text-white font-bold px-8 py-3 rounded-xl transition-colors' }, 'Browse Products')
+    return e('div', { className: 'flex-1 flex flex-col items-center justify-center px-4 py-24 text-center' },
+      e('div', { className: 'w-20 h-20 rounded-full bg-moss-50 border border-moss-200 flex items-center justify-center text-4xl font-black text-moss-600 mx-auto mb-6 shadow-sm font-sans' }, '0'),
+      e('h2', { className: 'font-caveat text-4xl font-bold text-bark-800 mb-3' }, 'Your cart is empty'),
+      e('p', { className: 'font-serif text-[15px] text-soil-700 mb-8 max-w-sm mx-auto leading-relaxed' }, 'Add some community-grown products to get started.'),
+      e('a', { 
+        href: 'produce_products.html', 
+        className: 'inline-flex items-center justify-center bg-gradient-to-br from-moss-700 to-moss-600 text-parchment-50 font-sans font-bold uppercase tracking-widest text-[13px] px-8 py-3.5 rounded-full transition-all shadow-md hover:shadow-lg hover:-translate-y-0.5' 
+      }, 'Browse Products')
     );
   }
 
-  return e('div', { className: 'max-w-2xl mx-auto px-4 sm:px-6 py-10' },
-    e('h1', { className: 'text-3xl font-black text-white mb-8' }, 'Shopping Cart'),
+  /* Populated state */
+  return e('div', { className: 'max-w-3xl mx-auto w-full px-4 sm:px-6 py-12 pb-24' },
+    e('div', { className: 'text-center mb-10' },
+      e('span', { className: 'tag-pill mb-4' }, 'Your Order'),
+      e('h1', { className: 'font-caveat text-[clamp(42px,5vw,56px)] font-bold text-bark-800 mb-2 leading-none' }, 'Shopping Cart'),
+      e('a', { href: 'produce_products.html', className: 'inline-block mt-2 text-[11px] font-sans font-bold uppercase tracking-widest text-moss-600 hover:text-moss-700 hover:underline underline-offset-4 transition-colors' }, '← Continue Shopping')
+    ),
+
     /* Items */
-    e('div', { className: 'flex flex-col gap-3 mb-6' },
+    e('div', { className: 'flex flex-col gap-4 mb-8' },
       cart.map(function(item) {
         var lineTotal = (item.price * item.qty).toFixed(2);
-        return e('div', { key: item.id, className: 'bg-white/5 border border-white/10 rounded-2xl p-4 flex items-center gap-4 hover:border-white/20 transition-colors' },
+        return e('div', { key: item.id, className: 'bg-white border border-soil-600/15 rounded-[20px] p-5 flex flex-col sm:flex-row items-start sm:items-center gap-5 hover:border-moss-400/40 shadow-sm transition-all' },
           e('div', { className: 'flex-1 min-w-0' },
-            e('p', { className: 'text-sm font-semibold text-white truncate' }, item.name),
-            e('p', { className: 'text-xs text-gray-400 mt-0.5' }, 'R' + parseFloat(item.price).toFixed(2) + ' each')
+            e('p', { className: 'text-[16px] font-bold text-bark-800 font-sans truncate leading-tight' }, item.name),
+            e('p', { className: 'text-[13px] text-soil-600 mt-1 font-sans font-medium' }, 'R' + parseFloat(item.price).toFixed(2) + ' each')
           ),
-          e('div', { className: 'flex items-center rounded-xl overflow-hidden border border-white/15 bg-white/5 shrink-0' },
+          
+          e('div', { className: 'flex items-center gap-4 w-full sm:w-auto justify-between sm:justify-end' },
+            e('div', { className: 'flex items-center rounded-xl overflow-hidden border border-soil-600/20 bg-parchment-50 shadow-inner shrink-0' },
+              e('button', {
+                onClick: function() { item.qty <= 1 ? removeFromCart(item.id) : setQty(item.id, item.qty - 1); },
+                className: 'w-9 h-9 flex items-center justify-center text-soil-600 hover:bg-moss-100 hover:text-moss-700 transition-colors font-bold text-lg'
+              }, '−'),
+              e('span', { className: 'w-10 text-center text-sm font-bold text-bark-800 border-x border-soil-600/20 leading-9 bg-white font-sans' }, item.qty),
+              e('button', {
+                onClick: function() { setQty(item.id, item.qty + 1); },
+                className: 'w-9 h-9 flex items-center justify-center text-soil-600 hover:bg-moss-100 hover:text-moss-700 transition-colors font-bold text-lg'
+              }, '+')
+            ),
+            e('span', { className: 'text-lg font-black text-moss-700 sm:w-24 text-right shrink-0 font-sans' }, 'R' + lineTotal),
             e('button', {
-              onClick: function() { item.qty <= 1 ? removeFromCart(item.id) : setQty(item.id, item.qty - 1); },
-              className: 'w-8 h-8 flex items-center justify-center text-gray-300 hover:bg-green-400/15 hover:text-green-400 transition-colors font-bold text-lg'
-            }, '-'),
-            e('span', { className: 'w-8 text-center text-sm font-bold text-white border-x border-white/10 leading-8' }, item.qty),
-            e('button', {
-              onClick: function() { setQty(item.id, item.qty + 1); },
-              className: 'w-8 h-8 flex items-center justify-center text-gray-300 hover:bg-green-400/15 hover:text-green-400 transition-colors font-bold text-lg'
-            }, '+')
-          ),
-          e('span', { className: 'text-sm font-black text-green-400 w-16 text-right shrink-0' }, 'R' + lineTotal),
-          e('button', {
-            onClick: function() { removeFromCart(item.id); },
-            className: 'w-7 h-7 flex items-center justify-center rounded-lg text-gray-600 hover:text-red-400 hover:bg-red-400/10 transition-colors text-sm shrink-0',
-            title: 'Remove'
-          }, 'x')
+              onClick: function() { removeFromCart(item.id); },
+              className: 'w-10 h-10 flex items-center justify-center rounded-full text-soil-500 hover:text-red-600 hover:bg-red-50 transition-colors text-xl font-bold bg-parchment-50 border border-soil-600/10 shrink-0 ml-2 sm:ml-0',
+              title: 'Remove'
+            }, '×')
+          )
         );
       })
     ),
+
     /* Summary */
-    e('div', { className: 'bg-white/5 border border-white/10 rounded-2xl p-5' },
-      e('div', { className: 'flex justify-between text-sm text-gray-400 mb-2' },
-        e('span', null, 'Subtotal'), e('span', null, 'R' + cartTotal.toFixed(2))
-      ),
-      e('div', { className: 'flex justify-between font-black text-white text-lg border-t border-white/10 pt-3 mt-3' },
-        e('span', null, 'Total'), e('span', { className: 'text-green-400' }, 'R' + cartTotal.toFixed(2))
-      ),
-      e('div', { className: 'flex gap-3 mt-5' },
-        e('button', {
-          onClick: clearCart,
-          className: 'flex-1 py-3 rounded-xl border border-red-400/30 text-red-400 text-sm font-bold hover:bg-red-400/10 transition-colors'
-        }, 'Clear Cart'),
-        e('a', {
-          href: 'checkout.html',
-          className: 'flex-1 py-3 rounded-xl bg-green-800 hover:bg-green-700 text-white text-sm font-bold text-center transition-colors'
-        }, 'Checkout')
+    e('div', { className: 'bg-parchment-50 border border-soil-600/15 rounded-[24px] p-6 sm:p-8 shadow-[0_8px_24px_rgba(58,35,12,0.04)] relative overflow-hidden' },
+      /* Inner grain texture for the summary box */
+      e('div', { className: 'absolute inset-0 pointer-events-none opacity-50', style: { backgroundImage: 'url("data:image/svg+xml,%3Csvg xmlns=\'http://www.w3.org/2000/svg\' width=\'300\' height=\'300\'%3E%3Cfilter id=\'n\'%3E%3CfeTurbulence type=\'fractalNoise\' baseFrequency=\'0.85\' numOctaves=\'4\' stitchTiles=\'stitch\'/%3E%3C/filter%3E%3Crect width=\'300\' height=\'300\' filter=\'url(%23n)\' opacity=\'0.03\'/%3E%3C/svg%3E")'} }),
+      
+      e('div', { className: 'relative z-10' },
+        e('div', { className: 'flex justify-between text-[15px] font-sans text-soil-700 mb-3' },
+          e('span', null, 'Subtotal'), e('span', { className: 'font-semibold text-bark-800' }, 'R' + cartTotal.toFixed(2))
+        ),
+        e('div', { className: 'flex justify-between font-black text-bark-800 text-2xl border-t border-soil-600/10 pt-4 mt-4 font-sans items-center' },
+          e('span', null, 'Total'), e('span', { className: 'text-moss-700 text-3xl' }, 'R' + cartTotal.toFixed(2))
+        ),
+        e('div', { className: 'flex flex-col sm:flex-row gap-4 mt-8' },
+          e('button', {
+            onClick: clearCart,
+            className: 'px-6 py-3.5 rounded-full border-2 border-red-200 text-red-600 text-[11px] font-bold uppercase tracking-widest hover:bg-red-50 hover:border-red-300 transition-all font-sans text-center'
+          }, 'Clear Cart'),
+          e('a', {
+            href: 'checkout.html',
+            className: 'flex-1 bg-gradient-to-br from-moss-700 to-moss-600 text-parchment-50 text-[13px] font-bold uppercase tracking-widest rounded-full py-3.5 text-center shadow-md hover:shadow-lg hover:-translate-y-0.5 transition-all font-sans'
+          }, 'Proceed to Checkout')
+        )
       )
     )
   );
@@ -100,7 +213,6 @@ var toggleRoot = document.getElementById('toggle-root');
 
 ReactDOM.createRoot(document.getElementById('app-root')).render(
   e(StoreProvider, null,
-    e(RootsComponents.ScrollGradient),
     ReactDOM.createPortal(e(RootsComponents.Navbar),        navRoot),
     ReactDOM.createPortal(e(RootsComponents.Footer),        footRoot),
     ReactDOM.createPortal(e(RootsComponents.LowDataToggle), toggleRoot),

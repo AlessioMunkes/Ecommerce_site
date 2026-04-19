@@ -113,6 +113,35 @@ function useStore() {
 }
 
 /* ----------------------------------------------------------
+   ICONS
+---------------------------------------------------------- */
+function CartIcon() {
+  return e('svg', { 
+    xmlns: 'http://www.w3.org/2000/svg', 
+    fill: 'none', 
+    viewBox: '0 0 24 24', 
+    strokeWidth: 1.5, 
+    stroke: 'currentColor', 
+    className: 'w-6 h-6' 
+  },
+    e('path', { strokeLinecap: 'round', strokeLinejoin: 'round', d: 'M2.25 3h1.386c.51 0 .955.343 1.087.835l.383 1.437M7.5 14.25a3 3 0 00-3 3h15.75m-12.75-3h11.218c1.121-2.3 2.1-4.684 2.924-7.138a60.114 60.114 0 00-16.536-1.84M7.5 14.25L5.106 5.272M6 20.25a.75.75 0 11-1.5 0 .75.75 0 011.5 0zm12.75 0a.75.75 0 11-1.5 0 .75.75 0 011.5 0z' })
+  );
+}
+
+function WishlistIcon() {
+  return e('svg', { 
+    xmlns: 'http://www.w3.org/2000/svg', 
+    fill: 'none', 
+    viewBox: '0 0 24 24', 
+    strokeWidth: 1.5, 
+    stroke: 'currentColor', 
+    className: 'w-6 h-6' 
+  },
+    e('path', { strokeLinecap: 'round', strokeLinejoin: 'round', d: 'M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12z' })
+  );
+}
+
+/* ----------------------------------------------------------
    NAVBAR
 ---------------------------------------------------------- */
 var NAV_LINKS = [
@@ -132,13 +161,13 @@ function Navbar() {
   var wishlist   = store.wishlist;
   var current    = window.location.pathname.split('/').pop() || 'index.html';
 
-  return e('header', { className: 'sticky top-0 z-50 bg-black/50 backdrop-blur-md border-b border-white/10' },
+  return e('header', { className: 'fixed top-0 left-0 right-0 z-50 bg-parchment-50/90 backdrop-blur-md shadow-sm border-b border-soil-600/10' },
     /* Main bar */
     e('div', { className: 'max-w-7xl mx-auto px-4 sm:px-6 h-16 flex items-center justify-between gap-4' },
       /* Brand */
-      e('a', { href: 'index.html', className: 'text-xl font-black tracking-tight shrink-0' },
-        e('span', { className: 'text-white' }, 'Roots'),
-        e('span', { className: 'text-green-400' }, '.')
+      e('a', { href: 'index.html', className: 'text-2xl font-black tracking-tight shrink-0 font-sans' },
+        e('span', { className: 'text-bark-800' }, 'Roots'),
+        e('span', { className: 'text-moss-600' }, '.')
       ),
 
       /* Desktop links */
@@ -148,49 +177,49 @@ function Navbar() {
           return e('a', {
             key: link.href,
             href: link.href,
-            className: 'px-3 py-2 rounded-lg text-sm font-medium transition-colors ' +
-              (isActive ? 'bg-green-800/60 text-green-400' : 'text-gray-300 hover:text-white hover:bg-white/10')
+            className: 'px-3 py-2 rounded-lg text-sm font-bold font-sans uppercase tracking-widest transition-colors ' +
+              (isActive ? 'bg-moss-50 text-moss-700' : 'text-soil-700 hover:text-moss-600 hover:bg-soil-600/5')
           }, link.label);
         })
       ),
 
-      /* Right icons */
-      e('div', { className: 'flex items-center gap-1' },
+      /* Right icons & mobile toggle */
+      e('div', { className: 'flex items-center gap-1 sm:gap-2' },
 
         /* Wishlist */
         e('a', {
           href: 'wishlist.html',
-          className: 'relative p-2.5 rounded-lg text-gray-300 hover:text-yellow-400 hover:bg-white/10 transition-colors'
+          className: 'relative p-2 rounded-xl text-soil-600 hover:text-yellow-500 hover:bg-soil-600/5 transition-colors'
         },
-          e('span', { className: 'text-base leading-none font-bold', 'aria-label': 'Wishlist' }, '[ ]'),
+          e(WishlistIcon, null),
           wishlist.length > 0 && e('span', {
-            className: 'absolute -top-0.5 -right-0.5 bg-yellow-400 text-black text-[10px] font-black w-4 h-4 rounded-full flex items-center justify-center'
+            className: 'absolute -top-0.5 -right-0.5 bg-yellow-400 border border-yellow-500 text-yellow-900 text-[10px] font-black w-4 h-4 rounded-full flex items-center justify-center font-sans shadow-sm'
           }, wishlist.length)
         ),
 
         /* Cart */
         e('a', {
           href: 'cart.html',
-          className: 'relative p-2.5 rounded-lg text-gray-300 hover:text-green-400 hover:bg-white/10 transition-colors'
+          className: 'relative p-2 rounded-xl text-soil-600 hover:text-moss-600 hover:bg-moss-50 transition-colors'
         },
-          e('span', { className: 'text-base leading-none font-bold', 'aria-label': 'Cart' }, '[C]'),
+          e(CartIcon, null),
           cartCount > 0 && e('span', {
-            className: 'absolute -top-0.5 -right-0.5 bg-green-400 text-black text-[10px] font-black w-4 h-4 rounded-full flex items-center justify-center'
+            className: 'absolute -top-0.5 -right-0.5 bg-moss-600 border border-moss-700 text-parchment-50 text-[10px] font-black w-4 h-4 rounded-full flex items-center justify-center font-sans shadow-sm'
           }, cartCount > 9 ? '9+' : cartCount)
         ),
 
         /* Hamburger */
         e('button', {
-          className: 'md:hidden p-2.5 rounded-lg text-gray-300 hover:text-white hover:bg-white/10 transition-colors',
+          className: 'md:hidden p-2.5 rounded-lg text-soil-600 hover:text-moss-600 hover:bg-moss-50 transition-colors',
           onClick: function() { setOpen(!open); },
           'aria-label': 'Toggle menu'
-        }, open ? 'X' : '=')
+        }, open ? 'X' : '☰')
       )
     ),
 
     /* Mobile menu */
     open && e('div', {
-      className: 'md:hidden border-t border-white/10 bg-black/70 backdrop-blur-md px-4 pb-4 pt-2'
+      className: 'md:hidden border-t border-soil-600/10 bg-parchment-50/95 backdrop-blur-md px-4 pb-4 pt-2'
     },
       NAV_LINKS.map(function(link) {
         var isActive = current === link.href;
@@ -198,8 +227,8 @@ function Navbar() {
           key: link.href,
           href: link.href,
           onClick: function() { setOpen(false); },
-          className: 'block px-3 py-2.5 rounded-lg text-sm font-medium mb-1 transition-colors ' +
-            (isActive ? 'bg-green-800/60 text-green-400' : 'text-gray-300 hover:text-white hover:bg-white/10')
+          className: 'block px-3 py-3 rounded-lg text-sm font-bold font-sans uppercase tracking-widest mb-1 transition-colors ' +
+            (isActive ? 'bg-moss-50 text-moss-700' : 'text-soil-700 hover:text-moss-600 hover:bg-soil-600/5')
         }, link.label);
       })
     )
@@ -222,36 +251,36 @@ function Footer() {
     ['Become a Seller', 'contact_us.html#become-a-seller'],
   ];
 
-  return e('footer', { className: 'border-t border-white/10 bg-black/20 mt-20' },
-    e('div', { className: 'max-w-7xl mx-auto px-4 sm:px-6 py-12 grid grid-cols-1 sm:grid-cols-3 gap-8' },
+  return e('footer', { className: 'bg-bark-900 text-parchment-100 mt-20 pt-16' },
+    e('div', { className: 'max-w-7xl mx-auto px-4 sm:px-6 py-12 grid grid-cols-1 sm:grid-cols-3 gap-10' },
       e('div', null,
-        e('span', { className: 'text-xl font-black' },
-          e('span', { className: 'text-white' }, 'Roots'),
-          e('span', { className: 'text-green-400' }, '.')
+        e('span', { className: 'text-3xl font-black font-sans tracking-tight' },
+          e('span', { className: 'text-parchment-50' }, 'Roots'),
+          e('span', { className: 'text-moss-400' }, '.')
         ),
-        e('p', { className: 'mt-2 text-sm text-gray-400 leading-relaxed' },
+        e('p', { className: 'mt-4 text-[15px] text-parchment-200/70 leading-relaxed font-serif' },
           'Rooted in community. Growing together. Every purchase supports township farmers directly.'
         )
       ),
       e('div', null,
-        e('h4', { className: 'text-xs font-bold text-gray-400 uppercase tracking-widest mb-3' }, 'Shop'),
-        e('div', { className: 'flex flex-col gap-2' },
+        e('h4', { className: 'text-[11px] font-bold text-parchment-200/50 font-sans uppercase tracking-widest mb-4' }, 'Shop'),
+        e('div', { className: 'flex flex-col gap-3' },
           shopLinks.map(function(item) {
-            return e('a', { key: item[0], href: item[1], className: 'text-sm text-gray-300 hover:text-green-400 transition-colors' }, item[0]);
+            return e('a', { key: item[0], href: item[1], className: 'text-[14px] text-parchment-200 hover:text-moss-400 transition-colors font-sans' }, item[0]);
           })
         )
       ),
       e('div', null,
-        e('h4', { className: 'text-xs font-bold text-gray-400 uppercase tracking-widest mb-3' }, 'Info'),
-        e('div', { className: 'flex flex-col gap-2' },
+        e('h4', { className: 'text-[11px] font-bold text-parchment-200/50 font-sans uppercase tracking-widest mb-4' }, 'Info'),
+        e('div', { className: 'flex flex-col gap-3' },
           infoLinks.map(function(item) {
-            return e('a', { key: item[0], href: item[1], className: 'text-sm text-gray-300 hover:text-green-400 transition-colors' }, item[0]);
+            return e('a', { key: item[0], href: item[1], className: 'text-[14px] text-parchment-200 hover:text-moss-400 transition-colors font-sans' }, item[0]);
           })
         )
       )
     ),
-    e('div', { className: 'border-t border-white/10 px-4 py-4 text-center text-xs text-gray-500' },
-      '2026 Roots Collective. Built with care for township communities.'
+    e('div', { className: 'border-t border-parchment-200/10 px-4 py-6 text-center text-[12px] text-parchment-200/50 font-sans' },
+      '© 2026 Roots Collective. Built with care for township communities.'
     )
   );
 }
@@ -279,19 +308,21 @@ function LowDataToggle() {
 
   return e('button', {
     onClick: toggle,
-    className: 'fixed bottom-5 right-5 z-50 flex items-center gap-2.5 px-3.5 py-2.5 rounded-full border backdrop-blur-sm shadow-xl transition-all ' +
-      (on ? 'bg-green-900/80 border-green-400/50' : 'bg-black/70 border-white/15 hover:border-green-400/30'),
+    className: 'fixed bottom-5 right-5 z-50 flex items-center gap-2.5 px-4 py-2.5 rounded-full border backdrop-blur-sm shadow-xl transition-all font-sans ' +
+      (on ? 'bg-moss-50 border-moss-400/50' : 'bg-parchment-50 border-soil-600/15 hover:border-moss-400/30'),
     title: 'Toggle Low Data Mode'
   },
-    e('span', { className: 'text-xs font-black ' + (on ? 'text-green-400' : 'text-gray-500') }, 'LD'),
-    e('span', { className: 'text-xs font-bold uppercase tracking-wide ' + (on ? 'text-green-400' : 'text-gray-400') }, 'Low Data'),
+    e('span', { className: 'text-[11px] font-black ' + (on ? 'text-moss-600' : 'text-soil-500') }, 'LD'),
+    e('span', { className: 'text-[11px] font-bold uppercase tracking-widest ' + (on ? 'text-moss-600' : 'text-soil-500') }, 'Low Data'),
+// The Toggle Track
     e('div', {
       className: 'w-8 h-4 rounded-full relative transition-colors ' +
-        (on ? 'bg-green-400/30 border border-green-400' : 'bg-white/10 border border-white/20')
+        (on ? 'bg-moss-300 border border-moss-500' : 'bg-soil-300 border border-soil-400') // Darkened the track
     },
+      // The Toggle Thumb (the circle)
       e('div', {
-        className: 'absolute top-0.5 w-3 h-3 rounded-full transition-all ' +
-          (on ? 'left-4 bg-green-400' : 'left-0.5 bg-gray-500')
+        className: 'absolute top-0.5 w-3 h-3 rounded-full transition-all shadow-sm ' +
+          (on ? 'left-4 bg-moss-800' : 'left-0.5 bg-soil-700') // Darkened the thumb
       })
     )
   );
@@ -300,17 +331,8 @@ function LowDataToggle() {
 /* ----------------------------------------------------------
    SCROLL GRADIENT
 ---------------------------------------------------------- */
+// Disabling gradient effect for the light parchment theme so the background stays solid.
 function ScrollGradient() {
-  useEffect(function() {
-    function handler() {
-      if (document.body.classList.contains('low-data')) return;
-      var max = document.body.scrollHeight - window.innerHeight;
-      if (max <= 0) return;
-      document.body.style.backgroundPosition = '0% ' + ((window.scrollY / max) * 100) + '%';
-    }
-    window.addEventListener('scroll', handler, { passive: true });
-    return function() { window.removeEventListener('scroll', handler); };
-  }, []);
   return null;
 }
 

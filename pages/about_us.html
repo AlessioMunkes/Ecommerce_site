@@ -3,151 +3,383 @@
 <head>
   <meta charset="UTF-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>About Us — Roots</title>
+  <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@400;600;700&family=Lora:ital,wght@0,400;0,500;0,600;1,400&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet">
   <script src="https://cdn.tailwindcss.com"></script>
-  <script>tailwind.config={theme:{extend:{colors:{green:{400:'#4ade80',700:'#15803d',800:'#015005'},soil:{700:'#382f26',800:'#1a3a2a',900:'#0f2417'}}}}}</script>
+  <script>    
+  tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            parchment: { 50:'#fdf8f0', 100:'#f7eed8', 200:'#eedfc0', 300:'#e0c99a' },
+            bark:      { 700:'#5c3d1e', 800:'#3d2810', 900:'#261808' },
+            moss:      { 400:'#7aad5a', 600:'#4a7c35', 700:'#345c24', 800:'#1e3a14' },
+            soil:      { 600:'#8b6340', 700:'#6b4a28', 800:'#4a3018' },
+          }
+        }
+      }
+    }
+  </script>
   <style>
-    body{background:linear-gradient(to bottom,#0f2417,#1a3a2a,#0e3d20,#1a3a2a,#0f2417);background-size:100% 400%;min-height:100vh;color:#f9faf8;font-family:system-ui,sans-serif}
-    body.low-data{background:#0f2417!important}body.low-data img{display:none!important}
-    ::-webkit-scrollbar{width:5px}::-webkit-scrollbar-track{background:#0f2417}::-webkit-scrollbar-thumb{background:#015005;border-radius:3px}
+    /* ── Base ── */
+    html { scroll-behavior: smooth; }
+    body {
+      background-color: #f7eed8;
+      color: #3d2810;
+      font-family: 'Lora', Georgia, serif;
+      overflow-x: hidden;
+    }
+    body.low-data { background: #c9b686 !important; }
+    body.low-data img { display: none !important; }
+
+    /* ── Scrollbar ── */
+    ::-webkit-scrollbar { width: 6px; }
+    ::-webkit-scrollbar-track { background: #eedfc0; }
+    ::-webkit-scrollbar-thumb { background: #4a7c35; border-radius: 3px; }
+
+    /* ── Hero ── */
+    .hero-wrap {
+      position: relative;
+      min-height: 92vh;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+    }
+    .hero-bg {
+      position: absolute;
+      inset: -20% 0;
+      width: 100%;
+      height: 140%;
+      object-fit: cover;
+      object-position: center 40%;
+      will-change: transform;
+      filter: brightness(0.42) saturate(0.85);
+    }
+    .hero-overlay {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(135deg,
+        rgba(58,35,12,0.75) 0%,
+        rgba(30,58,20,0.45) 55%,
+        rgba(58,35,12,0.2) 100%);
+    }
+
+    /* ── Parallax section bg ── */
+    .parallax-section {
+      position: relative;
+      overflow: hidden;
+    }
+    .parallax-bg {
+      position: absolute;
+      inset: -18% 0;
+      width: 100%;
+      height: 136%;
+      object-fit: cover;
+      will-change: transform;
+    }
+    .parallax-dim {
+      position: absolute;
+      inset: 0;
+    }
+
+    /* ── Panel images with parallax ── */
+    .panel-wrap {
+      position: relative;
+      border-radius: 20px;
+      overflow: hidden;
+      box-shadow: 0 20px 56px rgba(58,35,12,0.2);
+    }
+    .panel-wrap img {
+      width: 100%;
+      height: 420px;
+      object-fit: cover;
+      display: block;
+      transform: scale(1.14);
+      will-change: transform;
+    }
+
+    /* ── Grain texture ── */
+    .grain::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)' opacity='0.03'/%3E%3C/svg%3E");
+      pointer-events: none;
+      z-index: 1;
+    }
+
+    /* ── Scrolling tape ── */
+    .tape-wrap { overflow: hidden; background: linear-gradient(135deg,#345c24,#4a7c35); padding:12px 0; }
+    .tape-inner { display:inline-flex; animation:scrollTape 24s linear infinite; white-space:nowrap; }
+    .tape-item  { font-family:'Caveat',cursive; font-size:20px; color:rgba(253,248,240,0.88); padding:0 28px; }
+    .tape-dot   { color:rgba(253,248,240,0.35); font-size:18px; }
+    @keyframes scrollTape { from{transform:translateX(0)} to{transform:translateX(-50%)} }
+
+    /* ── Step circles ── */
+    .step-circle {
+      width:46px; height:46px; border-radius:50%;
+      background:linear-gradient(135deg,#345c24,#7aad5a);
+      display:flex; align-items:center; justify-content:center;
+      font-family:'Caveat',cursive; font-size:22px; font-weight:700; color:#fdf8f0;
+      box-shadow:0 4px 14px rgba(52,92,36,0.35); flex-shrink:0;
+    }
+
+    /* ── Leaf bullets ── */
+    .leaf-li { display:flex; align-items:flex-start; gap:10px; font-family:'Lora',serif; font-size:15px; line-height:1.65; padding:4px 0; }
+    .leaf-li::before { content:'•'; font-size:14px; margin-top:2px; flex-shrink:0; }
+
+    /* ── Stat cards ── */
+    .stat-card {
+      border-radius:16px; padding:18px; text-align:center;
+      backdrop-filter:blur(8px);
+      background:rgba(253,248,240,0.12);
+      border:1px solid rgba(253,248,240,0.2);
+    }
+    
+    .stat-card-light {
+      border-radius:16px; padding:24px 18px; text-align:center;
+      background:rgba(253,248,240,0.6);
+      border:1px solid rgba(122,173,90,0.2);
+      box-shadow:0 8px 24px rgba(92,61,30,0.05);
+    }
+
+    /* ── Tag pill ── */
+    .tag-pill {
+      display:inline-block; font-family:'DM Sans',sans-serif;
+      font-size:11px; font-weight:600; letter-spacing:0.12em; text-transform:uppercase;
+      background:rgba(122,173,90,0.16); color:#345c24;
+      border:1px solid rgba(122,173,90,0.35); padding:6px 16px; border-radius:50px;
+    }
+
+    /* ── Buttons ── */
+    .btn-primary {
+      display:inline-block; background:linear-gradient(135deg,#345c24,#4a7c35);
+      color:#fdf8f0; font-family:'DM Sans',sans-serif; font-weight:600; font-size:15px;
+      padding:14px 32px; border-radius:50px; text-decoration:none;
+      transition:transform 0.2s, box-shadow 0.2s;
+      box-shadow:0 4px 16px rgba(52,92,36,0.28); letter-spacing:0.01em;
+    }
+    .btn-primary:hover { transform:translateY(-2px); box-shadow:0 8px 24px rgba(52,92,36,0.4); }
+    .btn-outline {
+      display:inline-block; border:2px solid rgba(92,61,30,0.3); color:#3d2810;
+      font-family:'DM Sans',sans-serif; font-weight:600; font-size:15px;
+      padding:12px 30px; border-radius:50px; text-decoration:none;
+      transition:border-color 0.2s, background 0.2s, transform 0.2s;
+    }
+    .btn-outline:hover { border-color:#4a7c35; background:rgba(74,124,53,0.07); transform:translateY(-2px); }
+    .btn-outline-light {
+      display:inline-block; border:2px solid rgba(253,248,240,0.3); color:#fdf8f0;
+      font-family:'DM Sans',sans-serif; font-weight:600; font-size:15px;
+      padding:12px 30px; border-radius:50px; text-decoration:none;
+      transition:border-color 0.2s, background 0.2s, transform 0.2s;
+    }
+    .btn-outline-light:hover { border-color:rgba(168,219,120,0.7); background:rgba(122,173,90,0.1); transform:translateY(-2px); }
+
+    /* ── Fade-up animations ── */
+    @keyframes fadeUp { from{opacity:0;transform:translateY(28px)} to{opacity:1;transform:translateY(0)} }
+    .fade-up   { animation:fadeUp 0.85s ease both; }
+    .fade-up-2 { animation:fadeUp 0.85s 0.15s ease both; }
+    .fade-up-3 { animation:fadeUp 0.85s 0.30s ease both; }
+
+    /* ── Scroll reveal ── */
+    .reveal { opacity:0; transform:translateY(36px); transition:opacity 0.75s ease, transform 0.75s ease; }
+    .reveal.revealed { opacity:1; transform:translateY(0); }
+
+    /* ── Section backgrounds ── */
+    .bg-parchment { background-color:#fdf8f0; }
+    .bg-linen     { background-color:#f0e6cc; }
+
+    /* ── Navbar/footer colour overrides ── */
+    #navbar-root header {
+      background:rgba(247,238,216,0.9) !important;
+      border-bottom:1px solid rgba(92,61,30,0.12) !important;
+      backdrop-filter:blur(10px) !important;
+    }
+    #navbar-root .text-white   { color:#3d2810 !important; }
+    #navbar-root .text-gray-300 { color:#6b4a28 !important; }
+    #navbar-root .text-green-400 { color:#4a7c35 !important; }
+    #navbar-root .bg-green-400  { background:#4a7c35 !important; }
+    #navbar-root .text-black    { color:#fdf8f0 !important; }
+    #navbar-root .hover\:text-white:hover { color:#3d2810 !important; }
+    #navbar-root .hover\:bg-white\/10:hover { background:rgba(92,61,30,0.08) !important; }
+    #navbar-root .bg-green-800\/60 { background:rgba(74,124,53,0.15) !important; }
+    #navbar-root .border-white\/10 { border-color:rgba(92,61,30,0.1) !important; }
+    #navbar-root .bg-black\/50 { background:rgba(247,238,216,0.9) !important; }
+
+    #footer-root footer { background:#261808 !important; border-top:1px solid rgba(122,173,90,0.15) !important; }
+    #footer-root * { color:#c4b49a !important; }
+    #footer-root .text-green-400 { color:#7aad5a !important; }
+
+    #toggle-root button {
+      background:rgba(247,238,216,0.92) !important;
+      border-color:rgba(92,61,30,0.2) !important;
+    }
+    #toggle-root .text-gray-500 { color:#8b6340 !important; }
+    #toggle-root .text-gray-400 { color:#6b4a28 !important; }
+    /* ── Disable all animations in Low Data mode ── */
+    body.low-data *, 
+    body.low-data *::before, 
+    body.low-data *::after {
+      animation: none !important;
+      transition: none !important;
+    }
+
+    /* Force reveal and fade elements to be visible instantly */
+    body.low-data .reveal,
+    body.low-data .fade-up,
+    body.low-data .fade-up-2,
+    body.low-data .fade-up-3 {
+      opacity: 1 !important;
+      transform: translateY(0) !important;
+    }
   </style>
 </head>
 <body>
 <div id="navbar-root"></div>
 
-<!-- PAGE TITLE -->
-<div class="text-center pt-14 pb-4 px-4">
-  <h1 class="text-4xl sm:text-5xl font-black text-white">About Us</h1>
-</div>
+<section class="bg-linen pt-40 pb-16 px-4 sm:px-8">
+  <div class="max-w-4xl mx-auto text-center fade-up">
+    <h1 style="font-family:'Caveat',cursive;font-size:clamp(48px,7vw,72px);font-weight:700;color:#3d2810;line-height:1.1;">About Us</h1>
+    <div style="width:60px;height:3px;background:#4a7c35;margin:24px auto 0;border-radius:2px;"></div>
+  </div>
+</section>
 
-<div class="max-w-6xl mx-auto px-4 sm:px-8 pb-24">
-
-  <!-- MISSION -->
-  <section class="py-12">
-    <div class="text-center mb-8">
-      <span class="inline-block bg-soil-700/80 border border-white/10 text-white text-xs font-bold uppercase tracking-widest px-5 py-2 rounded-lg">Our Mission</span>
+<section class="bg-linen pb-20 px-4 sm:px-8">
+  <div class="max-w-5xl mx-auto">
+    <div class="text-center mb-10 reveal">
+      <span class="tag-pill" style="margin-bottom:14px;">Our Mission</span>
     </div>
-    <div class="bg-white/5 border border-white/10 rounded-2xl p-8 sm:p-12 flex items-start gap-6">
-      <span class="text-6xl font-black text-green-400/30 leading-none font-serif shrink-0 select-none">"</span>
-      <p class="text-xl sm:text-2xl text-white leading-relaxed italic text-center flex-1">
+    <div class="reveal flex items-start justify-center gap-6 max-w-4xl mx-auto text-center px-4">
+      <span style="font-family:'Georgia',serif;font-size:72px;color:rgba(122,173,90,0.25);line-height:0.8;user-select:none;">&ldquo;</span>
+      <p style="font-family:'Lora',serif;font-size:clamp(20px,3vw,26px);color:#6b4a28;line-height:1.75;font-style:italic;margin-top:16px;">
         To empower township farmers by giving every farmer a fair, proportional share of what they grow and the tools they need to grow more. Through this we can enable food and job security for our communities and create a more just and sustainable food system for all.
       </p>
-      <span class="text-6xl font-black text-green-400/30 leading-none font-serif shrink-0 select-none self-end">"</span>
+      <span style="font-family:'Georgia',serif;font-size:72px;color:rgba(122,173,90,0.25);line-height:0.8;user-select:none;align-self:flex-end;">&rdquo;</span>
     </div>
-  </section>
+  </div>
+</section>
 
-  <!-- OUR STORY -->
-  <section class="py-12 border-t border-white/10">
-    <div class="text-center mb-10">
-      <span class="inline-block bg-soil-700/80 border border-white/10 text-white text-xs font-bold uppercase tracking-widest px-5 py-2 rounded-lg">Our Story</span>
+<section class="bg-parchment py-24 px-4 sm:px-8">
+  <div class="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-14 items-center">
+    <div class="panel-wrap reveal">
+      <img data-parallax="0.14" src="../media/story-about-us.jpeg" alt="Our story">
     </div>
-    <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-      <div class="rounded-2xl overflow-hidden border border-white/10 shadow-xl">
-        <img src="../media/story-about-us.jpeg" alt="Our story" class="w-full h-[380px] object-cover">
-      </div>
-      <div>
-        <h2 class="text-2xl font-black text-white mb-5">How Roots Began</h2>
-        <p class="text-gray-300 leading-relaxed mb-4">Roots began as a small project with 3 households in Makhaza, Khayelitsha in early 2020. Our farmers had extra crops that they would sell to their neighbours but still had excess and needed another way to sell.</p>
-        <p class="text-gray-300 leading-relaxed mb-4">We wanted to find a way to support local farmers and create a more equitable food system, so we started by connecting with a few farmers we knew and helping them sell their produce directly to buyers in the city and other areas.</p>
-        <p class="text-gray-300 leading-relaxed">Today, we are continuously expanding to more communities and farmers, whilst we grow our operations and are able to provide more support and tools to better serve our farmers and buyers.</p>
-      </div>
+    <div class="reveal" style="transition-delay:0.15s;">
+      <span class="tag-pill" style="margin-bottom:14px;display:inline-block;">Our Story</span>
+      <h2 style="font-family:'Caveat',cursive;font-size:clamp(36px,5vw,52px);font-weight:700;color:#3d2810;margin-bottom:20px;">How Roots Began</h2>
+      <p style="font-family:'Lora',serif;font-size:16px;color:#6b4a28;line-height:1.82;margin-bottom:16px;">Roots began as a small project with 3 households in Makhaza, Khayelitsha in early 2020. Our farmers had extra crops that they would sell to their neighbours but still had excess and needed another way to sell.</p>
+      <p style="font-family:'Lora',serif;font-size:16px;color:#6b4a28;line-height:1.82;margin-bottom:16px;">We wanted to find a way to support local farmers and create a more equitable food system, so we started by connecting with a few farmers we knew and helping them sell their produce directly to buyers in the city and other areas.</p>
+      <p style="font-family:'Lora',serif;font-size:16px;color:#6b4a28;line-height:1.82;">Today, we are continuously expanding to more communities and farmers, whilst we grow our operations and are able to provide more support and tools to better serve our farmers and buyers.</p>
     </div>
-  </section>
+  </div>
+</section>
 
-  <!-- HOW IT WORKS -->
-  <section class="py-12 border-t border-white/10">
-    <div class="text-center mb-10">
-      <span class="inline-block bg-soil-700/80 border border-white/10 text-white text-xs font-bold uppercase tracking-widest px-5 py-2 rounded-lg">How It Works</span>
+<section class="bg-linen py-24 px-4 sm:px-8">
+  <div class="max-w-6xl mx-auto">
+    <div class="text-center mb-16 reveal">
+      <span class="tag-pill" style="margin-bottom:14px;display:inline-block;">How It Works</span>
+      <h2 style="font-family:'Caveat',cursive;font-size:clamp(36px,5vw,52px);font-weight:700;color:#3d2810;line-height:1.15;">Three Steps to Grow</h2>
     </div>
-    <div class="grid grid-cols-1 sm:grid-cols-3 gap-6">
-      <div class="bg-white/5 border border-white/10 rounded-2xl p-7 text-center hover:-translate-y-1 transition-transform">
-        <div class="w-12 h-12 rounded-full bg-green-800/60 border border-green-400/30 text-green-400 font-black text-lg flex items-center justify-center mx-auto mb-4">1</div>
-        <h3 class="text-base font-black text-green-400 mb-3">Sign Up</h3>
-        <p class="text-sm text-gray-400 leading-relaxed">Get in touch with us and apply to learn if you can join the network. We also provide resources to help if work still has to be done.</p>
+    <div class="grid grid-cols-1 sm:grid-cols-3 gap-10">
+      <div class="flex flex-col items-center text-center gap-4 reveal">
+        <div class="step-circle">1</div>
+        <h3 style="font-family:'Caveat',cursive;font-size:26px;font-weight:700;color:#345c24;">Sign Up</h3>
+        <p style="font-family:'Lora',serif;font-size:15px;color:#6b4a28;line-height:1.7;">Get in touch with us and apply to learn if you can join the network. We also provide resources to help if work still has to be done.</p>
       </div>
-      <div class="bg-white/5 border border-white/10 rounded-2xl p-7 text-center hover:-translate-y-1 transition-transform">
-        <div class="w-12 h-12 rounded-full bg-green-800/60 border border-green-400/30 text-green-400 font-black text-lg flex items-center justify-center mx-auto mb-4">2</div>
-        <h3 class="text-base font-black text-green-400 mb-3">Contribute Your Harvest</h3>
-        <p class="text-sm text-gray-400 leading-relaxed">Farmers contribute their harvest by delivery to our distribution center or through a pickup service we provide at a small cost.</p>
+      <div class="flex flex-col items-center text-center gap-4 reveal" style="transition-delay:0.15s">
+        <div class="step-circle">2</div>
+        <h3 style="font-family:'Caveat',cursive;font-size:26px;font-weight:700;color:#345c24;">Contribute Your Harvest</h3>
+        <p style="font-family:'Lora',serif;font-size:15px;color:#6b4a28;line-height:1.7;">Farmers contribute their harvest by delivery to our distribution center or through a pickup service we provide at a small cost.</p>
       </div>
-      <div class="bg-white/5 border border-white/10 rounded-2xl p-7 text-center hover:-translate-y-1 transition-transform">
-        <div class="w-12 h-12 rounded-full bg-green-800/60 border border-green-400/30 text-green-400 font-black text-lg flex items-center justify-center mx-auto mb-4">3</div>
-        <h3 class="text-base font-black text-green-400 mb-3">Earn Your Share</h3>
-        <p class="text-sm text-gray-400 leading-relaxed">Farmers receive payment based on quantity and quality of their produce. Small farms are not charged for their first 6 months of selling.</p>
+      <div class="flex flex-col items-center text-center gap-4 reveal" style="transition-delay:0.3s">
+        <div class="step-circle">3</div>
+        <h3 style="font-family:'Caveat',cursive;font-size:26px;font-weight:700;color:#345c24;">Earn Your Share</h3>
+        <p style="font-family:'Lora',serif;font-size:15px;color:#6b4a28;line-height:1.7;">Farmers receive payment based on quantity and quality of their produce. Small farms are not charged for their first 6 months of selling.</p>
       </div>
     </div>
-  </section>
+  </div>
+</section>
 
-  <!-- IMPACT STATS -->
-  <section class="py-12 border-t border-white/10">
-    <div class="text-center mb-10">
-      <span class="inline-block bg-soil-700/80 border border-white/10 text-white text-xs font-bold uppercase tracking-widest px-5 py-2 rounded-lg">Our Impact</span>
+<section class="bg-parchment py-24 px-4 sm:px-8">
+  <div class="max-w-6xl mx-auto">
+    <div class="text-center mb-16 reveal">
+      <span class="tag-pill" style="margin-bottom:14px;display:inline-block;">Our Impact</span>
+      <h2 style="font-family:'Caveat',cursive;font-size:clamp(36px,5vw,52px);font-weight:700;color:#3d2810;">Growing Stronger Together</h2>
     </div>
-    <div class="grid grid-cols-2 sm:grid-cols-4 gap-5">
-      <div class="bg-green-800/20 border border-green-400/20 rounded-2xl p-6 text-center hover:bg-green-800/30 transition-colors">
-        <div class="text-4xl font-black text-green-400 mb-2">300+</div>
-        <div class="text-xs font-bold uppercase tracking-widest text-gray-400">Farmers in network</div>
+    <div class="grid grid-cols-2 sm:grid-cols-4 gap-6">
+      <div class="stat-card-light reveal">
+        <div style="font-family:'Caveat',cursive;font-size:42px;font-weight:700;color:#4a7c35;line-height:1;">300+</div>
+        <div style="font-family:'DM Sans',sans-serif;font-size:11px;letter-spacing:0.1em;text-transform:uppercase;color:#8b6340;margin-top:8px;">Farmers in network</div>
       </div>
-      <div class="bg-green-800/20 border border-green-400/20 rounded-2xl p-6 text-center hover:bg-green-800/30 transition-colors">
-        <div class="text-4xl font-black text-green-400 mb-2">14</div>
-        <div class="text-xs font-bold uppercase tracking-widest text-gray-400">Communities served</div>
+      <div class="stat-card-light reveal" style="transition-delay:0.1s;">
+        <div style="font-family:'Caveat',cursive;font-size:42px;font-weight:700;color:#4a7c35;line-height:1;">14</div>
+        <div style="font-family:'DM Sans',sans-serif;font-size:11px;letter-spacing:0.1em;text-transform:uppercase;color:#8b6340;margin-top:8px;">Communities served</div>
       </div>
-      <div class="bg-green-800/20 border border-green-400/20 rounded-2xl p-6 text-center hover:bg-green-800/30 transition-colors">
-        <div class="text-4xl font-black text-green-400 mb-2">20t+</div>
-        <div class="text-xs font-bold uppercase tracking-widest text-gray-400">Tonnes sold to date</div>
+      <div class="stat-card-light reveal" style="transition-delay:0.2s;">
+        <div style="font-family:'Caveat',cursive;font-size:42px;font-weight:700;color:#4a7c35;line-height:1;">20t+</div>
+        <div style="font-family:'DM Sans',sans-serif;font-size:11px;letter-spacing:0.1em;text-transform:uppercase;color:#8b6340;margin-top:8px;">Tonnes sold to date</div>
       </div>
-      <div class="bg-green-800/20 border border-green-400/20 rounded-2xl p-6 text-center hover:bg-green-800/30 transition-colors">
-        <div class="text-4xl font-black text-green-400 mb-2">R1m+</div>
-        <div class="text-xs font-bold uppercase tracking-widest text-gray-400">Paid back to farmers</div>
+      <div class="stat-card-light reveal" style="transition-delay:0.3s;">
+        <div style="font-family:'Caveat',cursive;font-size:42px;font-weight:700;color:#4a7c35;line-height:1;">R1m+</div>
+        <div style="font-family:'DM Sans',sans-serif;font-size:11px;letter-spacing:0.1em;text-transform:uppercase;color:#8b6340;margin-top:8px;">Paid back to farmers</div>
       </div>
     </div>
-  </section>
+  </div>
+</section>
 
-  <!-- VALUES -->
-  <section class="py-12 border-t border-white/10">
-    <div class="text-center mb-10">
-      <span class="inline-block bg-soil-700/80 border border-white/10 text-white text-xs font-bold uppercase tracking-widest px-5 py-2 rounded-lg">Our Values</span>
+<section class="bg-linen py-24 px-4 sm:px-8">
+  <div class="max-w-7xl mx-auto">
+    <div class="text-center mb-16 reveal">
+      <span class="tag-pill" style="margin-bottom:14px;display:inline-block;">Our Values</span>
+      <h2 style="font-family:'Caveat',cursive;font-size:clamp(36px,5vw,52px);font-weight:700;color:#3d2810;">What We Stand For</h2>
     </div>
-    <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-      <div class="flex flex-col gap-6">
-        <div class="bg-white/5 border border-white/10 rounded-xl p-5">
-          <h3 class="text-base font-black text-white mb-2">Fairness</h3>
-          <p class="text-sm text-gray-400 leading-relaxed">We are looking to uplift these communities by ensuring fair compensation, support and transparent practices for all our farmers.</p>
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-14 items-center">
+      <div class="flex flex-col gap-8">
+        <div class="reveal">
+          <h3 style="font-family:'Caveat',cursive;font-size:28px;font-weight:700;color:#345c24;margin-bottom:8px;">Fairness</h3>
+          <p style="font-family:'Lora',serif;font-size:16px;color:#6b4a28;line-height:1.75;">We are looking to uplift these communities by ensuring fair compensation, support and transparent practices for all our farmers.</p>
         </div>
-        <div class="bg-white/5 border border-white/10 rounded-xl p-5">
-          <h3 class="text-base font-black text-white mb-2">Community First</h3>
-          <p class="text-sm text-gray-400 leading-relaxed">We prioritize the needs and voices of our community members in all our decisions, ensuring they are at the center of our efforts and that we reinvest in local infrastructure.</p>
+        <div class="reveal" style="transition-delay:0.1s">
+          <h3 style="font-family:'Caveat',cursive;font-size:28px;font-weight:700;color:#345c24;margin-bottom:8px;">Community First</h3>
+          <p style="font-family:'Lora',serif;font-size:16px;color:#6b4a28;line-height:1.75;">We prioritize the needs and voices of our community members in all our decisions, ensuring they are at the center of our efforts and that we reinvest in local infrastructure.</p>
         </div>
-        <div class="bg-white/5 border border-white/10 rounded-xl p-5">
-          <h3 class="text-base font-black text-white mb-2">Sustainability</h3>
-          <p class="text-sm text-gray-400 leading-relaxed">We are committed to sustainable farming practices that protect our environment. This includes focusing on soil health, efficient water use, seasonal crops, and encouraging organic practices.</p>
+        <div class="reveal" style="transition-delay:0.2s">
+          <h3 style="font-family:'Caveat',cursive;font-size:28px;font-weight:700;color:#345c24;margin-bottom:8px;">Sustainability</h3>
+          <p style="font-family:'Lora',serif;font-size:16px;color:#6b4a28;line-height:1.75;">We are committed to sustainable farming practices that protect our environment. This includes focusing on soil health, efficient water use, seasonal crops, and encouraging organic practices.</p>
         </div>
-        <div class="bg-white/5 border border-white/10 rounded-xl p-5">
-          <h3 class="text-base font-black text-white mb-2">Transparency</h3>
-          <p class="text-sm text-gray-400 leading-relaxed">Farmers get detailed monthly reports showing exactly what was sold, at what price, where the sales went, and what their share will be.</p>
+        <div class="reveal" style="transition-delay:0.3s">
+          <h3 style="font-family:'Caveat',cursive;font-size:28px;font-weight:700;color:#345c24;margin-bottom:8px;">Transparency</h3>
+          <p style="font-family:'Lora',serif;font-size:16px;color:#6b4a28;line-height:1.75;">Farmers get detailed monthly reports showing exactly what was sold, at what price, where the sales went, and what their share will be.</p>
         </div>
       </div>
-      <div class="rounded-2xl overflow-hidden border border-white/10 shadow-xl">
-        <img src="../media/our-values-about-us.jpg" alt="Our values" class="w-full h-full object-cover min-h-[400px]">
-      </div>
-    </div>
-  </section>
-
-  <!-- CTA -->
-  <section class="py-12 border-t border-white/10">
-    <div class="bg-gradient-to-br from-green-800/30 to-soil-700/40 border border-green-400/20 rounded-2xl p-10 sm:p-16 text-center">
-      <h2 class="text-3xl sm:text-4xl font-black text-white mb-4">Ready to grow with us?</h2>
-      <p class="text-gray-300 max-w-2xl mx-auto leading-relaxed mb-8">Are you looking to get started and contribute your harvest? Put in a sign up request today! Or if you are a buyer looking to support our farmers, browse our produce selection and shop with us today.</p>
-      <div class="flex flex-wrap gap-4 justify-center">
-        <a href="contact_us.html" class="bg-green-800 hover:bg-green-700 text-white font-bold px-8 py-3.5 rounded-xl transition-colors">Become a Seller</a>
-        <a href="produce_products.html" class="border border-green-400 text-green-400 hover:bg-green-400 hover:text-black font-bold px-8 py-3.5 rounded-xl transition-colors">Shop Produce</a>
+      <div class="panel-wrap reveal" style="transition-delay:0.2s;">
+        <img data-parallax="0.12" src="../media/our-values-about-us.jpg" alt="Our values">
       </div>
     </div>
-  </section>
+  </div>
+</section>
 
-</div>
+<section class="parallax-section grain py-28 px-4 sm:px-8" id="ctaSection">
+  <img id="ctaBg" src="../media/become-producer-homepage.jpg" alt="" class="parallax-bg" style="filter:brightness(0.25) saturate(0.6);">
+  <div class="parallax-dim" style="background:linear-gradient(135deg,rgba(38,24,8,0.88),rgba(26,58,20,0.8));"></div>
+
+  <div class="relative max-w-4xl mx-auto text-center" style="z-index:2;">
+    <div class="reveal">
+      <span style="display:inline-block;font-family:'DM Sans',sans-serif;font-size:11px;font-weight:600;letter-spacing:0.12em;text-transform:uppercase;background:rgba(122,173,90,0.15);color:#a8db78;border:1px solid rgba(122,173,90,0.3);padding:6px 16px;border-radius:50px;margin-bottom:20px;">Get Involved</span>
+      <h2 style="font-family:'Caveat',cursive;font-size:clamp(42px,6vw,64px);font-weight:700;color:#fdf8f0;line-height:1.1;margin-bottom:20px;">Ready to grow with us?</h2>
+      <p style="font-family:'Lora',serif;font-size:18px;color:rgba(253,248,240,0.8);line-height:1.8;margin-bottom:36px;max-width:700px;margin-inline:auto;">
+        Are you looking to get started and contribute your harvest? Put in a sign up request today! Or if you are a buyer looking to support our farmers, browse our produce selection and shop with us today.
+      </p>
+      <div style="display:flex;flex-wrap:wrap;justify-content:center;gap:16px;">
+        <a href="contact_us.html" class="btn-primary">Become a Seller</a>
+        <a href="produce_products.html" class="btn-outline-light">Shop Produce</a>
+      </div>
+    </div>
+  </div>
+</section>
 
 <div id="footer-root"></div>
 <div id="toggle-root"></div>
+
 <script src="https://unpkg.com/react@18/umd/react.production.min.js" crossorigin></script>
 <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js" crossorigin></script>
 <script src="../scripts/shared-components.js"></script>
@@ -162,6 +394,61 @@
       ReactDOM.createPortal(React.createElement(RootsComponents.LowDataToggle), document.getElementById('toggle-root'))
     )
   );
+</script>
+
+<script>
+(function() {
+  var lowData = function() { return document.body.classList.contains('low-data'); };
+
+  /* CTA section parallax */
+  var ctaBg  = document.getElementById('ctaBg');
+  var ctaSec = document.getElementById('ctaSection');
+  function ctaParallax() {
+    if (lowData() || !ctaBg || !ctaSec) return;
+    var rect   = ctaSec.getBoundingClientRect();
+    var offset = (rect.top + rect.height / 2 - window.innerHeight / 2) * 0.22;
+    ctaBg.style.transform = 'translateY(' + offset + 'px)';
+  }
+
+  /* Panel images parallax */
+  var panels = document.querySelectorAll('.panel-wrap img[data-parallax]');
+  function panelParallax() {
+    if (lowData()) return;
+    panels.forEach(function(img) {
+      var factor = parseFloat(img.dataset.parallax) || 0.12;
+      var wrap   = img.closest('.panel-wrap');
+      if (!wrap) return;
+      var rect   = wrap.getBoundingClientRect();
+      var center = rect.top + rect.height / 2 - window.innerHeight / 2;
+      img.style.transform = 'translateY(' + (center * factor) + 'px) scale(1.14)';
+    });
+  }
+
+  /* Scroll reveal */
+  var reveals = document.querySelectorAll('.reveal');
+  if ('IntersectionObserver' in window) {
+    var io = new IntersectionObserver(function(entries) {
+      entries.forEach(function(e) {
+        if (e.isIntersecting) { e.target.classList.add('revealed'); io.unobserve(e.target); }
+      });
+    }, { threshold: 0.1 });
+    reveals.forEach(function(el) { io.observe(el); });
+  } else {
+    reveals.forEach(function(el) { el.classList.add('revealed'); });
+  }
+
+  /* Combined scroll handler */
+  function onScroll() {
+    ctaParallax();
+    panelParallax();
+  }
+
+  window.addEventListener('scroll', onScroll, { passive: true });
+  window.addEventListener('resize', onScroll, { passive: true });
+
+  /* Init on load */
+  onScroll();
+})();
 </script>
 </body>
 </html>

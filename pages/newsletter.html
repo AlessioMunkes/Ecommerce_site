@@ -3,87 +3,202 @@
 <head>
   <meta charset="UTF-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Newsletter — Roots</title>
+  <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@400;600;700&family=Lora:ital,wght@0,400;0,500;0,600;1,400&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
   <script src="https://cdn.tailwindcss.com"></script>
-  <script>tailwind.config={theme:{extend:{colors:{green:{400:'#4ade80',700:'#15803d',800:'#015005'},soil:{700:'#382f26',800:'#1a3a2a',900:'#0f2417'}}}}}</script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            parchment: { 50:'#fdf8f0', 100:'#f7eed8', 200:'#eedfc0', 300:'#e0c99a' },
+            bark:      { 700:'#5c3d1e', 800:'#3d2810', 900:'#261808' },
+            moss:      { 400:'#7aad5a', 600:'#4a7c35', 700:'#345c24', 800:'#1e3a14' },
+            soil:      { 600:'#8b6340', 700:'#6b4a28', 800:'#4a3018' },
+          },
+          fontFamily: {
+            sans: ['"DM Sans"', 'sans-serif'],
+            serif: ['Lora', 'Georgia', 'serif'],
+            caveat: ['Caveat', 'cursive'],
+          }
+        }
+      }
+    }
+  </script>
   <style>
-    body{background:linear-gradient(to bottom,#0f2417,#1a3a2a,#0e3d20,#1a3a2a,#0f2417);background-size:100% 400%;min-height:100vh;color:#f9faf8;font-family:system-ui,sans-serif}
-    body.low-data{background:#0f2417!important}body.low-data img{display:none!important}
-    ::-webkit-scrollbar{width:5px}::-webkit-scrollbar-track{background:#0f2417}::-webkit-scrollbar-thumb{background:#015005;border-radius:3px}
-    input[type=email]{background:rgba(255,255,255,.06)}
+    /* ── Base ── */
+    html { scroll-behavior: smooth; }
+    body {
+      background-color: #f7eed8;
+      color: #3d2810;
+      font-family: 'Lora', Georgia, serif;
+      overflow-x: hidden;
+    }
+    body.low-data { background: #c9b686 !important; }
+    body.low-data img { display: none !important; }
+
+    /* ── Scrollbar ── */
+    ::-webkit-scrollbar { width: 6px; }
+    ::-webkit-scrollbar-track { background: #eedfc0; }
+    ::-webkit-scrollbar-thumb { background: #4a7c35; border-radius: 3px; }
+
+    /* ── Grain texture ── */
+    .grain::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)' opacity='0.03'/%3E%3C/svg%3E");
+      pointer-events: none;
+      z-index: 1;
+    }
+
+    /* ── Tag pill ── */
+    .tag-pill {
+      display:inline-block; font-family:'DM Sans',sans-serif;
+      font-size:11px; font-weight:700; letter-spacing:0.12em; text-transform:uppercase;
+      background:rgba(122,173,90,0.16); color:#345c24;
+      border:1px solid rgba(122,173,90,0.35); padding:6px 16px; border-radius:50px;
+    }
+
+    /* ── Buttons ── */
+    .btn-primary {
+      display:inline-flex; align-items:center; justify-content:center;
+      background:linear-gradient(135deg,#345c24,#4a7c35);
+      color:#fdf8f0; font-family:'DM Sans',sans-serif; font-weight:600; font-size:15px;
+      padding:12px 28px; border-radius:50px; text-decoration:none;
+      transition:transform 0.2s, box-shadow 0.2s, background 0.2s;
+      box-shadow:0 4px 16px rgba(52,92,36,0.28); letter-spacing:0.01em; cursor:pointer; border:none;
+    }
+    .btn-primary:hover { transform:translateY(-2px); box-shadow:0 8px 24px rgba(52,92,36,0.4); }
+
+    /* ── Fade-up animations ── */
+    @keyframes fadeUp { from{opacity:0;transform:translateY(28px)} to{opacity:1;transform:translateY(0)} }
+    .fade-up   { animation:fadeUp 0.85s ease both; }
+    .fade-up-2 { animation:fadeUp 0.85s 0.15s ease both; }
+    
+    /* ── Scroll reveal ── */
+    .reveal { opacity:0; transform:translateY(36px); transition:opacity 0.75s ease, transform 0.75s ease; }
+    .reveal.revealed { opacity:1; transform:translateY(0); }
+
+    /* ── Navbar/footer colour overrides ── */
+    #navbar-root header {
+      background:rgba(247,238,216,0.9) !important;
+      border-bottom:1px solid rgba(92,61,30,0.12) !important;
+      backdrop-filter:blur(10px) !important;
+    }
+    #navbar-root .text-white   { color:#3d2810 !important; }
+    #navbar-root .text-gray-300 { color:#6b4a28 !important; }
+    #navbar-root .text-green-400 { color:#4a7c35 !important; }
+    #navbar-root .bg-green-400  { background:#4a7c35 !important; }
+    #navbar-root .text-black    { color:#fdf8f0 !important; }
+    #navbar-root .hover\:text-white:hover { color:#3d2810 !important; }
+    #navbar-root .hover\:bg-white\/10:hover { background:rgba(92,61,30,0.08) !important; }
+    #navbar-root .bg-green-800\/60 { background:rgba(74,124,53,0.15) !important; }
+    #navbar-root .border-white\/10 { border-color:rgba(92,61,30,0.1) !important; }
+    #navbar-root .bg-black\/50 { background:rgba(247,238,216,0.9) !important; }
+
+    #footer-root footer { background:#261808 !important; border-top:1px solid rgba(122,173,90,0.15) !important; }
+    #footer-root * { color:#c4b49a !important; }
+    #footer-root .text-green-400 { color:#7aad5a !important; }
+
+    #toggle-root button {
+      background:rgba(247,238,216,0.92) !important;
+      border-color:rgba(92,61,30,0.2) !important;
+    }
+    #toggle-root .text-gray-500 { color:#8b6340 !important; }
+    #toggle-root .text-gray-400 { color:#6b4a28 !important; }
+    /* ── Disable all animations in Low Data mode ── */
+    body.low-data *, 
+    body.low-data *::before, 
+    body.low-data *::after {
+      animation: none !important;
+      transition: none !important;
+    }
+
+    /* Force reveal and fade elements to be visible instantly */
+    body.low-data .reveal,
+    body.low-data .fade-up,
+    body.low-data .fade-up-2,
+    body.low-data .fade-up-3 {
+      opacity: 1 !important;
+      transform: translateY(0) !important;
+    }
   </style>
 </head>
-<body>
+<body class="bg-linen flex flex-col min-h-screen">
+
 <div id="navbar-root"></div>
 
-<div class="max-w-5xl mx-auto px-4 sm:px-8 py-12 pb-24">
-
-  <!-- Title -->
-  <div class="text-center mb-4">
-    <h1 class="text-4xl font-black text-white">Newsletter</h1>
+<div class="pt-40 pb-12 px-4 sm:px-8 border-b border-soil-600/10 bg-parchment relative overflow-hidden grain">
+  <div class="relative max-w-4xl mx-auto text-center z-10 fade-up">
+    <h1 class="font-caveat text-[clamp(42px,6vw,64px)] font-bold text-bark-800 mb-6 leading-none">Roots Newsletter</h1>
+    <div class="text-center">
+      <span class="tag-pill bg-moss-50 border-moss-200">Community Impact — April 2026</span>
+    </div>
   </div>
+</div>
 
-  <!-- Issue card -->
-  <div class="text-center mb-10">
-    <span class="inline-block bg-soil-700/80 border border-white/10 text-white text-sm font-bold px-6 py-2.5 rounded-lg">Community Impact — April 2026</span>
-  </div>
+<div class="flex-1 max-w-6xl mx-auto px-4 sm:px-8 py-16 pb-24">
 
-  <!-- Two-column article -->
-  <article class="grid grid-cols-1 lg:grid-cols-2 gap-0 bg-white/5 border border-white/10 rounded-2xl overflow-hidden mb-10">
+  <article class="grid grid-cols-1 lg:grid-cols-2 gap-0 bg-parchment-50 border border-soil-600/15 rounded-[24px] overflow-hidden mb-16 shadow-[0_16px_40px_rgba(58,35,12,0.06)] fade-up-2">
 
-    <!-- Left: image + captions -->
-    <div class="p-6 sm:p-8 flex flex-col gap-6 border-b lg:border-b-0 lg:border-r border-white/10">
-      <div class="rounded-xl overflow-hidden border border-white/10">
-        <img src="../media/newsletter.jpeg" alt="Community farm" class="w-full h-64 object-cover">
+    <div class="p-8 sm:p-10 flex flex-col gap-8 border-b lg:border-b-0 lg:border-r border-soil-600/15 bg-white/40">
+      <div class="rounded-2xl overflow-hidden border border-soil-600/10 shadow-sm">
+        <img src="../media/newsletter.jpeg" alt="Community farm" class="w-full h-72 object-cover transition-transform duration-700 hover:scale-105">
       </div>
-      <div class="flex flex-col gap-3">
-        <p class="text-sm text-gray-300 leading-relaxed">Farmers from Nyanga harvested over a ton of spinach this month, with each contributing member receiving their proportional payout within 48 hours of sale.</p>
-        <p class="text-sm text-gray-300 leading-relaxed">New irrigation channels funded by last quarter's equipment pool are already showing results, with water usage down 30% across participating plots.</p>
-        <p class="text-sm text-gray-300 leading-relaxed">We welcomed 14 new farming families this April, bringing the total community membership to 312 households across 14 townships.</p>
-        <p class="text-sm text-gray-300 leading-relaxed">Seed sharing initiative launched — members can now list surplus seeds through the platform free of charge.</p>
+      <div class="flex flex-col gap-4 font-serif text-[15px] text-soil-700 leading-[1.8]">
+        <p>Farmers from Nyanga harvested over a ton of spinach this month, with each contributing member receiving their proportional payout within 48 hours of sale.</p>
+        <p>New irrigation channels funded by last quarter's equipment pool are already showing results, with water usage down 30% across participating plots.</p>
+        <p>We welcomed 14 new farming families this April, bringing the total community membership to 312 households across 14 townships.</p>
+        <p>Seed sharing initiative launched — members can now list surplus seeds through the platform free of charge.</p>
       </div>
     </div>
 
-    <!-- Right: segments -->
-    <div class="p-6 sm:p-8 flex flex-col gap-8">
+    <div class="p-8 sm:p-10 flex flex-col gap-10">
 
       <div>
-        <div class="inline-block bg-soil-700 border border-white/10 text-white text-xs font-bold uppercase tracking-widest px-4 py-1.5 rounded-lg mb-4">This Month in Numbers</div>
-        <div class="flex flex-col gap-2.5">
-          <p class="text-sm text-gray-300 leading-relaxed">Total produce sold: <strong class="text-white">4,820 kg</strong> across all communities.</p>
-          <p class="text-sm text-gray-300 leading-relaxed">Average payout per farmer: <strong class="text-green-400">R3,750</strong> — up 18% from March.</p>
-          <p class="text-sm text-gray-300 leading-relaxed">Equipment pool purchases: <strong class="text-white">3 drip irrigation systems</strong> and <strong class="text-white">12 hand tool sets.</strong></p>
-          <p class="text-sm text-gray-300 leading-relaxed">New members joined: <strong class="text-white">14 households</strong> across Khayelitsha, Mitchells Plain, Gugulethu, Bonteheuwel and Langa.</p>
+        <div class="inline-block font-sans text-[11px] font-bold uppercase tracking-widest text-moss-700 bg-moss-100/50 border border-moss-200 px-3 py-1.5 rounded-lg mb-4">This Month in Numbers</div>
+        <div class="flex flex-col gap-3 font-serif text-[15px] text-soil-700 leading-[1.7]">
+          <p>Total produce sold: <strong class="text-bark-800 font-semibold">4,820 kg</strong> across all communities.</p>
+          <p>Average payout per farmer: <strong class="text-moss-600 font-semibold">R3,750</strong> — up 18% from March.</p>
+          <p>Equipment pool purchases: <strong class="text-bark-800 font-semibold">3 drip irrigation systems</strong> and <strong class="text-bark-800 font-semibold">12 hand tool sets.</strong></p>
+          <p>New members joined: <strong class="text-bark-800 font-semibold">14 households</strong> across Khayelitsha, Mitchells Plain, Gugulethu, Bonteheuwel and Langa.</p>
         </div>
       </div>
 
+      <hr class="border-soil-600/10">
+
       <div>
-        <div class="inline-block bg-soil-700 border border-white/10 text-white text-xs font-bold uppercase tracking-widest px-4 py-1.5 rounded-lg mb-4">Spotlight: Equipment Sharing</div>
-        <div class="flex flex-col gap-2.5">
-          <p class="text-sm text-gray-300 leading-relaxed">This month we piloted a tool-sharing rotation between three neighbouring plots. Farmers reported saving an average of R320 each by borrowing instead of buying.</p>
-          <p class="text-sm text-gray-300 leading-relaxed">The rotation system is now being rolled out to any community that would like to join. Contact us to learn more.</p>
-          <p class="text-sm text-gray-300 leading-relaxed">Next month's bulk order closes on the 20th — submit equipment requests before then to qualify for the discount.</p>
+        <div class="inline-block font-sans text-[11px] font-bold uppercase tracking-widest text-moss-700 bg-moss-100/50 border border-moss-200 px-3 py-1.5 rounded-lg mb-4">Spotlight: Equipment Sharing</div>
+        <div class="flex flex-col gap-3 font-serif text-[15px] text-soil-700 leading-[1.7]">
+          <p>This month we piloted a tool-sharing rotation between three neighbouring plots. Farmers reported saving an average of R320 each by borrowing instead of buying.</p>
+          <p>The rotation system is now being rolled out to any community that would like to join. Contact us to learn more.</p>
+          <p>Next month's bulk order closes on the 20th — submit equipment requests before then to qualify for the discount.</p>
         </div>
       </div>
 
+      <hr class="border-soil-600/10">
+
       <div>
-        <div class="inline-block bg-soil-700 border border-white/10 text-white text-xs font-bold uppercase tracking-widest px-4 py-1.5 rounded-lg mb-4">Upcoming Events</div>
-        <div class="flex flex-col gap-2.5">
-          <p class="text-sm text-gray-300 leading-relaxed">Soil health workshop — Saturday 26 April, Gugulethu Community Hall, 10:00–13:00.</p>
-          <p class="text-sm text-gray-300 leading-relaxed">Payout day — Friday 2 May. All members will receive their April earnings via EFT.</p>
-          <p class="text-sm text-gray-300 leading-relaxed">New season planting guide available — members will receive an email or SMS about recommended crops to plant.</p>
+        <div class="inline-block font-sans text-[11px] font-bold uppercase tracking-widest text-moss-700 bg-moss-100/50 border border-moss-200 px-3 py-1.5 rounded-lg mb-4">Upcoming Events</div>
+        <div class="flex flex-col gap-3 font-serif text-[15px] text-soil-700 leading-[1.7]">
+          <p>Soil health workshop — Saturday 26 April, Gugulethu Community Hall, 10:00–13:00.</p>
+          <p>Payout day — Friday 2 May. All members will receive their April earnings via EFT.</p>
+          <p>New season planting guide available — members will receive an email or SMS about recommended crops to plant.</p>
         </div>
       </div>
 
     </div>
   </article>
 
-  <!-- Subscribe banner -->
-  <div class="bg-white/5 border border-white/10 rounded-2xl p-6 sm:p-8 flex flex-col sm:flex-row items-center justify-between gap-5">
-    <p class="text-base font-bold text-white text-center sm:text-left">Get the next issue delivered to your inbox</p>
-    <div class="flex gap-3 w-full sm:w-auto">
+  <div class="bg-parchment-100 border border-moss-400/30 rounded-[20px] p-8 sm:p-10 flex flex-col sm:flex-row items-center justify-between gap-6 shadow-[0_8px_24px_rgba(58,35,12,0.04)] reveal">
+    <div class="text-center sm:text-left">
+      <h3 class="font-caveat text-3xl font-bold text-moss-700 mb-2">Stay in the loop</h3>
+      <p class="font-serif text-[15px] text-soil-700">Get the next issue delivered directly to your inbox.</p>
+    </div>
+    <div class="flex flex-col sm:flex-row gap-3 w-full sm:w-auto">
       <input type="email" placeholder="your@email.com" id="subEmail"
-        class="flex-1 sm:w-56 border border-white/15 rounded-xl px-4 py-2.5 text-sm text-white placeholder-gray-600 outline-none focus:border-green-400 transition-colors">
-      <button id="subBtn" class="bg-green-800 hover:bg-green-700 text-white font-bold px-6 py-2.5 rounded-xl transition-colors whitespace-nowrap">Subscribe</button>
+        class="flex-1 sm:w-64 bg-white border border-soil-600/20 rounded-full px-5 py-3 text-[15px] font-sans text-bark-800 placeholder-soil-600/40 outline-none focus:border-moss-400 focus:ring-1 focus:ring-moss-400 transition-all shadow-inner">
+      <button id="subBtn" class="btn-primary w-full sm:w-auto">Subscribe</button>
     </div>
   </div>
 
@@ -91,6 +206,7 @@
 
 <div id="footer-root"></div>
 <div id="toggle-root"></div>
+
 <script src="https://unpkg.com/react@18/umd/react.production.min.js" crossorigin></script>
 <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js" crossorigin></script>
 <script src="../scripts/shared-components.js"></script>
@@ -99,27 +215,44 @@
   document.body.appendChild(mountDiv);
   ReactDOM.createRoot(mountDiv).render(
     React.createElement(RootsStore.StoreProvider, null,
-      React.createElement(RootsComponents.ScrollGradient),
       ReactDOM.createPortal(React.createElement(RootsComponents.Navbar),        document.getElementById('navbar-root')),
       ReactDOM.createPortal(React.createElement(RootsComponents.Footer),        document.getElementById('footer-root')),
       ReactDOM.createPortal(React.createElement(RootsComponents.LowDataToggle), document.getElementById('toggle-root'))
     )
   );
 
+  /* Scroll reveal */
+  var reveals = document.querySelectorAll('.reveal');
+  if ('IntersectionObserver' in window) {
+    var io = new IntersectionObserver(function(entries) {
+      entries.forEach(function(e) {
+        if (e.isIntersecting) { e.target.classList.add('revealed'); io.unobserve(e.target); }
+      });
+    }, { threshold: 0.1 });
+    reveals.forEach(function(el) { io.observe(el); });
+  } else {
+    reveals.forEach(function(el) { el.classList.add('revealed'); });
+  }
+
+  /* Subscribe interaction */
   var subBtn   = document.getElementById('subBtn');
   var subEmail = document.getElementById('subEmail');
   subBtn.addEventListener('click', function() {
     if (!subEmail.value.includes('@')) {
       subEmail.style.borderColor = '#ef4444';
-      setTimeout(function() { subEmail.style.borderColor = ''; }, 2000);
+      subEmail.style.boxShadow = '0 0 0 1px #ef4444';
+      setTimeout(function() { 
+        subEmail.style.borderColor = ''; 
+        subEmail.style.boxShadow = '';
+      }, 2000);
       return;
     }
     subBtn.textContent = 'Subscribed!';
-    subBtn.style.backgroundColor = '#15803d';
+    subBtn.style.background = '#4a7c35';
     subEmail.value = '';
     setTimeout(function() {
       subBtn.textContent = 'Subscribe';
-      subBtn.style.backgroundColor = '';
+      subBtn.style.background = '';
     }, 3000);
   });
 </script>

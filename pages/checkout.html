@@ -3,285 +3,390 @@
 <head>
   <meta charset="UTF-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Checkout — Roots</title>
+  <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@400;600;700&family=Lora:ital,wght@0,400;0,500;0,600;1,400&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
   <script src="https://cdn.tailwindcss.com"></script>
-  <script>tailwind.config={theme:{extend:{colors:{green:{400:'#4ade80',700:'#15803d',800:'#015005'},soil:{700:'#382f26',800:'#1a3a2a',900:'#0f2417'}}}}}</script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            parchment: { 50:'#fdf8f0', 100:'#f7eed8', 200:'#eedfc0', 300:'#e0c99a' },
+            bark:      { 700:'#5c3d1e', 800:'#3d2810', 900:'#261808' },
+            moss:      { 400:'#7aad5a', 600:'#4a7c35', 700:'#345c24', 800:'#1e3a14' },
+            soil:      { 600:'#8b6340', 700:'#6b4a28', 800:'#4a3018' },
+          },
+          fontFamily: {
+            sans: ['"DM Sans"', 'sans-serif'],
+            serif: ['Lora', 'Georgia', 'serif'],
+            caveat: ['Caveat', 'cursive'],
+          }
+        }
+      }
+    }
+  </script>
   <style>
-    body{background:linear-gradient(to bottom,#0f2417,#1a3a2a,#0e3d20,#1a3a2a,#0f2417);background-size:100% 400%;min-height:100vh;color:#f9faf8;font-family:system-ui,sans-serif}
-    body.low-data{background:#0f2417!important}
-    ::-webkit-scrollbar{width:5px}::-webkit-scrollbar-track{background:#0f2417}::-webkit-scrollbar-thumb{background:#015005;border-radius:3px}
-    input,select,textarea{background:rgba(255,255,255,.06);color:#f9faf8}
-    input::placeholder,textarea::placeholder{color:#4b5563}
-    select option{background:#1a3a2a;color:#f9faf8}
-    input[type=radio]{accent-color:#4ade80}
-    input[type=checkbox]{accent-color:#4ade80}
-    .field-error{color:#f87171;font-size:11px;margin-top:2px;display:block}
-    .input-err{border-color:#ef4444!important}
-    .pay-panel{display:none}.pay-panel.active{display:block}
-    .checkout-step{display:none}.checkout-step.active{display:block}
-    .qr-grid{display:grid;grid-template-columns:repeat(10,18px);grid-template-rows:repeat(10,18px);gap:2px;padding:10px;background:#fff;border-radius:8px}
-    .qr-cell{border-radius:2px;background:#fff}.qr-cell.filled{background:#111}
-    .popup-overlay{position:fixed;inset:0;background:rgba(0,0,0,.7);display:flex;align-items:center;justify-content:center;z-index:999;opacity:0;pointer-events:none;transition:opacity .3s;backdrop-filter:blur(6px)}
-    .popup-overlay.visible{opacity:1;pointer-events:all}
-    .popup-box{transform:scale(.92);transition:transform .3s}
-    .popup-overlay.visible .popup-box{transform:scale(1)}
+    /* ── Base ── */
+    html { scroll-behavior: smooth; }
+    body {
+      background-color: #f7eed8;
+      color: #3d2810;
+      font-family: 'Lora', Georgia, serif;
+      overflow-x: hidden;
+    }
+    body.low-data { background: #c9b686 !important; }
+    body.low-data img { display: none !important; }
+
+    /* ── Scrollbar ── */
+    ::-webkit-scrollbar { width: 6px; }
+    ::-webkit-scrollbar-track { background: #eedfc0; }
+    ::-webkit-scrollbar-thumb { background: #4a7c35; border-radius: 3px; }
+
+    /* ── Forms ── */
+    input[type=checkbox], input[type=radio] { accent-color: #4a7c35; }
+    select option { background: #fff; color: #3d2810; }
+    .field-error { color: #ef4444; font-size: 11px; margin-top: 4px; display: block; font-family: 'DM Sans', sans-serif; }
+    .input-err { border-color: #ef4444 !important; box-shadow: 0 0 0 1px #ef4444 !important; }
+    
+    .pay-panel { display: none; }
+    .pay-panel.active { display: block; }
+    .checkout-step { display: none; }
+    .checkout-step.active { display: block; }
+    
+    /* ── QR Grid ── */
+    .qr-grid { display: grid; grid-template-columns: repeat(10, 18px); grid-template-rows: repeat(10, 18px); gap: 2px; padding: 12px; background: #fff; border-radius: 12px; border: 1px solid rgba(139,99,64,0.15); box-shadow: 0 4px 12px rgba(58,35,12,0.05); }
+    .qr-cell { border-radius: 2px; background: #fdf8f0; }
+    .qr-cell.filled { background: #3d2810; }
+    
+    /* ── Popup ── */
+    .popup-overlay { position: fixed; inset: 0; background: rgba(38,24,8,0.4); display: flex; align-items: center; justify-content: center; z-index: 999; opacity: 0; pointer-events: none; transition: opacity 0.3s; backdrop-filter: blur(4px); }
+    .popup-overlay.visible { opacity: 1; pointer-events: all; }
+    .popup-box { transform: scale(0.92); transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
+    .popup-overlay.visible .popup-box { transform: scale(1); }
+
+    /* ── Grain texture ── */
+    .grain::after {
+      content: ''; position: absolute; inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)' opacity='0.03'/%3E%3C/svg%3E");
+      pointer-events: none; z-index: 1;
+    }
+
+    /* ── Navbar/footer overrides ── */
+    #navbar-root header { background:rgba(247,238,216,0.9) !important; border-bottom:1px solid rgba(92,61,30,0.12) !important; backdrop-filter:blur(10px) !important; }
+    #navbar-root .text-white { color:#3d2810 !important; }
+    #navbar-root .text-gray-300 { color:#6b4a28 !important; }
+    #navbar-root .text-green-400 { color:#4a7c35 !important; }
+    #navbar-root .bg-green-400 { background:#4a7c35 !important; }
+    #navbar-root .text-black { color:#fdf8f0 !important; }
+    #navbar-root .hover\:text-white:hover { color:#3d2810 !important; }
+    #navbar-root .hover\:bg-white\/10:hover { background:rgba(92,61,30,0.08) !important; }
+    #navbar-root .bg-green-800\/60 { background:rgba(74,124,53,0.15) !important; }
+    #navbar-root .border-white\/10 { border-color:rgba(92,61,30,0.1) !important; }
+    #navbar-root .bg-black\/50 { background:rgba(247,238,216,0.9) !important; }
+
+    #footer-root footer { background:#261808 !important; border-top:1px solid rgba(122,173,90,0.15) !important; }
+    #footer-root * { color:#c4b49a !important; }
+    #footer-root .text-green-400 { color:#7aad5a !important; }
+
+    #toggle-root button { background:rgba(247,238,216,0.92) !important; border-color:rgba(92,61,30,0.2) !important; }
+    #toggle-root .text-gray-500 { color:#8b6340 !important; }
+    #toggle-root .text-gray-400 { color:#6b4a28 !important; }
+
+    /* ── Override checkout.js dark mode text injections ── */
+    #deliveryMiniTotal .text-gray-400, 
+    #paymentMiniTotal .text-gray-400, 
+    #finalTotal .text-gray-400,
+    #reviewItems .text-gray-400,
+    #reviewDelivery .text-gray-400,
+    #reviewPayment .text-gray-400 {
+      color: #6b4a28 !important; /* text-soil-700 */
+    }
+
+    #deliveryMiniTotal .text-white, 
+    #paymentMiniTotal .text-white, 
+    #finalTotal .text-white,
+    #reviewItems .text-white,
+    #reviewDelivery .text-white,
+    #reviewPayment .text-white {
+      color: #3d2810 !important; /* text-bark-800 */
+    }
+
+    #deliveryMiniTotal .text-green-400, 
+    #paymentMiniTotal .text-green-400, 
+    #finalTotal .text-green-400,
+    #reviewItems .text-green-400,
+    #reviewDelivery .text-green-400,
+    #reviewPayment .text-green-400 {
+      color: #4a7c35 !important; /* text-moss-600 */
+
+      /* ── Fix the bottom totals in the Review Order section ── */
+    #orderTotals .text-white {
+      color: #3d2810 !important; /* bark-800 (Replaces white text) */
+    }
+    #orderTotals .text-gray-400 {
+      color: #6b4a28 !important; /* soil-700 (Replaces gray text) */
+    }
+    #orderTotals .text-green-400 {
+      color: #4a7c35 !important; /* moss-600 (Replaces bright green text) */
+    }
+    }
+    /* ── Disable all animations in Low Data mode ── */
+    body.low-data *, 
+    body.low-data *::before, 
+    body.low-data *::after {
+      animation: none !important;
+      transition: none !important;
+    }
+
+    /* Force reveal and fade elements to be visible instantly */
+    body.low-data .reveal,
+    body.low-data .fade-up,
+    body.low-data .fade-up-2,
+    body.low-data .fade-up-3 {
+      opacity: 1 !important;
+      transform: translateY(0) !important;
+    }
   </style>
 </head>
-<body>
+<body class="bg-linen flex flex-col min-h-screen">
 <div id="navbar-root"></div>
 
-<!-- ===================== EMPTY CART ===================== -->
-<div id="emptyState" class="hidden max-w-lg mx-auto px-4 py-24 text-center">
-  <div class="w-20 h-20 rounded-full bg-white/5 border border-white/10 flex items-center justify-center text-3xl font-black text-gray-600 mx-auto mb-6">0</div>
-  <h2 class="text-2xl font-black text-white mb-2">Your cart is empty</h2>
-  <p class="text-gray-400 mb-8">Add some products before checking out.</p>
-  <a href="produce_products.html" class="inline-block bg-green-800 hover:bg-green-700 text-white font-bold px-8 py-3 rounded-xl transition-colors">Browse Products</a>
+<div id="emptyState" class="hidden flex-1 flex flex-col items-center justify-center px-4 py-24 text-center mt-20">
+  <div class="w-20 h-20 rounded-full bg-moss-50 border border-moss-200 flex items-center justify-center text-4xl font-black text-moss-600 mx-auto mb-6 shadow-sm font-sans">0</div>
+  <h2 class="font-caveat text-4xl font-bold text-bark-800 mb-3">Your cart is empty</h2>
+  <p class="font-serif text-[15px] text-soil-700 mb-8 max-w-sm mx-auto leading-relaxed">Add some community-grown products before checking out.</p>
+  <a href="produce_products.html" class="inline-flex items-center justify-center bg-gradient-to-br from-moss-700 to-moss-600 text-parchment-50 font-sans font-bold uppercase tracking-widest text-[13px] px-8 py-3.5 rounded-full transition-all shadow-md hover:shadow-lg hover:-translate-y-0.5">Browse Products</a>
 </div>
 
-<!-- ===================== CHECKOUT PAGE ===================== -->
-<div id="checkoutPage" class="max-w-2xl mx-auto px-4 sm:px-6 py-10 pb-24">
+<div id="checkoutPage" class="flex-1 max-w-3xl mx-auto w-full px-4 sm:px-6 py-12 pb-24 mt-20">
 
-  <!-- PROGRESS -->
-  <div class="flex items-center justify-center gap-0 mb-10" id="progressBar">
-    <div class="flex flex-col items-center gap-1" id="step-ind-1">
-      <div class="w-9 h-9 rounded-full border-2 flex items-center justify-center text-sm font-black transition-all border-green-400 bg-green-800/60 text-green-400">1</div>
-      <span class="text-[10px] font-bold uppercase tracking-wide text-green-400">Order</span>
+  <div class="flex items-center justify-center gap-0 mb-12" id="progressBar">
+    <div class="flex flex-col items-center gap-1.5" id="step-ind-1">
+      <div class="w-10 h-10 rounded-full border-2 flex items-center justify-center text-sm font-black transition-all border-moss-400 bg-moss-50 text-moss-700 font-sans">1</div>
+      <span class="text-[10px] font-bold uppercase tracking-wide text-moss-700 font-sans">Order</span>
     </div>
-    <div class="h-px w-12 sm:w-16 bg-white/10 mb-4" id="line-1"></div>
-    <div class="flex flex-col items-center gap-1" id="step-ind-2">
-      <div class="w-9 h-9 rounded-full border-2 flex items-center justify-center text-sm font-black transition-all border-white/20 bg-white/5 text-gray-500">2</div>
-      <span class="text-[10px] font-bold uppercase tracking-wide text-gray-500">Delivery</span>
+    <div class="h-[2px] w-12 sm:w-16 bg-soil-600/15 mb-4" id="line-1"></div>
+    <div class="flex flex-col items-center gap-1.5" id="step-ind-2">
+      <div class="w-10 h-10 rounded-full border-2 flex items-center justify-center text-sm font-black transition-all border-soil-600/20 bg-parchment-100 text-soil-500 font-sans">2</div>
+      <span class="text-[10px] font-bold uppercase tracking-wide text-soil-500 font-sans">Delivery</span>
     </div>
-    <div class="h-px w-12 sm:w-16 bg-white/10 mb-4" id="line-2"></div>
-    <div class="flex flex-col items-center gap-1" id="step-ind-3">
-      <div class="w-9 h-9 rounded-full border-2 flex items-center justify-center text-sm font-black transition-all border-white/20 bg-white/5 text-gray-500">3</div>
-      <span class="text-[10px] font-bold uppercase tracking-wide text-gray-500">Payment</span>
+    <div class="h-[2px] w-12 sm:w-16 bg-soil-600/15 mb-4" id="line-2"></div>
+    <div class="flex flex-col items-center gap-1.5" id="step-ind-3">
+      <div class="w-10 h-10 rounded-full border-2 flex items-center justify-center text-sm font-black transition-all border-soil-600/20 bg-parchment-100 text-soil-500 font-sans">3</div>
+      <span class="text-[10px] font-bold uppercase tracking-wide text-soil-500 font-sans">Payment</span>
     </div>
-    <div class="h-px w-12 sm:w-16 bg-white/10 mb-4" id="line-3"></div>
-    <div class="flex flex-col items-center gap-1" id="step-ind-4">
-      <div class="w-9 h-9 rounded-full border-2 flex items-center justify-center text-sm font-black transition-all border-white/20 bg-white/5 text-gray-500">4</div>
-      <span class="text-[10px] font-bold uppercase tracking-wide text-gray-500">Confirm</span>
+    <div class="h-[2px] w-12 sm:w-16 bg-soil-600/15 mb-4" id="line-3"></div>
+    <div class="flex flex-col items-center gap-1.5" id="step-ind-4">
+      <div class="w-10 h-10 rounded-full border-2 flex items-center justify-center text-sm font-black transition-all border-soil-600/20 bg-parchment-100 text-soil-500 font-sans">4</div>
+      <span class="text-[10px] font-bold uppercase tracking-wide text-soil-500 font-sans">Confirm</span>
     </div>
   </div>
 
-  <!-- STEP 1: ORDER SUMMARY -->
   <section class="checkout-step active" id="step1">
-    <h2 class="text-2xl font-black text-white mb-6 pb-4 border-b border-white/10">Order Summary</h2>
-    <div id="orderItems" class="flex flex-col gap-3 mb-5"></div>
-    <div id="orderTotals" class="bg-white/5 border border-white/10 rounded-2xl p-5 flex flex-col gap-2 mb-6"></div>
+    <h2 class="font-caveat text-4xl font-bold text-bark-800 mb-6 pb-4 border-b border-soil-600/10">Order Summary</h2>
+    <div id="orderItems" class="flex flex-col gap-3 mb-6"></div>
+    <div id="orderTotals" class="bg-parchment-50 border border-soil-600/15 rounded-[20px] p-6 flex flex-col gap-2 mb-8 shadow-sm"></div>
     <div class="flex justify-end">
-      <button onclick="goToStep(2)" class="bg-green-800 hover:bg-green-700 text-white font-bold px-8 py-3 rounded-xl transition-colors">Continue to Delivery</button>
+      <button onclick="goToStep(2)" class="bg-gradient-to-br from-moss-700 to-moss-600 text-parchment-50 font-sans font-bold uppercase tracking-widest text-[13px] px-8 py-3.5 rounded-full transition-all shadow-md hover:shadow-lg hover:-translate-y-0.5">Continue to Delivery</button>
     </div>
   </section>
 
-  <!-- STEP 2: DELIVERY -->
   <section class="checkout-step" id="step2">
-    <h2 class="text-2xl font-black text-white mb-6 pb-4 border-b border-white/10">Delivery Options</h2>
+    <h2 class="font-caveat text-4xl font-bold text-bark-800 mb-6 pb-4 border-b border-soil-600/10">Delivery Options</h2>
 
-    <!-- Contact -->
-    <div class="bg-white/5 border border-white/10 rounded-2xl p-5 mb-4">
-      <h3 class="text-sm font-black text-white mb-4">Contact Details</h3>
-      <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-3">
-        <div class="flex flex-col gap-1"><label class="text-[10px] font-bold uppercase tracking-widest text-gray-400">First Name *</label><input type="text" id="firstName" placeholder="e.g. Sipho" class="border border-white/15 rounded-xl px-3 py-2.5 text-sm outline-none focus:border-green-400 transition-colors"></div>
-        <div class="flex flex-col gap-1"><label class="text-[10px] font-bold uppercase tracking-widest text-gray-400">Last Name *</label><input type="text" id="lastName" placeholder="e.g. Dlamini" class="border border-white/15 rounded-xl px-3 py-2.5 text-sm outline-none focus:border-green-400 transition-colors"></div>
+    <div class="bg-parchment-50 border border-soil-600/15 rounded-[20px] p-6 mb-5 shadow-sm">
+      <h3 class="font-sans text-sm font-black uppercase tracking-widest text-soil-600 mb-4">Contact Details</h3>
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4">
+        <div class="flex flex-col gap-1.5"><label class="text-[11px] font-sans font-bold uppercase tracking-widest text-soil-500">First Name *</label><input type="text" id="firstName" placeholder="e.g. Sipho" class="w-full bg-white border border-soil-600/20 rounded-xl px-4 py-3 text-[15px] font-sans text-bark-800 placeholder-soil-600/40 outline-none focus:border-moss-400 focus:ring-1 focus:ring-moss-400 transition-all shadow-inner"></div>
+        <div class="flex flex-col gap-1.5"><label class="text-[11px] font-sans font-bold uppercase tracking-widest text-soil-500">Last Name *</label><input type="text" id="lastName" placeholder="e.g. Dlamini" class="w-full bg-white border border-soil-600/20 rounded-xl px-4 py-3 text-[15px] font-sans text-bark-800 placeholder-soil-600/40 outline-none focus:border-moss-400 focus:ring-1 focus:ring-moss-400 transition-all shadow-inner"></div>
       </div>
-      <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
-        <div class="flex flex-col gap-1"><label class="text-[10px] font-bold uppercase tracking-widest text-gray-400">Email *</label><input type="email" id="email" placeholder="you@example.com" class="border border-white/15 rounded-xl px-3 py-2.5 text-sm outline-none focus:border-green-400 transition-colors"></div>
-        <div class="flex flex-col gap-1"><label class="text-[10px] font-bold uppercase tracking-widest text-gray-400">Phone *</label><input type="tel" id="phone" placeholder="+27 82 000 0000" class="border border-white/15 rounded-xl px-3 py-2.5 text-sm outline-none focus:border-green-400 transition-colors"></div>
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+        <div class="flex flex-col gap-1.5"><label class="text-[11px] font-sans font-bold uppercase tracking-widest text-soil-500">Email *</label><input type="email" id="email" placeholder="you@example.com" class="w-full bg-white border border-soil-600/20 rounded-xl px-4 py-3 text-[15px] font-sans text-bark-800 placeholder-soil-600/40 outline-none focus:border-moss-400 focus:ring-1 focus:ring-moss-400 transition-all shadow-inner"></div>
+        <div class="flex flex-col gap-1.5"><label class="text-[11px] font-sans font-bold uppercase tracking-widest text-soil-500">Phone *</label><input type="tel" id="phone" placeholder="+27 82 000 0000" class="w-full bg-white border border-soil-600/20 rounded-xl px-4 py-3 text-[15px] font-sans text-bark-800 placeholder-soil-600/40 outline-none focus:border-moss-400 focus:ring-1 focus:ring-moss-400 transition-all shadow-inner"></div>
       </div>
     </div>
 
-    <!-- Fulfilment -->
-    <div class="bg-white/5 border border-white/10 rounded-2xl p-5 mb-4">
-      <h3 class="text-sm font-black text-white mb-4">How would you like to receive your order?</h3>
-      <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
-        <label id="label-collect" class="flex items-center gap-3 p-4 rounded-xl border-2 border-green-400 bg-green-400/5 cursor-pointer transition-all">
+    <div class="bg-parchment-50 border border-soil-600/15 rounded-[20px] p-6 mb-5 shadow-sm">
+      <h3 class="font-sans text-sm font-black uppercase tracking-widest text-soil-600 mb-4">How would you like to receive your order?</h3>
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+        <label id="label-collect" class="flex items-center gap-3 p-4 rounded-xl border-2 border-moss-400 bg-moss-50 cursor-pointer transition-all">
           <input type="radio" name="fulfilment" value="collect" id="opt-collect" checked onchange="switchFulfilment()">
-          <div class="flex-1 min-w-0">
-            <div class="text-sm font-bold text-white">Collect</div>
-            <div class="text-xs text-gray-400">Free — pick up from distribution centre</div>
+          <div class="flex-1 min-w-0 font-sans">
+            <div class="text-[15px] font-bold text-bark-800">Collect</div>
+            <div class="text-[13px] text-soil-600 mt-0.5">Free — pick up from distribution centre</div>
           </div>
-          <span class="text-xs font-black text-green-400 bg-green-400/10 px-2.5 py-1 rounded-full border border-green-400/30 shrink-0">FREE</span>
+          <span class="text-[10px] font-black tracking-wider text-moss-700 bg-moss-100 px-2.5 py-1 rounded-full border border-moss-200 shrink-0">FREE</span>
         </label>
-        <label id="label-deliver" class="flex items-center gap-3 p-4 rounded-xl border-2 border-white/15 bg-white/5 cursor-pointer transition-all">
+        <label id="label-deliver" class="flex items-center gap-3 p-4 rounded-xl border-2 border-soil-600/15 bg-white cursor-pointer transition-all">
           <input type="radio" name="fulfilment" value="deliver" id="opt-deliver" onchange="switchFulfilment()">
-          <div class="flex-1 min-w-0">
-            <div class="text-sm font-bold text-white">Deliver</div>
-            <div class="text-xs text-gray-400">R80 flat rate — 2 to 4 business days</div>
+          <div class="flex-1 min-w-0 font-sans">
+            <div class="text-[15px] font-bold text-bark-800">Deliver</div>
+            <div class="text-[13px] text-soil-600 mt-0.5">R80 flat rate — 2 to 4 business days</div>
           </div>
-          <span class="text-xs font-black text-yellow-400 bg-yellow-400/10 px-2.5 py-1 rounded-full border border-yellow-400/30 shrink-0">+R80</span>
+          <span class="text-[10px] font-black tracking-wider text-soil-700 bg-soil-100 px-2.5 py-1 rounded-full border border-soil-200 shrink-0">+R80</span>
         </label>
       </div>
     </div>
 
-    <!-- Collect info -->
-    <div id="collectInfo" class="bg-white/5 border border-white/10 rounded-2xl p-5 mb-4 flex gap-4">
-      <div class="w-9 h-9 rounded-xl bg-green-800/50 border border-green-400/20 text-green-400 text-sm font-black flex items-center justify-center shrink-0">P</div>
+    <div id="collectInfo" class="bg-parchment-50 border border-soil-600/15 rounded-[20px] p-6 mb-5 flex gap-4 shadow-sm">
+      <div class="w-10 h-10 rounded-xl bg-moss-100 border border-moss-200 text-moss-700 text-lg font-black font-sans flex items-center justify-center shrink-0">P</div>
       <div>
-        <h3 class="text-sm font-black text-white mb-1">Collection Address</h3>
-        <p class="text-sm text-white font-semibold">Roots Distribution Centre</p>
-        <p class="text-xs text-gray-400 mt-1">12 Harvest Road, Khayelitsha, Cape Town, 7784</p>
-        <p class="text-xs text-gray-400">Mon–Fri: 07:00 – 17:00 | Sat: 08:00 – 13:00</p>
-        <p class="text-xs text-gray-500 mt-2 italic">Bring your order confirmation email and a valid ID.</p>
+        <h3 class="font-sans text-[11px] font-bold uppercase tracking-widest text-soil-500 mb-1.5">Collection Address</h3>
+        <p class="text-[15px] text-bark-800 font-bold font-sans">Roots Distribution Centre</p>
+        <p class="text-[14px] text-soil-700 font-serif mt-1">12 Harvest Road, Khayelitsha, Cape Town, 7784</p>
+        <p class="text-[14px] text-soil-700 font-serif mt-0.5">Mon–Fri: 07:00 – 17:00 | Sat: 08:00 – 13:00</p>
+        <p class="text-[13px] text-soil-500 mt-3 italic font-serif border-t border-soil-600/10 pt-3">Bring your order confirmation email and a valid ID.</p>
       </div>
     </div>
 
-    <!-- Delivery form -->
-    <div id="deliveryForm" class="bg-white/5 border border-white/10 rounded-2xl p-5 mb-4 hidden">
-      <h3 class="text-sm font-black text-white mb-4">Delivery Address</h3>
-      <div class="flex flex-col gap-3">
-        <div class="flex flex-col gap-1"><label class="text-[10px] font-bold uppercase tracking-widest text-gray-400">Street Address *</label><input type="text" id="street" placeholder="e.g. 45 Main Road" class="border border-white/15 rounded-xl px-3 py-2.5 text-sm outline-none focus:border-green-400 transition-colors"></div>
-        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
-          <div class="flex flex-col gap-1"><label class="text-[10px] font-bold uppercase tracking-widest text-gray-400">Suburb *</label><input type="text" id="suburb" placeholder="e.g. Mitchells Plain" class="border border-white/15 rounded-xl px-3 py-2.5 text-sm outline-none focus:border-green-400 transition-colors"></div>
-          <div class="flex flex-col gap-1"><label class="text-[10px] font-bold uppercase tracking-widest text-gray-400">City *</label><input type="text" id="city" placeholder="e.g. Cape Town" class="border border-white/15 rounded-xl px-3 py-2.5 text-sm outline-none focus:border-green-400 transition-colors"></div>
+    <div id="deliveryForm" class="bg-parchment-50 border border-soil-600/15 rounded-[20px] p-6 mb-5 hidden shadow-sm">
+      <h3 class="font-sans text-sm font-black uppercase tracking-widest text-soil-600 mb-4">Delivery Address</h3>
+      <div class="flex flex-col gap-4">
+        <div class="flex flex-col gap-1.5"><label class="text-[11px] font-sans font-bold uppercase tracking-widest text-soil-500">Street Address *</label><input type="text" id="street" placeholder="e.g. 45 Main Road" class="w-full bg-white border border-soil-600/20 rounded-xl px-4 py-3 text-[15px] font-sans text-bark-800 placeholder-soil-600/40 outline-none focus:border-moss-400 focus:ring-1 focus:ring-moss-400 transition-all shadow-inner"></div>
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div class="flex flex-col gap-1.5"><label class="text-[11px] font-sans font-bold uppercase tracking-widest text-soil-500">Suburb *</label><input type="text" id="suburb" placeholder="e.g. Mitchells Plain" class="w-full bg-white border border-soil-600/20 rounded-xl px-4 py-3 text-[15px] font-sans text-bark-800 placeholder-soil-600/40 outline-none focus:border-moss-400 focus:ring-1 focus:ring-moss-400 transition-all shadow-inner"></div>
+          <div class="flex flex-col gap-1.5"><label class="text-[11px] font-sans font-bold uppercase tracking-widest text-soil-500">City *</label><input type="text" id="city" placeholder="e.g. Cape Town" class="w-full bg-white border border-soil-600/20 rounded-xl px-4 py-3 text-[15px] font-sans text-bark-800 placeholder-soil-600/40 outline-none focus:border-moss-400 focus:ring-1 focus:ring-moss-400 transition-all shadow-inner"></div>
         </div>
-        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
-          <div class="flex flex-col gap-1"><label class="text-[10px] font-bold uppercase tracking-widest text-gray-400">Province *</label>
-            <select id="province" class="border border-white/15 rounded-xl px-3 py-2.5 text-sm outline-none focus:border-green-400 transition-colors">
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div class="flex flex-col gap-1.5"><label class="text-[11px] font-sans font-bold uppercase tracking-widest text-soil-500">Province *</label>
+            <select id="province" class="w-full bg-white border border-soil-600/20 rounded-xl px-4 py-3 text-[15px] font-sans text-bark-800 outline-none focus:border-moss-400 focus:ring-1 focus:ring-moss-400 transition-all shadow-inner">
               <option value="">Select province</option>
               <option>Western Cape</option><option>Eastern Cape</option><option>KwaZulu-Natal</option>
               <option>Gauteng</option><option>Limpopo</option><option>Mpumalanga</option>
               <option>North West</option><option>Northern Cape</option><option>Free State</option>
             </select>
           </div>
-          <div class="flex flex-col gap-1"><label class="text-[10px] font-bold uppercase tracking-widest text-gray-400">Postal Code *</label><input type="text" id="postalCode" placeholder="e.g. 7785" maxlength="4" class="border border-white/15 rounded-xl px-3 py-2.5 text-sm outline-none focus:border-green-400 transition-colors"></div>
+          <div class="flex flex-col gap-1.5"><label class="text-[11px] font-sans font-bold uppercase tracking-widest text-soil-500">Postal Code *</label><input type="text" id="postalCode" placeholder="e.g. 7785" maxlength="4" class="w-full bg-white border border-soil-600/20 rounded-xl px-4 py-3 text-[15px] font-sans text-bark-800 placeholder-soil-600/40 outline-none focus:border-moss-400 focus:ring-1 focus:ring-moss-400 transition-all shadow-inner"></div>
         </div>
-        <div class="flex flex-col gap-1"><label class="text-[10px] font-bold uppercase tracking-widest text-gray-400">Delivery Instructions <span class="normal-case font-normal text-gray-500">(optional)</span></label><textarea id="deliveryNote" rows="2" placeholder="Gate code, landmark, etc." class="border border-white/15 rounded-xl px-3 py-2.5 text-sm outline-none focus:border-green-400 transition-colors resize-none"></textarea></div>
+        <div class="flex flex-col gap-1.5"><label class="text-[11px] font-sans font-bold uppercase tracking-widest text-soil-500">Delivery Instructions <span class="normal-case font-normal text-soil-400">(optional)</span></label><textarea id="deliveryNote" rows="2" placeholder="Gate code, landmark, etc." class="w-full bg-white border border-soil-600/20 rounded-xl px-4 py-3 text-[15px] font-sans text-bark-800 placeholder-soil-600/40 outline-none focus:border-moss-400 focus:ring-1 focus:ring-moss-400 transition-all shadow-inner resize-none"></textarea></div>
       </div>
     </div>
 
-    <div id="deliveryMiniTotal" class="bg-white/5 border border-white/10 rounded-2xl p-4 mb-5 flex flex-col gap-2"></div>
-    <div class="flex justify-between">
-      <button onclick="goToStep(1)" class="border border-white/20 text-gray-300 hover:border-white/40 hover:text-white font-bold px-6 py-3 rounded-xl transition-colors">Back</button>
-      <button onclick="validateDelivery()" class="bg-green-800 hover:bg-green-700 text-white font-bold px-8 py-3 rounded-xl transition-colors">Continue to Payment</button>
+    <div id="deliveryMiniTotal" class="bg-parchment-100 border border-soil-600/10 rounded-[20px] p-5 mb-8 flex flex-col gap-2"></div>
+    <div class="flex justify-between items-center">
+      <button onclick="goToStep(1)" class="border-2 border-soil-600/20 text-soil-600 hover:border-moss-400 hover:text-moss-700 font-sans font-bold uppercase tracking-widest text-[11px] px-6 py-3 rounded-full transition-colors">Back</button>
+      <button onclick="validateDelivery()" class="bg-gradient-to-br from-moss-700 to-moss-600 text-parchment-50 font-sans font-bold uppercase tracking-widest text-[13px] px-8 py-3.5 rounded-full transition-all shadow-md hover:shadow-lg hover:-translate-y-0.5">Continue to Payment</button>
     </div>
   </section>
 
-  <!-- STEP 3: PAYMENT -->
   <section class="checkout-step" id="step3">
-    <h2 class="text-2xl font-black text-white mb-6 pb-4 border-b border-white/10">Payment</h2>
-    <div class="bg-white/5 border border-white/10 rounded-2xl p-5 mb-4">
-      <h3 class="text-sm font-black text-white mb-4">Payment Method</h3>
-      <!-- Tabs -->
-      <div class="flex gap-2 mb-5">
-        <button id="tab-card-btn"   onclick="switchPayTab('card',   this)" class="flex-1 py-2.5 rounded-xl text-xs font-bold uppercase tracking-wide transition-all bg-green-800/60 border-2 border-green-400 text-green-400">Card</button>
-        <button id="tab-eft-btn"    onclick="switchPayTab('eft',    this)" class="flex-1 py-2.5 rounded-xl text-xs font-bold uppercase tracking-wide transition-all bg-white/5 border-2 border-white/15 text-gray-400 hover:text-gray-200">EFT</button>
-        <button id="tab-wallet-btn" onclick="switchPayTab('wallet', this)" class="flex-1 py-2.5 rounded-xl text-xs font-bold uppercase tracking-wide transition-all bg-white/5 border-2 border-white/15 text-gray-400 hover:text-gray-200">Wallet</button>
+    <h2 class="font-caveat text-4xl font-bold text-bark-800 mb-6 pb-4 border-b border-soil-600/10">Payment</h2>
+    <div class="bg-parchment-50 border border-soil-600/15 rounded-[20px] p-6 mb-5 shadow-sm">
+      <h3 class="font-sans text-sm font-black uppercase tracking-widest text-soil-600 mb-4">Payment Method</h3>
+      <div class="flex gap-2 mb-6">
+        <button id="tab-card-btn"   onclick="switchPayTab('card',   this)" class="flex-1 py-2.5 rounded-xl text-[11px] font-bold uppercase tracking-wide transition-all bg-moss-50 border-2 border-moss-400 text-moss-700 font-sans">Card</button>
+        <button id="tab-eft-btn"    onclick="switchPayTab('eft',    this)" class="flex-1 py-2.5 rounded-xl text-[11px] font-bold uppercase tracking-wide transition-all bg-white border-2 border-soil-600/15 text-soil-500 hover:text-bark-800 font-sans">EFT</button>
+        <button id="tab-wallet-btn" onclick="switchPayTab('wallet', this)" class="flex-1 py-2.5 rounded-xl text-[11px] font-bold uppercase tracking-wide transition-all bg-white border-2 border-soil-600/15 text-soil-500 hover:text-bark-800 font-sans">Wallet</button>
       </div>
 
-      <!-- Card panel -->
       <div id="pay-card" class="pay-panel active">
-        <div class="rounded-2xl p-5 mb-5" style="background:linear-gradient(135deg,#015005,#1a3a2a)">
-          <div class="w-9 h-7 rounded bg-gradient-to-br from-yellow-400 to-yellow-600 mb-5"></div>
-          <div class="text-lg font-mono tracking-widest text-white mb-4" id="cardNumDisplay">.... .... .... ....</div>
-          <div class="flex justify-between">
-            <div><div class="text-[9px] uppercase tracking-widest text-white/50 mb-0.5">Card holder</div><div class="text-sm font-bold text-white" id="cardNameDisplay">YOUR NAME</div></div>
-            <div><div class="text-[9px] uppercase tracking-widest text-white/50 mb-0.5">Expires</div><div class="text-sm font-bold text-white" id="cardExpDisplay">MM/YY</div></div>
+        <div class="rounded-[20px] p-6 mb-6 shadow-md" style="background:linear-gradient(135deg,#345c24,#1e3a14)">
+          <div class="w-10 h-7 rounded bg-gradient-to-br from-yellow-200 to-yellow-500 mb-6 shadow-sm"></div>
+          <div class="text-xl font-mono tracking-widest text-parchment-50 mb-5" id="cardNumDisplay">.... .... .... ....</div>
+          <div class="flex justify-between font-sans">
+            <div><div class="text-[9px] uppercase tracking-widest text-parchment-200/70 mb-1">Card holder</div><div class="text-sm font-bold text-parchment-50 uppercase" id="cardNameDisplay">YOUR NAME</div></div>
+            <div class="text-right"><div class="text-[9px] uppercase tracking-widest text-parchment-200/70 mb-1">Expires</div><div class="text-sm font-bold text-parchment-50" id="cardExpDisplay">MM/YY</div></div>
           </div>
         </div>
-        <div class="flex flex-col gap-3">
-          <div class="flex flex-col gap-1"><label class="text-[10px] font-bold uppercase tracking-widest text-gray-400">Name on Card *</label><input type="text" id="cardName" placeholder="As it appears on the card" oninput="document.getElementById('cardNameDisplay').textContent=this.value.toUpperCase()||'YOUR NAME'" class="border border-white/15 rounded-xl px-3 py-2.5 text-sm outline-none focus:border-green-400 transition-colors"></div>
-          <div class="flex flex-col gap-1"><label class="text-[10px] font-bold uppercase tracking-widest text-gray-400">Card Number *</label><input type="text" id="cardNumber" placeholder="0000 0000 0000 0000" maxlength="19" oninput="formatCardNumber(this)" class="border border-white/15 rounded-xl px-3 py-2.5 text-sm font-mono outline-none focus:border-green-400 transition-colors"></div>
-          <div class="grid grid-cols-2 gap-3">
-            <div class="flex flex-col gap-1"><label class="text-[10px] font-bold uppercase tracking-widest text-gray-400">Expiry *</label><input type="text" id="cardExpiry" placeholder="MM/YY" maxlength="5" oninput="formatExpiry(this)" class="border border-white/15 rounded-xl px-3 py-2.5 text-sm outline-none focus:border-green-400 transition-colors"></div>
-            <div class="flex flex-col gap-1"><label class="text-[10px] font-bold uppercase tracking-widest text-gray-400">CVV *</label><input type="text" id="cardCVV" placeholder="..." maxlength="4" oninput="this.value=this.value.replace(/\D/g,'')" class="border border-white/15 rounded-xl px-3 py-2.5 text-sm outline-none focus:border-green-400 transition-colors"></div>
+        <div class="flex flex-col gap-4">
+          <div class="flex flex-col gap-1.5"><label class="text-[11px] font-sans font-bold uppercase tracking-widest text-soil-500">Name on Card *</label><input type="text" id="cardName" placeholder="As it appears on the card" oninput="document.getElementById('cardNameDisplay').textContent=this.value.toUpperCase()||'YOUR NAME'" class="w-full bg-white border border-soil-600/20 rounded-xl px-4 py-3 text-[15px] font-sans text-bark-800 placeholder-soil-600/40 outline-none focus:border-moss-400 focus:ring-1 focus:ring-moss-400 transition-all shadow-inner"></div>
+          <div class="flex flex-col gap-1.5"><label class="text-[11px] font-sans font-bold uppercase tracking-widest text-soil-500">Card Number *</label><input type="text" id="cardNumber" placeholder="0000 0000 0000 0000" maxlength="19" oninput="formatCardNumber(this)" class="w-full bg-white border border-soil-600/20 rounded-xl px-4 py-3 text-[15px] font-mono text-bark-800 placeholder-soil-600/40 outline-none focus:border-moss-400 focus:ring-1 focus:ring-moss-400 transition-all shadow-inner"></div>
+          <div class="grid grid-cols-2 gap-4">
+            <div class="flex flex-col gap-1.5"><label class="text-[11px] font-sans font-bold uppercase tracking-widest text-soil-500">Expiry *</label><input type="text" id="cardExpiry" placeholder="MM/YY" maxlength="5" oninput="formatExpiry(this)" class="w-full bg-white border border-soil-600/20 rounded-xl px-4 py-3 text-[15px] font-sans text-bark-800 placeholder-soil-600/40 outline-none focus:border-moss-400 focus:ring-1 focus:ring-moss-400 transition-all shadow-inner"></div>
+            <div class="flex flex-col gap-1.5"><label class="text-[11px] font-sans font-bold uppercase tracking-widest text-soil-500">CVV *</label><input type="text" id="cardCVV" placeholder="..." maxlength="4" oninput="this.value=this.value.replace(/\D/g,'')" class="w-full bg-white border border-soil-600/20 rounded-xl px-4 py-3 text-[15px] font-sans text-bark-800 placeholder-soil-600/40 outline-none focus:border-moss-400 focus:ring-1 focus:ring-moss-400 transition-all shadow-inner"></div>
           </div>
         </div>
       </div>
 
-      <!-- EFT panel -->
       <div id="pay-eft" class="pay-panel">
-        <p class="text-sm text-gray-400 mb-4">Transfer your payment to the following account. Use your order number as the reference.</p>
-        <div class="flex flex-col gap-2 mb-4">
-          <div class="flex justify-between items-center px-4 py-3 bg-white/5 rounded-xl text-sm"><span class="text-gray-400">Bank</span><strong class="text-white">FNB</strong></div>
-          <div class="flex justify-between items-center px-4 py-3 bg-white/5 rounded-xl text-sm"><span class="text-gray-400">Account Name</span><strong class="text-white">Roots Collective (Pty) Ltd</strong></div>
-          <div class="flex justify-between items-center px-4 py-3 bg-white/5 rounded-xl text-sm"><span class="text-gray-400">Account Number</span><strong class="text-white">62 000 123 456</strong></div>
-          <div class="flex justify-between items-center px-4 py-3 bg-white/5 rounded-xl text-sm"><span class="text-gray-400">Branch Code</span><strong class="text-white">250 655</strong></div>
-          <div class="flex justify-between items-center px-4 py-3 bg-white/5 rounded-xl text-sm"><span class="text-gray-400">Reference</span><strong class="text-green-400" id="eftRef">ORDER-XXXX</strong></div>
+        <p class="text-[15px] text-soil-700 mb-5 font-serif">Transfer your payment to the following account. Use your order number as the reference.</p>
+        <div class="flex flex-col gap-2 mb-5">
+          <div class="flex justify-between items-center px-5 py-3.5 bg-white border border-soil-600/10 rounded-xl text-[14px] font-sans"><span class="text-soil-600">Bank</span><strong class="text-bark-800">FNB</strong></div>
+          <div class="flex justify-between items-center px-5 py-3.5 bg-white border border-soil-600/10 rounded-xl text-[14px] font-sans"><span class="text-soil-600">Account Name</span><strong class="text-bark-800">Roots Collective (Pty) Ltd</strong></div>
+          <div class="flex justify-between items-center px-5 py-3.5 bg-white border border-soil-600/10 rounded-xl text-[14px] font-sans"><span class="text-soil-600">Account Number</span><strong class="text-bark-800">62 000 123 456</strong></div>
+          <div class="flex justify-between items-center px-5 py-3.5 bg-white border border-soil-600/10 rounded-xl text-[14px] font-sans"><span class="text-soil-600">Branch Code</span><strong class="text-bark-800">250 655</strong></div>
+          <div class="flex justify-between items-center px-5 py-3.5 bg-white border border-soil-600/10 rounded-xl text-[14px] font-sans"><span class="text-soil-600">Reference</span><strong class="text-moss-700" id="eftRef">ORDER-XXXX</strong></div>
         </div>
-        <p class="text-xs text-gray-500 italic">Orders are processed within 24 hours of payment confirmation.</p>
+        <p class="text-[13px] text-soil-500 italic font-serif">Orders are processed within 24 hours of payment confirmation.</p>
       </div>
 
-      <!-- Wallet panel -->
       <div id="pay-wallet" class="pay-panel">
         <div class="flex gap-3 mb-6">
-          <div id="wallet-snapscan" onclick="selectWallet(this,'snapscan')" class="flex-1 flex flex-col items-center gap-2 py-4 rounded-xl border-2 border-green-400 bg-green-400/5 cursor-pointer">
-            <div class="w-10 h-10 rounded-xl bg-red-600 text-white font-black text-lg flex items-center justify-center">S</div>
-            <span class="text-xs text-gray-300">SnapScan</span>
+          <div id="wallet-snapscan" onclick="selectWallet(this,'snapscan')" class="flex-1 flex flex-col items-center gap-2 py-4 rounded-xl border-2 border-moss-400 bg-moss-50 cursor-pointer font-sans transition-all">
+            <div class="w-10 h-10 rounded-xl bg-red-600 text-white font-black text-lg flex items-center justify-center shadow-sm">S</div>
+            <span class="text-[11px] font-bold text-bark-800 uppercase tracking-wide">SnapScan</span>
           </div>
-          <div id="wallet-ozow" onclick="selectWallet(this,'ozow')" class="flex-1 flex flex-col items-center gap-2 py-4 rounded-xl border-2 border-white/15 bg-white/5 cursor-pointer">
-            <div class="w-10 h-10 rounded-xl bg-purple-600 text-white font-black text-lg flex items-center justify-center">O</div>
-            <span class="text-xs text-gray-300">Ozow</span>
+          <div id="wallet-ozow" onclick="selectWallet(this,'ozow')" class="flex-1 flex flex-col items-center gap-2 py-4 rounded-xl border-2 border-soil-600/15 bg-white cursor-pointer font-sans transition-all">
+            <div class="w-10 h-10 rounded-xl bg-purple-600 text-white font-black text-lg flex items-center justify-center shadow-sm">O</div>
+            <span class="text-[11px] font-bold text-soil-600 uppercase tracking-wide">Ozow</span>
           </div>
-          <div id="wallet-zapper" onclick="selectWallet(this,'zapper')" class="flex-1 flex flex-col items-center gap-2 py-4 rounded-xl border-2 border-white/15 bg-white/5 cursor-pointer">
-            <div class="w-10 h-10 rounded-xl bg-yellow-600 text-white font-black text-lg flex items-center justify-center">Z</div>
-            <span class="text-xs text-gray-300">Zapper</span>
+          <div id="wallet-zapper" onclick="selectWallet(this,'zapper')" class="flex-1 flex flex-col items-center gap-2 py-4 rounded-xl border-2 border-soil-600/15 bg-white cursor-pointer font-sans transition-all">
+            <div class="w-10 h-10 rounded-xl bg-blue-500 text-white font-black text-lg flex items-center justify-center shadow-sm">Z</div>
+            <span class="text-[11px] font-bold text-soil-600 uppercase tracking-wide">Zapper</span>
           </div>
         </div>
         <div class="flex flex-col items-center gap-3">
           <div class="qr-grid" id="qrGrid"></div>
-          <p class="text-xs text-gray-400" id="qrLabel">Scan with SnapScan to pay</p>
+          <p class="text-[13px] text-soil-600 font-sans font-medium mt-2" id="qrLabel">Scan with SnapScan to pay</p>
         </div>
       </div>
     </div>
 
-    <div id="paymentMiniTotal" class="bg-white/5 border border-white/10 rounded-2xl p-4 mb-5 flex flex-col gap-2"></div>
-    <div class="flex justify-between">
-      <button onclick="goToStep(2)" class="border border-white/20 text-gray-300 hover:border-white/40 hover:text-white font-bold px-6 py-3 rounded-xl transition-colors">Back</button>
-      <button onclick="validatePayment()" id="payBtn" class="bg-green-800 hover:bg-green-700 text-white font-bold px-8 py-3 rounded-xl transition-colors">Review Order</button>
+    <div id="paymentMiniTotal" class="bg-parchment-100 border border-soil-600/10 rounded-[20px] p-5 mb-8 flex flex-col gap-2"></div>
+    <div class="flex justify-between items-center">
+      <button onclick="goToStep(2)" class="border-2 border-soil-600/20 text-soil-600 hover:border-moss-400 hover:text-moss-700 font-sans font-bold uppercase tracking-widest text-[11px] px-6 py-3 rounded-full transition-colors">Back</button>
+      <button onclick="validatePayment()" id="payBtn" class="bg-gradient-to-br from-moss-700 to-moss-600 text-parchment-50 font-sans font-bold uppercase tracking-widest text-[13px] px-8 py-3.5 rounded-full transition-all shadow-md hover:shadow-lg hover:-translate-y-0.5">Review Order</button>
     </div>
   </section>
 
-  <!-- STEP 4: REVIEW -->
   <section class="checkout-step" id="step4">
-    <h2 class="text-2xl font-black text-white mb-6 pb-4 border-b border-white/10">Review &amp; Confirm</h2>
-    <div class="flex flex-col gap-4 mb-6">
-      <div class="bg-white/5 border border-white/10 rounded-2xl overflow-hidden">
-        <div class="flex justify-between items-center px-4 py-3 bg-soil-700/60 border-b border-white/10">
-          <span class="text-xs font-bold uppercase tracking-widest text-gray-300">Order Items</span>
-          <button onclick="goToStep(1)" class="text-xs text-gray-400 hover:text-green-400 border border-white/15 hover:border-green-400/40 px-3 py-1 rounded-lg transition-colors">Edit</button>
+    <h2 class="font-caveat text-4xl font-bold text-bark-800 mb-6 pb-4 border-b border-soil-600/10">Review &amp; Confirm</h2>
+    <div class="flex flex-col gap-5 mb-8">
+      <div class="bg-parchment-50 border border-soil-600/15 rounded-[20px] overflow-hidden shadow-sm">
+        <div class="flex justify-between items-center px-5 py-3.5 bg-parchment-100 border-b border-soil-600/10">
+          <span class="font-sans text-[11px] font-bold uppercase tracking-widest text-soil-600">Order Items</span>
+          <button onclick="goToStep(1)" class="font-sans text-[11px] font-bold uppercase tracking-wider text-soil-500 hover:text-moss-600 underline underline-offset-4 transition-colors">Edit</button>
         </div>
-        <div id="reviewItems"></div>
+        <div id="reviewItems" class="p-2"></div>
       </div>
-      <div class="bg-white/5 border border-white/10 rounded-2xl overflow-hidden">
-        <div class="flex justify-between items-center px-4 py-3 bg-soil-700/60 border-b border-white/10">
-          <span class="text-xs font-bold uppercase tracking-widest text-gray-300">Delivery</span>
-          <button onclick="goToStep(2)" class="text-xs text-gray-400 hover:text-green-400 border border-white/15 hover:border-green-400/40 px-3 py-1 rounded-lg transition-colors">Edit</button>
+      <div class="bg-parchment-50 border border-soil-600/15 rounded-[20px] overflow-hidden shadow-sm">
+        <div class="flex justify-between items-center px-5 py-3.5 bg-parchment-100 border-b border-soil-600/10">
+          <span class="font-sans text-[11px] font-bold uppercase tracking-widest text-soil-600">Delivery</span>
+          <button onclick="goToStep(2)" class="font-sans text-[11px] font-bold uppercase tracking-wider text-soil-500 hover:text-moss-600 underline underline-offset-4 transition-colors">Edit</button>
         </div>
-        <div id="reviewDelivery"></div>
+        <div id="reviewDelivery" class="p-5"></div>
       </div>
-      <div class="bg-white/5 border border-white/10 rounded-2xl overflow-hidden">
-        <div class="flex justify-between items-center px-4 py-3 bg-soil-700/60 border-b border-white/10">
-          <span class="text-xs font-bold uppercase tracking-widest text-gray-300">Payment</span>
-          <button onclick="goToStep(3)" class="text-xs text-gray-400 hover:text-green-400 border border-white/15 hover:border-green-400/40 px-3 py-1 rounded-lg transition-colors">Edit</button>
+      <div class="bg-parchment-50 border border-soil-600/15 rounded-[20px] overflow-hidden shadow-sm">
+        <div class="flex justify-between items-center px-5 py-3.5 bg-parchment-100 border-b border-soil-600/10">
+          <span class="font-sans text-[11px] font-bold uppercase tracking-widest text-soil-600">Payment</span>
+          <button onclick="goToStep(3)" class="font-sans text-[11px] font-bold uppercase tracking-wider text-soil-500 hover:text-moss-600 underline underline-offset-4 transition-colors">Edit</button>
         </div>
-        <div id="reviewPayment"></div>
+        <div id="reviewPayment" class="p-5"></div>
       </div>
     </div>
 
-    <div id="finalTotal" class="bg-white/5 border border-white/10 rounded-2xl p-4 flex flex-col gap-2 mb-5"></div>
+    <div id="finalTotal" class="bg-parchment-100 border border-soil-600/15 rounded-[20px] p-6 flex flex-col gap-2 mb-6 shadow-sm"></div>
 
-    <label class="flex items-start gap-3 text-sm text-gray-400 cursor-pointer mb-6">
-      <input type="checkbox" id="termsCheck" class="mt-0.5 shrink-0">
-      <span>I agree to the <a href="#" onclick="return false" class="text-green-400 hover:underline">Terms &amp; Conditions</a> and <a href="#" onclick="return false" class="text-green-400 hover:underline">Privacy Policy</a></span>
+    <label class="flex items-start gap-3 text-[14px] text-soil-700 cursor-pointer mb-8 font-serif">
+      <input type="checkbox" id="termsCheck" class="mt-1 w-4 h-4 rounded border-soil-600/30 text-moss-600 focus:ring-moss-400 bg-white cursor-pointer shrink-0">
+      <span>I agree to the <a href="#" onclick="return false" class="text-moss-600 hover:underline">Terms &amp; Conditions</a> and <a href="#" onclick="return false" class="text-moss-600 hover:underline">Privacy Policy</a></span>
     </label>
 
-    <div class="flex justify-between">
-      <button onclick="goToStep(3)" class="border border-white/20 text-gray-300 hover:border-white/40 hover:text-white font-bold px-6 py-3 rounded-xl transition-colors">Back</button>
-      <button onclick="placeOrder()" id="placeOrderBtn" class="bg-green-800 hover:bg-green-700 text-white font-bold px-8 py-3.5 rounded-xl transition-colors text-base">Place Order</button>
+    <div class="flex justify-between items-center">
+      <button onclick="goToStep(3)" class="border-2 border-soil-600/20 text-soil-600 hover:border-moss-400 hover:text-moss-700 font-sans font-bold uppercase tracking-widest text-[11px] px-6 py-3 rounded-full transition-colors">Back</button>
+      <button onclick="placeOrder()" id="placeOrderBtn" class="bg-gradient-to-br from-moss-700 to-moss-600 text-parchment-50 font-sans font-bold uppercase tracking-widest text-[14px] px-8 py-4 rounded-full transition-all shadow-md hover:shadow-lg hover:-translate-y-0.5">Place Order</button>
     </div>
   </section>
 
-</div><!-- /checkoutPage -->
-
-<!-- SUCCESS POPUP -->
-<div class="popup-overlay" id="successPopup">
-  <div class="popup-box bg-soil-800 border border-green-400/30 rounded-2xl p-10 max-w-md w-11/12 text-center flex flex-col items-center gap-4">
-    <div class="w-16 h-16 rounded-full bg-green-400/15 border-2 border-green-400 flex items-center justify-center text-3xl text-green-400 font-black">✓</div>
-    <h2 class="text-2xl font-black text-white">Order Placed!</h2>
-    <p class="text-sm text-gray-300">Thank you for your order. A confirmation has been sent to <strong class="text-white" id="popupEmail"></strong>.</p>
-    <div class="bg-white/5 border border-white/10 rounded-xl px-5 py-3 text-sm text-gray-400">Order ref: <strong class="text-green-400" id="popupRef"></strong></div>
-    <p class="text-xs text-gray-500 italic">Your order will be ready for <span id="popupMethod"></span>.</p>
-    <button onclick="finishOrder()" class="bg-green-800 hover:bg-green-700 text-white font-bold px-8 py-3 rounded-xl transition-colors">Back to Home</button>
+</div><div class="popup-overlay" id="successPopup">
+  <div class="popup-box bg-parchment-50 border border-soil-600/15 rounded-[24px] p-10 max-w-md w-11/12 text-center flex flex-col items-center gap-4 shadow-[0_20px_60px_rgba(58,35,12,0.15)] grain relative overflow-hidden">
+    <div class="relative z-10 flex flex-col items-center">
+      <div class="w-16 h-16 rounded-full bg-moss-50 border-2 border-moss-400 flex items-center justify-center text-3xl text-moss-600 font-black mb-2 shadow-sm">✓</div>
+      <h2 class="font-caveat text-4xl font-bold text-bark-800 mb-1">Order Placed!</h2>
+      <p class="font-serif text-[15px] text-soil-700 mb-4">Thank you for your order. A confirmation has been sent to <strong class="text-bark-800" id="popupEmail"></strong>.</p>
+      <div class="bg-white border border-soil-600/10 rounded-xl px-5 py-3 text-[14px] text-soil-600 font-sans shadow-inner mb-3">Order ref: <strong class="text-moss-700" id="popupRef"></strong></div>
+      <p class="text-[13px] text-soil-500 italic font-serif mb-6">Your order will be ready for <span id="popupMethod"></span>.</p>
+      <button onclick="finishOrder()" class="bg-gradient-to-br from-moss-700 to-moss-600 text-parchment-50 font-sans font-bold uppercase tracking-widest text-[13px] px-8 py-3.5 rounded-full transition-all shadow-md hover:shadow-lg hover:-translate-y-0.5">Back to Home</button>
+    </div>
   </div>
 </div>
 
@@ -296,52 +401,37 @@
   document.body.appendChild(mountDiv);
   ReactDOM.createRoot(mountDiv).render(
     React.createElement(RootsStore.StoreProvider, null,
-      React.createElement(RootsComponents.ScrollGradient),
       ReactDOM.createPortal(React.createElement(RootsComponents.Navbar),        document.getElementById('navbar-root')),
       ReactDOM.createPortal(React.createElement(RootsComponents.Footer),        document.getElementById('footer-root')),
       ReactDOM.createPortal(React.createElement(RootsComponents.LowDataToggle), document.getElementById('toggle-root'))
     )
   );
 
-  /* Override progress bar styling for new Tailwind classes */
+  /* Override progress bar styling for new light theme */
   function updateProgress(step) {
     for (var i = 1; i <= 4; i++) {
       var ind    = document.getElementById('step-ind-' + i);
       if (!ind) continue;
       var circle = ind.querySelector('div');
       var label  = ind.querySelector('span');
-      if (i < step) {
-        circle.className = 'w-9 h-9 rounded-full border-2 flex items-center justify-center text-sm font-black transition-all border-green-400 bg-green-800/60 text-green-400';
-        label.className  = 'text-[10px] font-bold uppercase tracking-wide text-green-400';
-      } else if (i === step) {
-        circle.className = 'w-9 h-9 rounded-full border-2 flex items-center justify-center text-sm font-black transition-all border-green-400 bg-green-800/60 text-green-400';
-        label.className  = 'text-[10px] font-bold uppercase tracking-wide text-green-400';
+      if (i <= step) {
+        circle.className = 'w-10 h-10 rounded-full border-2 flex items-center justify-center text-sm font-black transition-all border-moss-400 bg-moss-50 text-moss-700 font-sans shadow-sm';
+        label.className  = 'text-[10px] font-bold uppercase tracking-wide text-moss-700 font-sans mt-0.5';
       } else {
-        circle.className = 'w-9 h-9 rounded-full border-2 flex items-center justify-center text-sm font-black transition-all border-white/20 bg-white/5 text-gray-500';
-        label.className  = 'text-[10px] font-bold uppercase tracking-wide text-gray-500';
+        circle.className = 'w-10 h-10 rounded-full border-2 flex items-center justify-center text-sm font-black transition-all border-soil-600/20 bg-parchment-100 text-soil-500 font-sans';
+        label.className  = 'text-[10px] font-bold uppercase tracking-wide text-soil-500 font-sans mt-0.5';
       }
     }
   }
 
-  /* Override renderOrderSummary to use Tailwind */
-  var _origGoToStep = goToStep;
+  var _origGoToStep = typeof goToStep === 'function' ? goToStep : function(){};
   goToStep = function(n) {
     _origGoToStep(n);
     updateProgress(n);
   };
 
-  /* Tailwind-styled total rows */
-  function renderTotalRow(label, value, grand) {
-    var div = document.createElement('div');
-    div.className = 'flex justify-between text-sm ' + (grand ? 'font-black text-white border-t border-white/10 pt-3 mt-1' : 'text-gray-400');
-    div.innerHTML = '<span>' + label + '</span><span class="' + (grand ? 'text-green-400 text-base' : '') + '">' + value + '</span>';
-    return div;
-  }
-
-  /* Patch renderOrderSummary to use Tailwind cards */
-  var origRenderOS = window.renderOrderSummary;
-  if (typeof renderOrderSummary === 'function') {
-    window.renderOrderSummary = function() {
+  /* Override Tailwind-styled total rows */
+  window.renderOrderSummary = function() {
       var cart = getCart();
       var container = document.getElementById('orderItems');
       var totalsEl  = document.getElementById('orderTotals');
@@ -352,22 +442,70 @@
       cart.forEach(function(item) {
         var line = item.price * item.qty;
         subtotal += line;
-        html += '<div class="bg-white/5 border border-white/10 rounded-xl p-4 flex items-center justify-between gap-4">' +
-          '<div><p class="text-sm font-semibold text-white">' + item.name + '</p>' +
-          '<p class="text-xs text-gray-400 mt-0.5">x' + item.qty + ' @ R' + parseFloat(item.price).toFixed(2) + '</p></div>' +
-          '<span class="text-sm font-black text-green-400">R' + line.toFixed(2) + '</span></div>';
+        
+        /* ── UPDATED CLASSES HERE: bg-white, text-bark-800, text-soil-600, text-moss-700 ── */
+        html += '<div class="bg-white border border-soil-600/10 rounded-xl p-4 flex items-center justify-between gap-4 shadow-sm">' +
+          '<div><p class="text-sm font-bold text-bark-800">' + item.name + '</p>' +
+          '<p class="text-xs text-soil-600 mt-0.5">x' + item.qty + ' @ R' + parseFloat(item.price).toFixed(2) + '</p></div>' +
+          '<span class="text-sm font-black text-moss-700">R' + line.toFixed(2) + '</span></div>';
       });
       container.innerHTML = html;
 
       var isDeliver = document.getElementById('opt-deliver') && document.getElementById('opt-deliver').checked;
       var delivery  = isDeliver ? 80 : 0;
       var total     = subtotal + delivery;
+      
       totalsEl.innerHTML = '';
       totalsEl.appendChild(renderTotalRow('Subtotal', 'R' + subtotal.toFixed(2), false));
-      totalsEl.appendChild(renderTotalRow('Delivery', delivery === 0 ? 'Free' : 'R' + delivery.toFixed(2), false));
+      if (isDeliver) totalsEl.appendChild(renderTotalRow('Delivery', 'R80.00', false));
       totalsEl.appendChild(renderTotalRow('Total', 'R' + total.toFixed(2), true));
     };
-  }
+
+  /* Override checkout.js interactions to use light theme classes */
+  window.switchFulfilment = function() {
+    var isDeliver = document.getElementById('opt-deliver') && document.getElementById('opt-deliver').checked;
+    var lCol = document.getElementById('label-collect');
+    var lDel = document.getElementById('label-deliver');
+    var cInfo = document.getElementById('collectInfo');
+    var dForm = document.getElementById('deliveryForm');
+
+    if(isDeliver) {
+      if(lCol) lCol.className = 'flex items-center gap-3 p-4 rounded-xl border-2 border-soil-600/15 bg-white cursor-pointer transition-all';
+      if(lDel) lDel.className = 'flex items-center gap-3 p-4 rounded-xl border-2 border-moss-400 bg-moss-50 cursor-pointer transition-all';
+      if(cInfo) cInfo.classList.add('hidden');
+      if(dForm) dForm.classList.remove('hidden');
+    } else {
+      if(lCol) lCol.className = 'flex items-center gap-3 p-4 rounded-xl border-2 border-moss-400 bg-moss-50 cursor-pointer transition-all';
+      if(lDel) lDel.className = 'flex items-center gap-3 p-4 rounded-xl border-2 border-soil-600/15 bg-white cursor-pointer transition-all';
+      if(cInfo) cInfo.classList.remove('hidden');
+      if(dForm) dForm.classList.add('hidden');
+    }
+    if(typeof renderOrderSummary === 'function') renderOrderSummary();
+  };
+
+  window.switchPayTab = function(tab, btnEl) {
+    document.querySelectorAll('.pay-panel').forEach(function(el){ el.classList.remove('active'); });
+    var pTab = document.getElementById('pay-'+tab);
+    if(pTab) pTab.classList.add('active');
+
+    document.getElementById('tab-card-btn').className   = 'flex-1 py-2.5 rounded-xl text-[11px] font-bold uppercase tracking-wide transition-all bg-white border-2 border-soil-600/15 text-soil-500 hover:text-bark-800 font-sans';
+    document.getElementById('tab-eft-btn').className    = 'flex-1 py-2.5 rounded-xl text-[11px] font-bold uppercase tracking-wide transition-all bg-white border-2 border-soil-600/15 text-soil-500 hover:text-bark-800 font-sans';
+    document.getElementById('tab-wallet-btn').className = 'flex-1 py-2.5 rounded-xl text-[11px] font-bold uppercase tracking-wide transition-all bg-white border-2 border-soil-600/15 text-soil-500 hover:text-bark-800 font-sans';
+
+    if(btnEl) btnEl.className = 'flex-1 py-2.5 rounded-xl text-[11px] font-bold uppercase tracking-wide transition-all bg-moss-50 border-2 border-moss-400 text-moss-700 font-sans';
+  };
+
+  window.selectWallet = function(el, type) {
+    document.getElementById('wallet-snapscan').className = 'flex-1 flex flex-col items-center gap-2 py-4 rounded-xl border-2 border-soil-600/15 bg-white cursor-pointer font-sans transition-all';
+    document.getElementById('wallet-ozow').className = 'flex-1 flex flex-col items-center gap-2 py-4 rounded-xl border-2 border-soil-600/15 bg-white cursor-pointer font-sans transition-all';
+    document.getElementById('wallet-zapper').className = 'flex-1 flex flex-col items-center gap-2 py-4 rounded-xl border-2 border-soil-600/15 bg-white cursor-pointer font-sans transition-all';
+
+    if(el) el.className = 'flex-1 flex flex-col items-center gap-2 py-4 rounded-xl border-2 border-moss-400 bg-moss-50 cursor-pointer font-sans transition-all';
+    
+    var lbl = document.getElementById('qrLabel');
+    if(lbl) lbl.textContent = 'Scan with ' + (type.charAt(0).toUpperCase() + type.slice(1)) + ' to pay';
+    if(typeof generateQR === 'function') generateQR();
+  };
 </script>
 </body>
 </html>

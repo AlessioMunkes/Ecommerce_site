@@ -3,160 +3,279 @@
 <head>
   <meta charset="UTF-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Contact Us — Roots</title>
+  <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@400;600;700&family=Lora:ital,wght@0,400;0,500;0,600;1,400&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
   <script src="https://cdn.tailwindcss.com"></script>
-  <script>tailwind.config={theme:{extend:{colors:{green:{400:'#4ade80',700:'#15803d',800:'#015005'},soil:{700:'#382f26',800:'#1a3a2a',900:'#0f2417'}}}}}</script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            parchment: { 50:'#fdf8f0', 100:'#f7eed8', 200:'#eedfc0', 300:'#e0c99a' },
+            bark:      { 700:'#5c3d1e', 800:'#3d2810', 900:'#261808' },
+            moss:      { 400:'#7aad5a', 600:'#4a7c35', 700:'#345c24', 800:'#1e3a14' },
+            soil:      { 600:'#8b6340', 700:'#6b4a28', 800:'#4a3018' },
+          },
+          fontFamily: {
+            sans: ['"DM Sans"', 'sans-serif'],
+            serif: ['Lora', 'Georgia', 'serif'],
+            caveat: ['Caveat', 'cursive'],
+          }
+        }
+      }
+    }
+  </script>
   <style>
-    body{background:linear-gradient(to bottom,#0f2417,#1a3a2a,#0e3d20,#1a3a2a,#0f2417);background-size:100% 400%;min-height:100vh;color:#f9faf8;font-family:system-ui,sans-serif}
-    body.low-data{background:#0f2417!important}
-    ::-webkit-scrollbar{width:5px}::-webkit-scrollbar-track{background:#0f2417}::-webkit-scrollbar-thumb{background:#015005;border-radius:3px}
-    input,select,textarea{background:rgba(255,255,255,.06)}
-    input[type=checkbox]{accent-color:#4ade80}
-    .input-highlight{border-color:#4ade80!important;box-shadow:0 0 0 3px rgba(74,222,128,.2)}
+    /* ── Base ── */
+    html { scroll-behavior: smooth; }
+    body {
+      background-color: #f7eed8;
+      color: #3d2810;
+      font-family: 'Lora', Georgia, serif;
+      overflow-x: hidden;
+    }
+    body.low-data { background: #c9b686 !important; }
+    body.low-data img { display: none !important; }
+
+    /* ── Scrollbar ── */
+    ::-webkit-scrollbar { width: 6px; }
+    ::-webkit-scrollbar-track { background: #eedfc0; }
+    ::-webkit-scrollbar-thumb { background: #4a7c35; border-radius: 3px; }
+
+    /* ── Forms ── */
+    input[type=checkbox] { accent-color: #4a7c35; }
+    .input-highlight {
+      border-color: #4a7c35 !important;
+      box-shadow: 0 0 0 3px rgba(122,173,90,0.3) !important;
+      background-color: #fdf8f0 !important;
+    }
+
+    /* ── Grain texture ── */
+    .grain::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)' opacity='0.03'/%3E%3C/svg%3E");
+      pointer-events: none;
+      z-index: 1;
+    }
+
+    /* ── Tag pill ── */
+    .tag-pill {
+      display:inline-block; font-family:'DM Sans',sans-serif;
+      font-size:11px; font-weight:700; letter-spacing:0.12em; text-transform:uppercase;
+      background:rgba(122,173,90,0.16); color:#345c24;
+      border:1px solid rgba(122,173,90,0.35); padding:6px 16px; border-radius:50px;
+    }
+
+    /* ── Buttons ── */
+    .btn-primary {
+      display:inline-flex; align-items:center; justify-content:center;
+      background:linear-gradient(135deg,#345c24,#4a7c35);
+      color:#fdf8f0; font-family:'DM Sans',sans-serif; font-weight:600; font-size:15px;
+      padding:14px 28px; border-radius:50px; text-decoration:none;
+      transition:transform 0.2s, box-shadow 0.2s, background 0.2s;
+      box-shadow:0 4px 16px rgba(52,92,36,0.28); letter-spacing:0.01em; cursor:pointer; border:none;
+    }
+    .btn-primary:hover { transform:translateY(-2px); box-shadow:0 8px 24px rgba(52,92,36,0.4); }
+
+    /* ── Fade-up animations ── */
+    @keyframes fadeUp { from{opacity:0;transform:translateY(28px)} to{opacity:1;transform:translateY(0)} }
+    .fade-up   { animation:fadeUp 0.85s ease both; }
+    .fade-up-2 { animation:fadeUp 0.85s 0.15s ease both; }
+    
+    /* ── Scroll reveal ── */
+    .reveal { opacity:0; transform:translateY(36px); transition:opacity 0.75s ease, transform 0.75s ease; }
+    .reveal.revealed { opacity:1; transform:translateY(0); }
+
+    /* ── Navbar/footer colour overrides ── */
+    #navbar-root header {
+      background:rgba(247,238,216,0.9) !important;
+      border-bottom:1px solid rgba(92,61,30,0.12) !important;
+      backdrop-filter:blur(10px) !important;
+    }
+    #navbar-root .text-white   { color:#3d2810 !important; }
+    #navbar-root .text-gray-300 { color:#6b4a28 !important; }
+    #navbar-root .text-green-400 { color:#4a7c35 !important; }
+    #navbar-root .bg-green-400  { background:#4a7c35 !important; }
+    #navbar-root .text-black    { color:#fdf8f0 !important; }
+    #navbar-root .hover\:text-white:hover { color:#3d2810 !important; }
+    #navbar-root .hover\:bg-white\/10:hover { background:rgba(92,61,30,0.08) !important; }
+    #navbar-root .bg-green-800\/60 { background:rgba(74,124,53,0.15) !important; }
+    #navbar-root .border-white\/10 { border-color:rgba(92,61,30,0.1) !important; }
+    #navbar-root .bg-black\/50 { background:rgba(247,238,216,0.9) !important; }
+
+    #footer-root footer { background:#261808 !important; border-top:1px solid rgba(122,173,90,0.15) !important; }
+    #footer-root * { color:#c4b49a !important; }
+    #footer-root .text-green-400 { color:#7aad5a !important; }
+
+    #toggle-root button {
+      background:rgba(247,238,216,0.92) !important;
+      border-color:rgba(92,61,30,0.2) !important;
+    }
+    #toggle-root .text-gray-500 { color:#8b6340 !important; }
+    #toggle-root .text-gray-400 { color:#6b4a28 !important; }
+    /* ── Disable all animations in Low Data mode ── */
+    body.low-data *, 
+    body.low-data *::before, 
+    body.low-data *::after {
+      animation: none !important;
+      transition: none !important;
+    }
+
+    /* Force reveal and fade elements to be visible instantly */
+    body.low-data .reveal,
+    body.low-data .fade-up,
+    body.low-data .fade-up-2,
+    body.low-data .fade-up-3 {
+      opacity: 1 !important;
+      transform: translateY(0) !important;
+    }
   </style>
 </head>
-<body>
+<body class="bg-linen flex flex-col min-h-screen">
+
 <div id="navbar-root"></div>
 
-<div class="max-w-5xl mx-auto px-4 sm:px-8 py-12 pb-24">
-
-  <!-- Title -->
-  <div class="text-center mb-12">
-    <h1 class="text-4xl sm:text-5xl font-black text-white mb-2">Contact Us</h1>
-    <p class="text-gray-400">We would love to hear from you</p>
+<div class="pt-40 pb-12 px-4 sm:px-8 border-b border-soil-600/10 bg-parchment relative overflow-hidden grain">
+  <div class="relative max-w-4xl mx-auto text-center z-10 fade-up">
+    <h1 class="font-caveat text-[clamp(48px,7vw,72px)] font-bold text-bark-800 mb-4 leading-none">Contact Us</h1>
+    <p class="font-serif text-soil-700 text-lg max-w-2xl mx-auto">We would love to hear from you.</p>
   </div>
+</div>
 
-  <!-- GET IN TOUCH -->
-  <section class="mb-12">
-    <div class="mb-6">
-      <span class="inline-block bg-soil-700/80 border border-white/10 text-white text-xs font-bold uppercase tracking-widest px-5 py-2 rounded-lg">Get In Touch</span>
+<div class="flex-1 max-w-5xl mx-auto px-4 sm:px-8 py-16 pb-24">
+
+  <section class="mb-20 fade-up-2">
+    <div class="text-center sm:text-left mb-8">
+      <span class="tag-pill">Get In Touch</span>
     </div>
-    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
-
-      <!-- Email form -->
-      <div class="bg-white/5 border border-white/10 rounded-2xl p-6">
-        <h3 class="text-base font-black text-green-400 mb-1">Send us an Email</h3>
-        <p class="text-sm text-gray-400 mb-5">Have questions? Send us an email and we will get back to you as soon as possible.</p>
-        <form id="contactForm" class="flex flex-col gap-4">
+    
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+      <div class="bg-parchment-50 border border-soil-600/15 rounded-[24px] p-8 shadow-[0_8px_24px_rgba(58,35,12,0.04)]">
+        <h3 class="font-caveat text-3xl font-bold text-moss-700 mb-2">Send us an Email</h3>
+        <p class="text-[15px] text-soil-700 mb-6 leading-relaxed">Have questions? Send us an email and we will get back to you as soon as possible.</p>
+        
+        <form id="contactForm" class="flex flex-col gap-5">
           <div class="flex flex-col gap-1.5">
-            <label class="text-[11px] font-bold uppercase tracking-widest text-gray-400">Name</label>
-            <input type="text" id="name" name="name" placeholder="Your full name" class="border border-white/15 rounded-xl px-3.5 py-2.5 text-sm text-white placeholder-gray-600 outline-none focus:border-green-400 transition-colors">
+            <label class="text-[11px] font-sans font-bold uppercase tracking-widest text-soil-600">Name</label>
+            <input type="text" id="name" name="name" placeholder="Your full name" class="w-full bg-white border border-soil-600/20 rounded-xl px-4 py-3 text-[15px] font-sans text-bark-800 placeholder-soil-600/40 outline-none focus:border-moss-400 focus:ring-1 focus:ring-moss-400 transition-all shadow-inner">
           </div>
           <div class="flex flex-col gap-1.5">
-            <label class="text-[11px] font-bold uppercase tracking-widest text-gray-400">Email</label>
-            <input type="email" id="contactEmail" name="email" placeholder="your.email@example.com" class="border border-white/15 rounded-xl px-3.5 py-2.5 text-sm text-white placeholder-gray-600 outline-none focus:border-green-400 transition-colors">
+            <label class="text-[11px] font-sans font-bold uppercase tracking-widest text-soil-600">Email</label>
+            <input type="email" id="contactEmail" name="email" placeholder="your.email@example.com" class="w-full bg-white border border-soil-600/20 rounded-xl px-4 py-3 text-[15px] font-sans text-bark-800 placeholder-soil-600/40 outline-none focus:border-moss-400 focus:ring-1 focus:ring-moss-400 transition-all shadow-inner">
           </div>
           <div class="flex flex-col gap-1.5">
-            <label class="text-[11px] font-bold uppercase tracking-widest text-gray-400">Subject</label>
-            <input type="text" id="subject" name="subject" placeholder="What is this about?" class="border border-white/15 rounded-xl px-3.5 py-2.5 text-sm text-white placeholder-gray-600 outline-none focus:border-green-400 transition-colors">
+            <label class="text-[11px] font-sans font-bold uppercase tracking-widest text-soil-600">Subject</label>
+            <input type="text" id="subject" name="subject" placeholder="What is this about?" class="w-full bg-white border border-soil-600/20 rounded-xl px-4 py-3 text-[15px] font-sans text-bark-800 placeholder-soil-600/40 outline-none focus:border-moss-400 focus:ring-1 focus:ring-moss-400 transition-all shadow-inner">
           </div>
           <div class="flex flex-col gap-1.5">
-            <label class="text-[11px] font-bold uppercase tracking-widest text-gray-400">Message</label>
-            <textarea id="message" name="message" rows="4" placeholder="Your message here..." class="border border-white/15 rounded-xl px-3.5 py-2.5 text-sm text-white placeholder-gray-600 outline-none focus:border-green-400 transition-colors resize-none"></textarea>
+            <label class="text-[11px] font-sans font-bold uppercase tracking-widest text-soil-600">Message</label>
+            <textarea id="message" name="message" rows="4" placeholder="Your message here..." class="w-full bg-white border border-soil-600/20 rounded-xl px-4 py-3 text-[15px] font-sans text-bark-800 placeholder-soil-600/40 outline-none focus:border-moss-400 focus:ring-1 focus:ring-moss-400 transition-all shadow-inner resize-none"></textarea>
           </div>
-          <button type="submit" id="contactSubmitBtn" class="bg-green-800 hover:bg-green-700 text-white font-bold py-2.5 rounded-xl transition-colors">Send Email</button>
+          <button type="submit" id="contactSubmitBtn" class="btn-primary mt-2">Send Email</button>
         </form>
       </div>
 
-      <!-- Call info -->
-      <div class="bg-white/5 border border-white/10 rounded-2xl p-6 flex flex-col gap-5">
-        <div>
-          <h3 class="text-base font-black text-green-400 mb-1">Call Us</h3>
-          <p class="text-sm text-gray-400">Prefer to speak directly? Give us a call during business hours.</p>
+      <div class="bg-parchment-50 border border-soil-600/15 rounded-[24px] p-8 shadow-[0_8px_24px_rgba(58,35,12,0.04)] flex flex-col">
+        <div class="mb-6">
+          <h3 class="font-caveat text-3xl font-bold text-moss-700 mb-2">Call Us</h3>
+          <p class="text-[15px] text-soil-700 leading-relaxed">Prefer to speak directly? Give us a call during business hours.</p>
         </div>
-        <div class="flex flex-col gap-4">
-          <div class="bg-black/20 rounded-xl p-4">
-            <div class="text-[10px] font-bold uppercase tracking-widest text-gray-500 mb-1">Phone</div>
-            <div class="text-sm font-semibold text-white">+27 21 123 4567</div>
+        <div class="flex flex-col gap-4 flex-1">
+          <div class="bg-parchment-100 border border-soil-600/10 rounded-xl p-5">
+            <div class="text-[11px] font-sans font-bold uppercase tracking-widest text-soil-500 mb-1.5">Phone</div>
+            <div class="text-[15px] font-bold text-bark-800 font-sans">+27 21 123 4567</div>
           </div>
-          <div class="bg-black/20 rounded-xl p-4">
-            <div class="text-[10px] font-bold uppercase tracking-widest text-gray-500 mb-1">WhatsApp</div>
-            <div class="text-sm font-semibold text-white">+27 82 123 4567</div>
+          <div class="bg-parchment-100 border border-soil-600/10 rounded-xl p-5">
+            <div class="text-[11px] font-sans font-bold uppercase tracking-widest text-soil-500 mb-1.5">WhatsApp</div>
+            <div class="text-[15px] font-bold text-bark-800 font-sans">+27 82 123 4567</div>
           </div>
-          <div class="bg-black/20 rounded-xl p-4">
-            <div class="text-[10px] font-bold uppercase tracking-widest text-gray-500 mb-1">Hours</div>
-            <div class="text-sm text-gray-300">Monday – Friday, 8:00 AM – 5:00 PM (SAST)</div>
+          <div class="bg-parchment-100 border border-soil-600/10 rounded-xl p-5">
+            <div class="text-[11px] font-sans font-bold uppercase tracking-widest text-soil-500 mb-1.5">Hours</div>
+            <div class="text-[15px] text-soil-700 font-sans">Monday – Friday, 8:00 AM – 5:00 PM (SAST)</div>
           </div>
-          <div class="bg-black/20 rounded-xl p-4">
-            <div class="text-[10px] font-bold uppercase tracking-widest text-gray-500 mb-1">Support</div>
-            <div class="text-sm text-gray-300">We are here to help with any questions about our products, collectives, and payouts.</div>
+          <div class="bg-parchment-100 border border-soil-600/10 rounded-xl p-5 mt-auto">
+            <div class="text-[11px] font-sans font-bold uppercase tracking-widest text-soil-500 mb-1.5">Support</div>
+            <div class="text-[15px] text-soil-700 leading-relaxed">We are here to help with any questions about our products, collectives, and payouts.</div>
           </div>
         </div>
       </div>
-
     </div>
   </section>
 
-  <!-- BECOME A SELLER -->
-  <section id="become-a-seller" class="scroll-mt-20">
-    <div class="mb-6">
-      <span class="inline-block bg-soil-700/80 border border-white/10 text-white text-xs font-bold uppercase tracking-widest px-5 py-2 rounded-lg">Become a Seller</span>
+  <section id="become-a-seller" class="scroll-mt-28 reveal">
+    <div class="text-center sm:text-left mb-8">
+      <span class="tag-pill">Become a Seller</span>
     </div>
-    <div class="bg-white/5 border border-white/10 rounded-2xl p-6 sm:p-8">
-      <h2 class="text-xl font-black text-white mb-1">Apply to Join the Collective</h2>
-      <p class="text-sm text-gray-400 mb-7">Are you a farmer interested in selling your crops with Roots? Apply now to join our community collective.</p>
+    
+    <div class="bg-parchment-50 border border-soil-600/15 rounded-[24px] p-8 sm:p-10 shadow-[0_12px_32px_rgba(58,35,12,0.05)]">
+      <h2 class="font-caveat text-[clamp(32px,5vw,42px)] font-bold text-moss-700 mb-3">Apply to Join the Collective</h2>
+      <p class="text-[15px] text-soil-700 mb-8 leading-relaxed max-w-2xl">Are you a farmer interested in selling your crops with Roots? Apply now to join our community collective and get your fair share.</p>
 
-      <form id="sellerForm" class="flex flex-col gap-5">
+      <form id="sellerForm" class="flex flex-col gap-6">
 
-        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
           <div class="flex flex-col gap-1.5">
-            <label class="text-[11px] font-bold uppercase tracking-widest text-gray-400">Full Name *</label>
-            <input type="text" id="seller-name" name="seller-name" placeholder="Your full name" class="border border-white/15 rounded-xl px-3.5 py-2.5 text-sm text-white placeholder-gray-600 outline-none focus:border-green-400 transition-colors">
+            <label class="text-[11px] font-sans font-bold uppercase tracking-widest text-soil-600">Full Name *</label>
+            <input type="text" id="seller-name" name="seller-name" placeholder="Your full name" class="w-full bg-white border border-soil-600/20 rounded-xl px-4 py-3 text-[15px] font-sans text-bark-800 placeholder-soil-600/40 outline-none focus:border-moss-400 focus:ring-1 focus:ring-moss-400 transition-all shadow-inner">
           </div>
           <div class="flex flex-col gap-1.5">
-            <label class="text-[11px] font-bold uppercase tracking-widest text-gray-400">Email *</label>
-            <input type="email" id="seller-email" name="seller-email" placeholder="your.email@example.com" class="border border-white/15 rounded-xl px-3.5 py-2.5 text-sm text-white placeholder-gray-600 outline-none focus:border-green-400 transition-colors">
+            <label class="text-[11px] font-sans font-bold uppercase tracking-widest text-soil-600">Email *</label>
+            <input type="email" id="seller-email" name="seller-email" placeholder="your.email@example.com" class="w-full bg-white border border-soil-600/20 rounded-xl px-4 py-3 text-[15px] font-sans text-bark-800 placeholder-soil-600/40 outline-none focus:border-moss-400 focus:ring-1 focus:ring-moss-400 transition-all shadow-inner">
           </div>
         </div>
 
-        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
           <div class="flex flex-col gap-1.5">
-            <label class="text-[11px] font-bold uppercase tracking-widest text-gray-400">Phone *</label>
-            <input type="tel" id="seller-phone" name="seller-phone" placeholder="+27 82 000 0000" class="border border-white/15 rounded-xl px-3.5 py-2.5 text-sm text-white placeholder-gray-600 outline-none focus:border-green-400 transition-colors">
+            <label class="text-[11px] font-sans font-bold uppercase tracking-widest text-soil-600">Phone *</label>
+            <input type="tel" id="seller-phone" name="seller-phone" placeholder="+27 82 000 0000" class="w-full bg-white border border-soil-600/20 rounded-xl px-4 py-3 text-[15px] font-sans text-bark-800 placeholder-soil-600/40 outline-none focus:border-moss-400 focus:ring-1 focus:ring-moss-400 transition-all shadow-inner">
           </div>
           <div class="flex flex-col gap-1.5">
-            <label class="text-[11px] font-bold uppercase tracking-widest text-gray-400">Farm Name</label>
-            <input type="text" id="farm-name" name="farm-name" placeholder="Your farm or collective name" class="border border-white/15 rounded-xl px-3.5 py-2.5 text-sm text-white placeholder-gray-600 outline-none focus:border-green-400 transition-colors">
+            <label class="text-[11px] font-sans font-bold uppercase tracking-widest text-soil-600">Farm Name</label>
+            <input type="text" id="farm-name" name="farm-name" placeholder="Your farm or collective name" class="w-full bg-white border border-soil-600/20 rounded-xl px-4 py-3 text-[15px] font-sans text-bark-800 placeholder-soil-600/40 outline-none focus:border-moss-400 focus:ring-1 focus:ring-moss-400 transition-all shadow-inner">
           </div>
         </div>
 
         <div class="flex flex-col gap-1.5">
-          <label class="text-[11px] font-bold uppercase tracking-widest text-gray-400">Farm Location</label>
-          <input type="text" id="farm-location" name="farm-location" placeholder="Township, City" class="border border-white/15 rounded-xl px-3.5 py-2.5 text-sm text-white placeholder-gray-600 outline-none focus:border-green-400 transition-colors">
+          <label class="text-[11px] font-sans font-bold uppercase tracking-widest text-soil-600">Farm Location</label>
+          <input type="text" id="farm-location" name="farm-location" placeholder="Township, City" class="w-full bg-white border border-soil-600/20 rounded-xl px-4 py-3 text-[15px] font-sans text-bark-800 placeholder-soil-600/40 outline-none focus:border-moss-400 focus:ring-1 focus:ring-moss-400 transition-all shadow-inner">
         </div>
 
         <div class="flex flex-col gap-2">
-          <label class="text-[11px] font-bold uppercase tracking-widest text-gray-400">What crops do you grow?</label>
-          <div class="flex flex-wrap gap-x-6 gap-y-2.5 mt-1">
-            <label class="flex items-center gap-2 text-sm text-gray-300 cursor-pointer"><input type="checkbox" name="crop-types" value="vegetables"> Vegetables</label>
-            <label class="flex items-center gap-2 text-sm text-gray-300 cursor-pointer"><input type="checkbox" name="crop-types" value="fruits"> Fruits</label>
-            <label class="flex items-center gap-2 text-sm text-gray-300 cursor-pointer"><input type="checkbox" name="crop-types" value="grains"> Grains</label>
-            <label class="flex items-center gap-2 text-sm text-gray-300 cursor-pointer"><input type="checkbox" name="crop-types" value="seeds"> Seeds</label>
-            <label class="flex items-center gap-2 text-sm text-gray-300 cursor-pointer"><input type="checkbox" name="crop-types" value="other"> Other</label>
+          <label class="text-[11px] font-sans font-bold uppercase tracking-widest text-soil-600">What crops do you grow?</label>
+          <div class="flex flex-wrap gap-x-8 gap-y-3 mt-2">
+            <label class="flex items-center gap-2.5 text-[15px] text-soil-700 cursor-pointer font-sans"><input type="checkbox" name="crop-types" value="vegetables" class="w-4 h-4 rounded border-soil-600/30 text-moss-600 focus:ring-moss-400 cursor-pointer"> Vegetables</label>
+            <label class="flex items-center gap-2.5 text-[15px] text-soil-700 cursor-pointer font-sans"><input type="checkbox" name="crop-types" value="fruits" class="w-4 h-4 rounded border-soil-600/30 text-moss-600 focus:ring-moss-400 cursor-pointer"> Fruits</label>
+            <label class="flex items-center gap-2.5 text-[15px] text-soil-700 cursor-pointer font-sans"><input type="checkbox" name="crop-types" value="grains" class="w-4 h-4 rounded border-soil-600/30 text-moss-600 focus:ring-moss-400 cursor-pointer"> Grains</label>
+            <label class="flex items-center gap-2.5 text-[15px] text-soil-700 cursor-pointer font-sans"><input type="checkbox" name="crop-types" value="seeds" class="w-4 h-4 rounded border-soil-600/30 text-moss-600 focus:ring-moss-400 cursor-pointer"> Seeds</label>
+            <label class="flex items-center gap-2.5 text-[15px] text-soil-700 cursor-pointer font-sans"><input type="checkbox" name="crop-types" value="other" class="w-4 h-4 rounded border-soil-600/30 text-moss-600 focus:ring-moss-400 cursor-pointer"> Other</label>
           </div>
         </div>
 
-        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-6 mt-2">
           <div class="flex flex-col gap-1.5">
-            <label class="text-[11px] font-bold uppercase tracking-widest text-gray-400">Farm Size (square metres)</label>
-            <input type="number" id="farm-size" name="farm-size" placeholder="e.g. 500" class="border border-white/15 rounded-xl px-3.5 py-2.5 text-sm text-white placeholder-gray-600 outline-none focus:border-green-400 transition-colors [appearance:textfield]">
+            <label class="text-[11px] font-sans font-bold uppercase tracking-widest text-soil-600">Farm Size (square metres)</label>
+            <input type="number" id="farm-size" name="farm-size" placeholder="e.g. 500" class="w-full bg-white border border-soil-600/20 rounded-xl px-4 py-3 text-[15px] font-sans text-bark-800 placeholder-soil-600/40 outline-none focus:border-moss-400 focus:ring-1 focus:ring-moss-400 transition-all shadow-inner [appearance:textfield]">
           </div>
           <div class="flex flex-col gap-1.5">
-            <label class="text-[11px] font-bold uppercase tracking-widest text-gray-400">Years of Farming Experience</label>
-            <input type="number" id="years-farming" name="years-farming" placeholder="e.g. 5" class="border border-white/15 rounded-xl px-3.5 py-2.5 text-sm text-white placeholder-gray-600 outline-none focus:border-green-400 transition-colors [appearance:textfield]">
+            <label class="text-[11px] font-sans font-bold uppercase tracking-widest text-soil-600">Years of Farming Experience</label>
+            <input type="number" id="years-farming" name="years-farming" placeholder="e.g. 5" class="w-full bg-white border border-soil-600/20 rounded-xl px-4 py-3 text-[15px] font-sans text-bark-800 placeholder-soil-600/40 outline-none focus:border-moss-400 focus:ring-1 focus:ring-moss-400 transition-all shadow-inner [appearance:textfield]">
           </div>
         </div>
 
         <div class="flex flex-col gap-1.5">
-          <label class="text-[11px] font-bold uppercase tracking-widest text-gray-400">Tell us about your farm</label>
-          <textarea id="about-farm" name="about-farm" rows="4" placeholder="Share information about your farm, practices, and what makes your crops special..." class="border border-white/15 rounded-xl px-3.5 py-2.5 text-sm text-white placeholder-gray-600 outline-none focus:border-green-400 transition-colors resize-none"></textarea>
+          <label class="text-[11px] font-sans font-bold uppercase tracking-widest text-soil-600">Tell us about your farm</label>
+          <textarea id="about-farm" name="about-farm" rows="4" placeholder="Share information about your farm, practices, and what makes your crops special..." class="w-full bg-white border border-soil-600/20 rounded-xl px-4 py-3 text-[15px] font-sans text-bark-800 placeholder-soil-600/40 outline-none focus:border-moss-400 focus:ring-1 focus:ring-moss-400 transition-all shadow-inner resize-none"></textarea>
         </div>
 
         <div class="flex flex-col gap-1.5">
-          <label class="text-[11px] font-bold uppercase tracking-widest text-gray-400">Why do you want to join Roots?</label>
-          <textarea id="why-join" name="why-join" rows="3" placeholder="Tell us your motivation..." class="border border-white/15 rounded-xl px-3.5 py-2.5 text-sm text-white placeholder-gray-600 outline-none focus:border-green-400 transition-colors resize-none"></textarea>
+          <label class="text-[11px] font-sans font-bold uppercase tracking-widest text-soil-600">Why do you want to join Roots?</label>
+          <textarea id="why-join" name="why-join" rows="3" placeholder="Tell us your motivation..." class="w-full bg-white border border-soil-600/20 rounded-xl px-4 py-3 text-[15px] font-sans text-bark-800 placeholder-soil-600/40 outline-none focus:border-moss-400 focus:ring-1 focus:ring-moss-400 transition-all shadow-inner resize-none"></textarea>
         </div>
 
-        <button type="submit" id="sellerSubmitBtn" class="bg-green-800 hover:bg-green-700 text-white font-bold py-3.5 rounded-xl transition-colors text-base">Submit Application</button>
+        <div class="mt-4">
+          <button type="submit" id="sellerSubmitBtn" class="btn-primary w-full sm:w-auto">Submit Application</button>
+        </div>
       </form>
     </div>
   </section>
@@ -165,6 +284,7 @@
 
 <div id="footer-root"></div>
 <div id="toggle-root"></div>
+
 <script src="https://unpkg.com/react@18/umd/react.production.min.js" crossorigin></script>
 <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js" crossorigin></script>
 <script src="../scripts/shared-components.js"></script>
@@ -173,21 +293,36 @@
   document.body.appendChild(mountDiv);
   ReactDOM.createRoot(mountDiv).render(
     React.createElement(RootsStore.StoreProvider, null,
-      React.createElement(RootsComponents.ScrollGradient),
       ReactDOM.createPortal(React.createElement(RootsComponents.Navbar),        document.getElementById('navbar-root')),
       ReactDOM.createPortal(React.createElement(RootsComponents.Footer),        document.getElementById('footer-root')),
       ReactDOM.createPortal(React.createElement(RootsComponents.LowDataToggle), document.getElementById('toggle-root'))
     )
   );
 
+  /* Scroll reveal */
+  var reveals = document.querySelectorAll('.reveal');
+  if ('IntersectionObserver' in window) {
+    var io = new IntersectionObserver(function(entries) {
+      entries.forEach(function(e) {
+        if (e.isIntersecting) { e.target.classList.add('revealed'); io.unobserve(e.target); }
+      });
+    }, { threshold: 0.1 });
+    reveals.forEach(function(el) { io.observe(el); });
+  } else {
+    reveals.forEach(function(el) { el.classList.add('revealed'); });
+  }
+
   /* Contact form */
   document.getElementById('contactForm').addEventListener('submit', function(ev) {
     ev.preventDefault();
     var btn = document.getElementById('contactSubmitBtn');
     btn.textContent = 'Message Sent!';
-    btn.classList.add('bg-green-700');
+    btn.style.background = '#4a7c35'; /* Moss green */
     this.reset();
-    setTimeout(function() { btn.textContent = 'Send Email'; btn.classList.remove('bg-green-700'); }, 3000);
+    setTimeout(function() { 
+      btn.textContent = 'Send Email'; 
+      btn.style.background = ''; 
+    }, 3000);
   });
 
   /* Seller form */
@@ -195,9 +330,12 @@
     ev.preventDefault();
     var btn = document.getElementById('sellerSubmitBtn');
     btn.textContent = 'Application Submitted!';
-    btn.classList.add('bg-green-700');
+    btn.style.background = '#4a7c35'; /* Moss green */
     this.reset();
-    setTimeout(function() { btn.textContent = 'Submit Application'; btn.classList.remove('bg-green-700'); }, 3000);
+    setTimeout(function() { 
+      btn.textContent = 'Submit Application'; 
+      btn.style.background = ''; 
+    }, 3000);
   });
 
   /* Scroll + highlight on anchor */

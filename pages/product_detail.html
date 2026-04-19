@@ -3,24 +3,117 @@
 <head>
   <meta charset="UTF-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Product — Roots</title>
+  <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@400;600;700&family=Lora:ital,wght@0,400;0,500;0,600;1,400&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
   <script src="https://cdn.tailwindcss.com"></script>
-  <script>tailwind.config={theme:{extend:{colors:{green:{400:'#4ade80',700:'#15803d',800:'#015005'},soil:{700:'#382f26',800:'#1a3a2a',900:'#0f2417'}}}}}</script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            parchment: { 50:'#fdf8f0', 100:'#f7eed8', 200:'#eedfc0', 300:'#e0c99a' },
+            bark:      { 700:'#5c3d1e', 800:'#3d2810', 900:'#261808' },
+            moss:      { 400:'#7aad5a', 600:'#4a7c35', 700:'#345c24', 800:'#1e3a14' },
+            soil:      { 600:'#8b6340', 700:'#6b4a28', 800:'#4a3018' },
+          },
+          fontFamily: {
+            sans: ['"DM Sans"', 'sans-serif'],
+            serif: ['Lora', 'Georgia', 'serif'],
+            caveat: ['Caveat', 'cursive'],
+          }
+        }
+      }
+    }
+  </script>
   <style>
-    body{background:linear-gradient(to bottom,#0f2417,#1a3a2a,#0e3d20,#1a3a2a,#0f2417);background-size:100% 400%;min-height:100vh;color:#f9faf8;font-family:system-ui,sans-serif}
-    body.low-data{background:#0f2417!important}body.low-data img{display:none!important}
-    ::-webkit-scrollbar{width:5px}::-webkit-scrollbar-track{background:#0f2417}::-webkit-scrollbar-thumb{background:#015005;border-radius:3px}
+    /* ── Base ── */
+    html { scroll-behavior: smooth; }
+    body {
+      background-color: #f7eed8;
+      color: #3d2810;
+      font-family: 'Lora', Georgia, serif;
+      overflow-x: hidden;
+    }
+    body.low-data { background: #c9b686 !important; }
+    body.low-data img { display: none !important; }
+
+    /* ── Scrollbar ── */
+    ::-webkit-scrollbar { width: 6px; }
+    ::-webkit-scrollbar-track { background: #eedfc0; }
+    ::-webkit-scrollbar-thumb { background: #4a7c35; border-radius: 3px; }
+
+    /* ── Grain texture ── */
+    .grain::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)' opacity='0.03'/%3E%3C/svg%3E");
+      pointer-events: none;
+      z-index: 1;
+    }
+
+    /* ── Tag pill ── */
+    .tag-pill {
+      display:inline-block; font-family:'DM Sans',sans-serif;
+      font-size:11px; font-weight:700; letter-spacing:0.12em; text-transform:uppercase;
+      background:rgba(122,173,90,0.16); color:#345c24;
+      border:1px solid rgba(122,173,90,0.35); padding:6px 16px; border-radius:50px;
+    }
+
+    /* ── Navbar/footer colour overrides ── */
+    #navbar-root header {
+      background:rgba(247,238,216,0.9) !important;
+      border-bottom:1px solid rgba(92,61,30,0.12) !important;
+      backdrop-filter:blur(10px) !important;
+    }
+    #navbar-root .text-white   { color:#3d2810 !important; }
+    #navbar-root .text-gray-300 { color:#6b4a28 !important; }
+    #navbar-root .text-green-400 { color:#4a7c35 !important; }
+    #navbar-root .bg-green-400  { background:#4a7c35 !important; }
+    #navbar-root .text-black    { color:#fdf8f0 !important; }
+    #navbar-root .hover\:text-white:hover { color:#3d2810 !important; }
+    #navbar-root .hover\:bg-white\/10:hover { background:rgba(92,61,30,0.08) !important; }
+    #navbar-root .bg-green-800\/60 { background:rgba(74,124,53,0.15) !important; }
+    #navbar-root .border-white\/10 { border-color:rgba(92,61,30,0.1) !important; }
+    #navbar-root .bg-black\/50 { background:rgba(247,238,216,0.9) !important; }
+
+    #footer-root footer { background:#261808 !important; border-top:1px solid rgba(122,173,90,0.15) !important; }
+    #footer-root * { color:#c4b49a !important; }
+    #footer-root .text-green-400 { color:#7aad5a !important; }
+
+    #toggle-root button {
+      background:rgba(247,238,216,0.92) !important;
+      border-color:rgba(92,61,30,0.2) !important;
+    }
+    #toggle-root .text-gray-500 { color:#8b6340 !important; }
+    #toggle-root .text-gray-400 { color:#6b4a28 !important; }
+    /* ── Disable all animations in Low Data mode ── */
+    body.low-data *, 
+    body.low-data *::before, 
+    body.low-data *::after {
+      animation: none !important;
+      transition: none !important;
+    }
+
+    /* Force reveal and fade elements to be visible instantly */
+    body.low-data .reveal,
+    body.low-data .fade-up,
+    body.low-data .fade-up-2,
+    body.low-data .fade-up-3 {
+      opacity: 1 !important;
+      transform: translateY(0) !important;
+    }
   </style>
 </head>
-<body>
+<body class="bg-linen flex flex-col min-h-screen">
 <div id="navbar-root"></div>
-<div id="app-root" class="min-h-screen"></div>
+<div id="app-root" class="min-h-screen pt-28"></div>
 <div id="footer-root"></div>
 <div id="toggle-root"></div>
 
 <script src="https://unpkg.com/react@18/umd/react.production.min.js" crossorigin></script>
 <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js" crossorigin></script>
 <script src="../scripts/shared-components.js"></script>
-<script src="../scripts/product_detail.js"></script>
+<script src="../scripts/product_detail.js"></script> 
 <script>
 var useState  = React.useState;
 var useEffect = React.useEffect;
@@ -31,15 +124,15 @@ var useStore      = RootsStore.useStore;
 function StarRating(props) {
   var stars = [];
   for (var i = 1; i <= 5; i++) {
-    stars.push(e('span', { key: i, className: i <= props.rating ? 'text-yellow-400' : 'text-gray-600' }, i <= props.rating ? '★' : '☆'));
+    stars.push(e('span', { key: i, className: i <= props.rating ? 'text-yellow-500' : 'text-soil-600/30' }, i <= props.rating ? '★' : '☆'));
   }
-  return e('span', { className: 'flex gap-0.5 text-sm' }, stars);
+  return e('span', { className: 'flex gap-0.5 text-[15px]' }, stars);
 }
 
 function DetailApp() {
   var store = useStore();
   var productId = new URLSearchParams(window.location.search).get('id');
-  var product = PRODUCTS[productId];
+  var product = typeof PRODUCTS !== 'undefined' ? PRODUCTS[productId] : null;
 
   var qtyState     = useState(1);
   var tabState     = useState('description');
@@ -50,13 +143,14 @@ function DetailApp() {
 
   useEffect(function() {
     if (product) { document.title = product.name + ' — Roots'; }
-  }, []);
+  }, [product]);
 
   if (!product) {
-    return e('div', { className: 'max-w-2xl mx-auto px-4 py-24 text-center' },
-      e('div', { className: 'w-20 h-20 rounded-full bg-white/5 border border-white/10 flex items-center justify-center text-2xl font-black text-gray-600 mx-auto mb-6' }, '?'),
-      e('h2', { className: 'text-2xl font-black text-white mb-2' }, 'Product not found'),
-      e('a', { href: 'produce_products.html', className: 'inline-block bg-green-800 hover:bg-green-700 text-white font-bold px-6 py-3 rounded-xl transition-colors mt-4' }, 'Back to Products')
+    return e('div', { className: 'max-w-2xl mx-auto px-4 py-24 text-center mt-10' },
+      e('div', { className: 'w-20 h-20 rounded-full bg-moss-50 border border-moss-200 flex items-center justify-center text-4xl font-black text-moss-600 mx-auto mb-6 font-caveat' }, '?'),
+      e('h2', { className: 'font-caveat text-4xl font-bold text-bark-800 mb-3' }, 'Product not found'),
+      e('p', { className: 'font-serif text-[15px] text-soil-700 mb-8 max-w-sm mx-auto leading-relaxed' }, 'We could not find the product you are looking for.'),
+      e('a', { href: 'produce_products.html', className: 'inline-flex items-center justify-center bg-gradient-to-br from-moss-700 to-moss-600 text-parchment-50 font-sans font-bold uppercase tracking-widest text-[13px] px-8 py-3.5 rounded-full transition-all shadow-md hover:shadow-lg hover:-translate-y-0.5' }, 'Back to Products')
     );
   }
 
@@ -74,105 +168,106 @@ function DetailApp() {
     setTimeout(function() { setAdded(false); }, 2000);
   }
 
-  return e('div', { className: 'max-w-6xl mx-auto px-4 sm:px-8 py-8 pb-24' },
+  return e('div', { className: 'max-w-6xl mx-auto px-4 sm:px-8 py-10 pb-24' },
 
     /* Breadcrumb */
-    e('nav', { className: 'flex items-center gap-2 text-xs text-gray-500 mb-8 flex-wrap' },
-      e('a', { href: 'index.html', className: 'hover:text-green-400 transition-colors' }, 'Home'),
-      e('span', null, '/'),
-      e('a', { href: 'produce_products.html', className: 'hover:text-green-400 transition-colors' }, 'Products'),
-      e('span', null, '/'),
-      e('a', { href: 'produce_products.html?filter=' + product.category, className: 'hover:text-green-400 transition-colors' }, product.category.charAt(0).toUpperCase() + product.category.slice(1)),
-      e('span', null, '/'),
-      e('span', { className: 'text-gray-300' }, product.name)
+    e('nav', { className: 'flex items-center gap-2 text-[11px] font-sans font-bold uppercase tracking-widest text-soil-500 mb-8 flex-wrap' },
+      e('a', { href: 'index.html', className: 'hover:text-moss-600 transition-colors' }, 'Home'),
+      e('span', { className: 'text-soil-600/30' }, '/'),
+      e('a', { href: 'produce_products.html', className: 'hover:text-moss-600 transition-colors' }, 'Products'),
+      e('span', { className: 'text-soil-600/30' }, '/'),
+      e('a', { href: 'produce_products.html?filter=' + product.category, className: 'hover:text-moss-600 transition-colors' }, product.category.charAt(0).toUpperCase() + product.category.slice(1)),
+      e('span', { className: 'text-soil-600/30' }, '/'),
+      e('span', { className: 'text-bark-800' }, product.name)
     ),
 
     /* Main hero grid */
-    e('div', { className: 'grid grid-cols-1 lg:grid-cols-2 gap-10 mb-12' },
+    e('div', { className: 'grid grid-cols-1 lg:grid-cols-2 gap-12 mb-16' },
 
       /* Image */
       e('div', { className: 'flex flex-col gap-3' },
-        e('div', { className: 'relative rounded-2xl overflow-hidden border-2 border-green-800/60 shadow-2xl aspect-[4/3]' },
+        e('div', { className: 'relative rounded-[24px] overflow-hidden border border-soil-600/15 shadow-[0_16px_40px_rgba(58,35,12,0.06)] aspect-[4/3] bg-parchment-200' },
           e('img', { id: 'detailMainImg', src: product.image, alt: product.name, className: 'w-full h-full object-cover' }),
           e('button', {
             onClick: function() { store.toggleWishlist(product); },
-            className: 'absolute top-3 right-3 w-10 h-10 rounded-full border backdrop-blur-sm flex items-center justify-center text-xl transition-all ' +
-              (isWishlisted ? 'bg-yellow-400/20 border-yellow-400 text-yellow-400' : 'bg-black/50 border-white/20 text-gray-400 hover:text-yellow-400'),
+            className: 'absolute top-4 right-4 w-11 h-11 rounded-full flex items-center justify-center text-xl transition-all shadow-sm border ' +
+              (isWishlisted ? 'bg-yellow-50 border-yellow-400 text-yellow-500' : 'bg-white/90 border-soil-600/20 text-soil-500 hover:text-yellow-500 hover:border-yellow-400'),
             title: isWishlisted ? 'Remove from wishlist' : 'Add to wishlist'
           }, isWishlisted ? '★' : '☆'),
-          e('span', { className: 'absolute bottom-3 left-3 text-[11px] font-bold uppercase tracking-wider px-3 py-1 rounded-full bg-green-900/80 text-green-400 border border-green-400/30' }, product.badge)
+          product.badge && e('span', { className: 'absolute bottom-4 left-4 text-[11px] font-sans font-bold uppercase tracking-widest px-3.5 py-1.5 rounded-full bg-moss-100/90 text-moss-800 border border-moss-400/30 backdrop-blur-sm shadow-sm' }, product.badge)
         )
       ),
 
       /* Info */
-      e('div', { className: 'flex flex-col gap-4' },
+      e('div', { className: 'flex flex-col gap-5' },
         e('div', null,
-          e('h1', { className: 'text-3xl font-black text-white mb-2' }, product.name),
+          e('h1', { className: 'font-caveat text-[clamp(36px,5vw,48px)] font-bold text-bark-800 leading-tight mb-3' }, product.name),
           e('div', { className: 'flex items-center gap-3 flex-wrap' },
-            e('span', { className: 'text-xs font-bold uppercase tracking-widest text-green-400' }, product.category.charAt(0).toUpperCase() + product.category.slice(1)),
-            e('span', { className: 'text-xs font-bold px-2.5 py-1 rounded-full ' + (product.stock ? 'bg-green-400/10 text-green-400' : 'bg-red-400/10 text-red-400') }, product.stock ? 'In Stock' : 'Out of Stock')
+            e('span', { className: 'text-[10px] font-sans font-bold uppercase tracking-widest bg-moss-50 text-moss-700 border border-moss-200 px-2.5 py-1 rounded-md' }, product.category),
+            e('span', { className: 'text-[10px] font-sans font-bold uppercase tracking-widest px-2.5 py-1 rounded-md border ' + (product.stock ? 'bg-moss-50/50 text-moss-600 border-moss-200' : 'bg-red-50 text-red-600 border-red-200') }, product.stock ? 'In Stock' : 'Out of Stock')
           )
         ),
         e('div', { className: 'flex items-baseline gap-2' },
-          e('span', { className: 'text-4xl font-black text-green-400' }, 'R' + product.price),
-          e('span', { className: 'text-sm text-gray-400' }, product.priceUnit)
+          e('span', { className: 'text-4xl font-black text-moss-700 font-sans' }, 'R' + product.price),
+          e('span', { className: 'text-[15px] text-soil-600 font-sans font-medium' }, product.priceUnit || 'each')
         ),
-        e('p', { className: 'text-sm text-gray-300 leading-relaxed' }, product.description),
+        e('p', { className: 'text-[15px] font-serif text-soil-700 leading-relaxed' }, product.description),
 
         /* Chips */
-        e('div', { className: 'grid grid-cols-2 gap-2' },
+        product.chips && product.chips.length > 0 && e('div', { className: 'grid grid-cols-2 gap-3 mt-1' },
           product.chips.map(function(chip, i) {
-            return e('div', { key: i, className: 'bg-white/5 border border-white/10 rounded-xl p-3 flex items-center gap-3' },
+            return e('div', { key: i, className: 'bg-parchment-50 border border-soil-600/10 rounded-xl p-3.5 flex items-center gap-3 shadow-sm' },
               e('div', { className: 'flex flex-col' },
-                e('span', { className: 'text-[10px] font-bold uppercase tracking-widest text-gray-500' }, chip.label),
-                e('span', { className: 'text-xs font-semibold text-white mt-0.5' }, chip.value)
+                e('span', { className: 'text-[10px] font-sans font-bold uppercase tracking-widest text-soil-500' }, chip.label),
+                e('span', { className: 'text-[14px] font-bold text-bark-800 font-sans mt-0.5' }, chip.value)
               )
             );
           })
         ),
 
         /* Farmer card */
-        e('div', { className: 'bg-green-800/15 border border-green-400/20 rounded-xl p-4 flex items-start gap-4' },
-          e('div', { className: 'w-10 h-10 rounded-full bg-green-400/10 border border-green-400/20 flex items-center justify-center text-lg shrink-0' }, 'F'),
+        product.farmer && e('div', { className: 'bg-parchment-100 border border-soil-600/15 rounded-[16px] p-5 flex items-start gap-4 mt-2' },
+          e('div', { className: 'w-12 h-12 rounded-full bg-white border border-soil-600/10 shadow-sm flex items-center justify-center text-xl font-caveat font-bold text-moss-600 shrink-0' }, product.farmer.name.charAt(0)),
           e('div', null,
-            e('div', { className: 'text-[10px] font-bold uppercase tracking-widest text-gray-500 mb-0.5' }, 'Grown by'),
-            e('div', { className: 'text-sm font-bold text-green-400' }, product.farmer.name),
-            e('div', { className: 'text-xs text-gray-400' }, product.farmer.location),
-            e('p', { className: 'text-xs text-gray-400 mt-1.5 leading-relaxed' }, product.farmer.note)
+            e('div', { className: 'text-[10px] font-sans font-bold uppercase tracking-widest text-soil-500 mb-0.5' }, 'Grown by'),
+            e('div', { className: 'text-[15px] font-bold text-bark-800 font-sans' }, product.farmer.name),
+            e('div', { className: 'text-[13px] text-soil-600 font-sans mt-0.5' }, product.farmer.location),
+            e('p', { className: 'text-[14px] text-soil-700 font-serif mt-2 leading-relaxed italic' }, product.farmer.note)
           )
         ),
 
         /* Qty + total */
-        e('div', { className: 'flex items-center gap-4' },
-          e('div', { className: 'flex items-center rounded-xl overflow-hidden border border-white/15 bg-white/5' },
-            e('button', { onClick: function() { setQty(Math.max(1, qty - 1)); }, className: 'w-10 h-10 flex items-center justify-center text-gray-300 hover:bg-green-400/15 hover:text-green-400 transition-colors font-bold text-xl' }, '-'),
-            e('span', { className: 'w-10 text-center text-sm font-black text-white border-x border-white/10 leading-10' }, qty),
-            e('button', { onClick: function() { setQty(Math.min(99, qty + 1)); }, className: 'w-10 h-10 flex items-center justify-center text-gray-300 hover:bg-green-400/15 hover:text-green-400 transition-colors font-bold text-xl' }, '+')
+        e('div', { className: 'flex items-center gap-5 mt-2' },
+          e('div', { className: 'flex items-center rounded-xl overflow-hidden border border-soil-600/20 bg-white shadow-sm' },
+            e('button', { onClick: function() { setQty(Math.max(1, qty - 1)); }, className: 'w-11 h-11 flex items-center justify-center text-soil-600 hover:bg-moss-50 hover:text-moss-700 transition-colors font-bold text-xl' }, '−'),
+            e('span', { className: 'w-10 text-center text-[15px] font-black text-bark-800 border-x border-soil-600/20 leading-[44px] bg-parchment-50 font-sans' }, qty),
+            e('button', { onClick: function() { setQty(Math.min(99, qty + 1)); }, className: 'w-11 h-11 flex items-center justify-center text-soil-600 hover:bg-moss-50 hover:text-moss-700 transition-colors font-bold text-xl' }, '+')
           ),
-          e('span', { className: 'text-2xl font-black text-green-400' }, 'R' + lineTotal)
+          e('span', { className: 'text-[22px] font-black text-moss-700 font-sans' }, 'R' + lineTotal)
         ),
 
         /* Action buttons */
-        e('div', { className: 'flex gap-3' },
+        e('div', { className: 'flex gap-3 mt-1' },
           e('button', {
             onClick: handleAddToCart,
-            className: 'flex-1 py-3.5 rounded-xl font-bold transition-all text-sm ' + (added ? 'bg-green-700 text-white' : 'bg-green-800 hover:bg-green-700 text-white')
+            className: 'flex-1 py-4 rounded-full font-sans font-bold uppercase tracking-widest text-[13px] transition-all shadow-md hover:shadow-lg ' + 
+              (added ? 'bg-moss-700 text-parchment-50 transform -translate-y-0.5' : 'bg-gradient-to-br from-moss-700 to-moss-600 text-parchment-50 hover:-translate-y-0.5')
           }, added ? ('Added ' + (qty > 1 ? qty + 'x' : '') + '!') : 'Add to Cart'),
           e('a', {
             href: 'checkout.html',
-            className: 'flex-1 py-3.5 rounded-xl font-bold text-sm text-center border-2 border-green-400 text-green-400 hover:bg-green-400 hover:text-black transition-all'
+            className: 'flex-1 py-4 rounded-full font-sans font-bold uppercase tracking-widest text-[13px] text-center border-2 border-moss-600 text-moss-700 hover:bg-moss-50 hover:-translate-y-0.5 transition-all'
           }, 'Buy Now')
         ),
 
         /* Delivery strip */
-        e('div', { className: 'bg-white/5 border border-white/10 rounded-xl p-4 flex flex-col gap-2.5' },
+        e('div', { className: 'bg-white border border-soil-600/10 rounded-[16px] p-5 flex flex-col gap-3 shadow-sm mt-1' },
           [
             ['C', 'Collect free from distribution centre'],
             ['D', 'Delivery from R80 — 2 to 4 business days'],
             ['Q', 'Community-grown and quality checked'],
           ].map(function(row, i) {
-            return e('div', { key: i, className: 'flex items-center gap-3 text-xs text-gray-400' },
-              e('div', { className: 'w-5 h-5 rounded bg-green-800/50 border border-green-400/20 text-green-400 text-[10px] font-black flex items-center justify-center shrink-0' }, row[0]),
+            return e('div', { key: i, className: 'flex items-center gap-3 text-[13px] font-sans text-soil-600 font-medium' },
+              e('div', { className: 'w-6 h-6 rounded-md bg-parchment-100 border border-soil-600/10 text-moss-700 text-[11px] font-black flex items-center justify-center shrink-0' }, row[0]),
               row[1]
             );
           })
@@ -181,73 +276,73 @@ function DetailApp() {
     ),
 
     /* TABS */
-    e('div', { className: 'mb-12' },
-      e('div', { className: 'flex border-b border-white/10 mb-6' },
+    e('div', { className: 'mb-16' },
+      e('div', { className: 'flex border-b border-soil-600/10 mb-8 overflow-x-auto hide-scrollbar' },
         ['description', 'nutrition', 'reviews'].map(function(t) {
-          var labels = { description: 'Description', nutrition: 'Nutrition / Details', reviews: 'Reviews' };
+          var labels = { description: 'Description', nutrition: 'Nutrition & Details', reviews: 'Reviews' };
           return e('button', {
             key: t,
             onClick: function() { setTab(t); },
-            className: 'px-5 py-3 text-sm font-bold border-b-2 transition-colors -mb-px ' +
-              (tab === t ? 'border-green-400 text-green-400' : 'border-transparent text-gray-500 hover:text-gray-300')
+            className: 'px-6 py-4 text-[13px] font-sans font-bold uppercase tracking-widest border-b-2 transition-colors -mb-px whitespace-nowrap ' +
+              (tab === t ? 'border-moss-600 text-moss-700' : 'border-transparent text-soil-500 hover:text-bark-800 hover:border-soil-600/20')
           }, labels[t]);
         })
       ),
 
       /* Description */
-      tab === 'description' && e('div', { className: 'text-sm text-gray-300 leading-relaxed max-w-3xl' }, product.description),
+      tab === 'description' && e('div', { className: 'text-[15px] font-serif text-soil-700 leading-relaxed max-w-3xl' }, product.description),
 
       /* Nutrition */
-      tab === 'nutrition' && e('div', { className: 'max-w-lg border border-white/10 rounded-xl overflow-hidden' },
+      tab === 'nutrition' && product.nutrition && e('div', { className: 'max-w-xl bg-white border border-soil-600/15 rounded-[16px] overflow-hidden shadow-sm' },
         product.nutrition.map(function(row, i) {
           return e('div', {
             key: i,
-            className: 'flex justify-between px-4 py-3 text-sm border-b border-white/5 ' + (i % 2 === 0 ? '' : 'bg-white/3')
+            className: 'flex justify-between px-5 py-3.5 text-[14px] font-sans border-b border-soil-600/5 ' + (i % 2 === 0 ? '' : 'bg-parchment-50')
           },
-            e('span', { className: 'text-gray-400' }, row.label),
-            e('span', { className: 'text-white font-semibold' }, row.value)
+            e('span', { className: 'text-soil-600 font-medium' }, row.label),
+            e('span', { className: 'text-bark-800 font-bold' }, row.value)
           );
         })
       ),
 
       /* Reviews */
-      tab === 'reviews' && e('div', { className: 'flex flex-col gap-4 max-w-2xl' },
+      tab === 'reviews' && product.reviews && e('div', { className: 'flex flex-col gap-4 max-w-2xl' },
         product.reviews.map(function(review, i) {
-          return e('div', { key: i, className: 'bg-white/5 border border-white/10 rounded-xl p-5' },
+          return e('div', { key: i, className: 'bg-white border border-soil-600/10 rounded-[20px] p-6 shadow-sm' },
             e('div', { className: 'flex items-center gap-3 mb-3 flex-wrap' },
-              e('span', { className: 'text-sm font-bold text-white' }, review.author),
+              e('span', { className: 'text-[15px] font-bold text-bark-800 font-sans' }, review.author),
               e(StarRating, { rating: review.rating }),
-              e('span', { className: 'text-xs text-gray-500 ml-auto' }, review.date)
+              e('span', { className: 'text-[12px] text-soil-500 ml-auto font-sans font-medium uppercase tracking-wider' }, review.date)
             ),
-            e('p', { className: 'text-sm text-gray-300 leading-relaxed' }, review.body)
+            e('p', { className: 'text-[15px] font-serif text-soil-700 leading-relaxed' }, review.body)
           );
         })
       )
     ),
 
     /* RELATED */
-    related.length > 0 && e('div', null,
-      e('div', { className: 'text-center mb-6' },
-        e('span', { className: 'inline-block bg-soil-700/80 border border-white/10 text-white text-xs font-bold uppercase tracking-widest px-5 py-2 rounded-lg' }, 'You Might Also Like')
+    related.length > 0 && e('div', { className: 'pt-8 border-t border-soil-600/10' },
+      e('div', { className: 'text-center mb-8' },
+        e('span', { className: 'tag-pill' }, 'You Might Also Like')
       ),
-      e('div', { className: 'grid grid-cols-2 sm:grid-cols-4 gap-4' },
+      e('div', { className: 'grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6' },
         related.map(function(p) {
-          return e('div', { key: p.id, className: 'bg-white/5 border border-white/10 rounded-xl overflow-hidden hover:-translate-y-1 hover:border-green-400/30 transition-all' },
+          return e('div', { key: p.id, className: 'bg-parchment-50 border border-soil-600/15 rounded-[20px] overflow-hidden flex flex-col transition-all duration-300 hover:-translate-y-1 hover:border-moss-400/40 hover:shadow-[0_12px_32px_rgba(58,35,12,0.06)]' },
             e('a', { href: 'product_detail.html?id=' + p.id },
-              e('div', { className: 'aspect-[4/3] overflow-hidden bg-black/20' },
-                e('img', { src: p.image, alt: p.name, className: 'w-full h-full object-cover', loading: 'lazy' })
+              e('div', { className: 'aspect-[4/3] overflow-hidden bg-parchment-200 border-b border-soil-600/10 group' },
+                e('img', { src: p.image, alt: p.name, className: 'w-full h-full object-cover transition-transform duration-500 group-hover:scale-105', loading: 'lazy' })
               )
             ),
-            e('div', { className: 'p-3' },
-              e('div', { className: 'flex justify-between items-start gap-1 mb-2' },
-                e('span', { className: 'text-xs font-semibold text-white leading-tight' }, p.name),
-                e('span', { className: 'text-xs font-black text-green-400 shrink-0' }, 'R' + p.price)
+            e('div', { className: 'p-4 flex flex-col gap-3 flex-1' },
+              e('div', { className: 'flex justify-between items-start gap-2' },
+                e('span', { className: 'text-[15px] font-bold text-bark-800 font-sans leading-tight' }, p.name),
+                e('span', { className: 'text-[16px] font-black text-moss-700 shrink-0 font-sans' }, 'R' + p.price)
               ),
-              e('div', { className: 'flex gap-1.5' },
-                e('a', { href: 'product_detail.html?id=' + p.id, className: 'flex-1 text-center py-1.5 text-[11px] font-bold rounded-lg border border-white/15 text-gray-300 hover:bg-white/10 transition-colors' }, 'View'),
+              e('div', { className: 'flex gap-2 mt-auto pt-1' },
+                e('a', { href: 'product_detail.html?id=' + p.id, className: 'flex-1 text-center py-2 text-[11px] font-bold uppercase tracking-widest rounded-full border-2 border-soil-600/20 text-bark-800 hover:border-moss-600 hover:bg-moss-50 hover:text-moss-700 transition-all font-sans' }, 'View'),
                 e('button', {
                   onClick: function() { store.addToCart(p, 1); },
-                  className: 'flex-1 py-1.5 text-[11px] font-bold rounded-lg bg-green-800 hover:bg-green-700 text-white transition-colors'
+                  className: 'flex-1 py-2 text-[11px] font-bold uppercase tracking-widest rounded-full bg-gradient-to-br from-moss-700 to-moss-600 text-parchment-50 hover:-translate-y-0.5 transition-all font-sans shadow-sm hover:shadow-md'
                 }, 'Add')
               )
             )
@@ -264,7 +359,6 @@ var toggleRoot = document.getElementById('toggle-root');
 
 ReactDOM.createRoot(document.getElementById('app-root')).render(
   e(StoreProvider, null,
-    e(RootsComponents.ScrollGradient),
     ReactDOM.createPortal(e(RootsComponents.Navbar),        navRoot),
     ReactDOM.createPortal(e(RootsComponents.Footer),        footRoot),
     ReactDOM.createPortal(e(RootsComponents.LowDataToggle), toggleRoot),
