@@ -640,7 +640,7 @@ const PRODUCTS = {
         price:     45,
         priceUnit: 'per kg',
         stock:     'In Stock',
-        image:     '../media/spinach-products.jpg',
+        image:     'media/spinach-products.jpg',
         badge:     'Vegetables',
         chips: [
             { label: 'Weight',  value: '1 kg' },
@@ -681,7 +681,7 @@ const PRODUCTS = {
         price:     30,
         priceUnit: 'per kg',
         stock:     'In Stock',
-        image:     '../media/tomatoes-products.jpg',
+        image:     'media/tomatoes-products.jpg',
         badge:     'Vegetables',
         chips: [
             { label: 'Weight',  value: '1 kg' },
@@ -722,7 +722,7 @@ const PRODUCTS = {
         price:     60,
         priceUnit: 'per kg',
         stock:     'In Stock',
-        image:     '../media/lemons-products.jpeg',
+        image:     'media/lemons-products.jpeg',
         badge:     'Fruits',
         chips: [
             { label: 'Weight',  value: '1 kg (±6–8 lemons)' },
@@ -763,7 +763,7 @@ const PRODUCTS = {
         price:     70,
         priceUnit: 'per unit',
         stock:     'In Stock',
-        image:     '../media/butternut-products.jpeg',
+        image:     'media/butternut-products.jpeg',
         badge:     'Vegetables',
         chips: [
             { label: 'Weight',  value: '±900g – 1.3kg' },
@@ -804,7 +804,7 @@ const PRODUCTS = {
         price:     70,
         priceUnit: 'per kg',
         stock:     'In Stock',
-        image:     '../media/sorghum-products.jpg',
+        image:     'media/sorghum-products.jpg',
         badge:     'Grains',
         chips: [
             { label: 'Weight',   value: '1 kg' },
@@ -845,7 +845,7 @@ const PRODUCTS = {
         price:     35,
         priceUnit: 'per pack',
         stock:     'In Stock',
-        image:     '../media/greens-seedpack-products.jpeg',
+        image:     'media/greens-seedpack-products.jpeg',
         badge:     'Seeds',
         chips: [
             { label: 'Contents',  value: 'Spinach, Swiss Chard, Kale' },
@@ -886,7 +886,7 @@ const PRODUCTS = {
         price:     50,
         priceUnit: 'per pair',
         stock:     'In Stock',
-        image:     '../media/equipment-products-1.jpg',
+        image:     'media/equipment-products-1.jpg',
         badge:     'Equipment',
         chips: [
             { label: 'Material', value: 'Nitrile-coated cotton' },
@@ -926,7 +926,7 @@ const PRODUCTS = {
         price:     100,
         priceUnit: 'each',
         stock:     'In Stock',
-        image:     '../media/hoe-products.jpeg',
+        image:     'media/hoe-products.jpeg',
         badge:     'Equipment',
         chips: [
             { label: 'Length',   value: '140 cm (adjustable)' },
@@ -966,7 +966,7 @@ const PRODUCTS = {
         price:     80,
         priceUnit: 'per kg',
         stock:     'In Stock',
-        image:     '../media/sorghum-products.jpg',
+        image:     'media/sorghum-products.jpg',
         badge:     'Grains',
         chips: [
             { label: 'Weight',  value: '1 kg' },
@@ -1006,7 +1006,7 @@ const PRODUCTS = {
         price:     100,
         priceUnit: 'per head (±1kg)',
         stock:     'In Stock',
-        image:     '../media/cabbage-products.jpeg',
+        image:     'media/cabbage-products.jpeg',
         badge:     'Vegetables',
         chips: [
             { label: 'Weight',  value: '±800g – 1.2kg per head' },

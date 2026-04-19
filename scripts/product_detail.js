@@ -17,7 +17,7 @@ var PRODUCTS = {
         price:     45,
         priceUnit: 'per kg',
         stock:     'In Stock',
-        image:     '../media/spinach-products.jpg',
+        image:     'media/spinach-products.jpg',
         badge:     'Vegetables',
         chips: [
             { label: 'Weight',  value: '1 kg' },
@@ -54,7 +54,7 @@ var PRODUCTS = {
         price:     30,
         priceUnit: 'per kg',
         stock:     'In Stock',
-        image:     '../media/tomatoes-products.jpg',
+        image:     'media/tomatoes-products.jpg',
         badge:     'Vegetables',
         chips: [
             { label: 'Weight',  value: '1 kg' },
@@ -91,7 +91,7 @@ var PRODUCTS = {
         price:     60,
         priceUnit: 'per kg',
         stock:     'In Stock',
-        image:     '../media/lemons-products.jpeg',
+        image:     'media/lemons-products.jpeg',
         badge:     'Fruits',
         chips: [
             { label: 'Weight',  value: '1 kg (±6–8 lemons)' },
@@ -128,7 +128,7 @@ var PRODUCTS = {
         price:     70,
         priceUnit: 'per unit',
         stock:     'In Stock',
-        image:     '../media/butternut-products.jpeg',
+        image:     'media/butternut-products.jpeg',
         badge:     'Vegetables',
         chips: [
             { label: 'Weight',  value: '±900g – 1.3kg' },
@@ -165,7 +165,7 @@ var PRODUCTS = {
         price:     55,
         priceUnit: 'per bag',
         stock:     'In Stock',
-        image:     '../media/maize-meal-products.jpeg',
+        image:     'media/maize-meal-products.jpeg',
         badge:     'Dry Goods',
         chips: [
             { label: 'Weight',  value: '2 kg' },
@@ -200,7 +200,7 @@ var PRODUCTS = {
         price:     65,
         priceUnit: 'per bag',
         stock:     'In Stock',
-        image:     '../media/sorghum-products.jpg',
+        image:     'media/sorghum-products.jpg',
         badge:     'Dry Goods',
         chips: [
             { label: 'Weight',  value: '1 kg' },
@@ -235,7 +235,7 @@ var PRODUCTS = {
         price:     85,
         priceUnit: 'per pack',
         stock:     'In Stock',
-        image:     '../media/greens-seedpack-products.jpeg',
+        image:     'media/greens-seedpack-products.jpeg',
         badge:     'Seeds',
         chips: [
             { label: 'Contents', value: '5 variety mix' },
@@ -268,7 +268,7 @@ var PRODUCTS = {
         price:     120,
         priceUnit: 'per unit',
         stock:     'In Stock',
-        image:     '../media/hoe-products.jpeg',
+        image:     'media/hoe-products.jpeg',
         badge:     'Equipment',
         chips: [
             { label: 'Material', value: 'Steel head, wood handle' },
@@ -301,7 +301,7 @@ var PRODUCTS = {
         price:     25,
         priceUnit: 'per head',
         stock:     'In Stock',
-        image:     '../media/cabbage-products.jpeg',
+        image:     'media/cabbage-products.jpeg',
         badge:     'Vegetables',
         chips: [
             { label: 'Weight',  value: '±1.2 – 1.8kg' },
