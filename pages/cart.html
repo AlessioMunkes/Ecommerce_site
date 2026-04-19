@@ -1,130 +1,112 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Shopping Cart — Roots</title>
-    <link rel="stylesheet" href="../styles/styles.css" />
+  <meta charset="UTF-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Shopping Cart — Roots</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>tailwind.config={theme:{extend:{colors:{green:{400:'#4ade80',700:'#15803d',800:'#015005'},soil:{700:'#382f26',800:'#1a3a2a',900:'#0f2417'}}}}}</script>
+  <style>
+    body{background:linear-gradient(to bottom,#0f2417,#1a3a2a,#0e3d20,#1a3a2a,#0f2417);background-size:100% 400%;min-height:100vh;color:#f9faf8;font-family:system-ui,sans-serif}
+    body.low-data{background:#0f2417!important}
+    ::-webkit-scrollbar{width:5px}::-webkit-scrollbar-track{background:#0f2417}::-webkit-scrollbar-thumb{background:#015005;border-radius:3px}
+  </style>
 </head>
 <body>
-    <header class="header">
-        <div class="header-brand">
-            <h3><a href="index.html">Roots</a></h3>
-        </div>
-        <input type="checkbox" id="nav-toggle" class="nav-toggle">
-        <label for="nav-toggle" class="hamburger">
-            <span></span>
-            <span></span>
-            <span></span>
-        </label>
-        <nav class="links">
-            <a href="index.html">Home</a>
-            <a href="produce_products.html">Products</a>
-            <a href="newsletter.html">Newsletter</a>
-            <a href="about_us.html">About Us</a>
-            <a href="contact_us.html">Contact Us</a>
-            <a href="wishlist.html">Wishlist</a>
-            <a href="cart.html">Shopping Cart</a>
-        </nav>
-    </header>
+<div id="navbar-root"></div>
+<div id="app-root" class="min-h-screen"></div>
+<div id="footer-root"></div>
+<div id="toggle-root"></div>
+<script src="https://unpkg.com/react@18/umd/react.production.min.js" crossorigin></script>
+<script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js" crossorigin></script>
+<script src="../scripts/shared-components.js"></script>
+<script>
+var e             = React.createElement;
+var StoreProvider = RootsStore.StoreProvider;
+var useStore      = RootsStore.useStore;
 
-    <div class="page-container">
+function CartApp() {
+  var store = useStore();
+  var cart       = store.cart;
+  var cartTotal  = store.cartTotal;
+  var removeFromCart = store.removeFromCart;
+  var setQty         = store.setQty;
+  var clearCart      = store.clearCart;
 
-        <div class="page-title-card">
-            <h1>Shopping Cart</h1>
-        </div>
+  if (cart.length === 0) {
+    return e('div', { className: 'max-w-2xl mx-auto px-4 py-24 text-center' },
+      e('div', { className: 'w-20 h-20 rounded-full bg-white/5 border border-white/10 flex items-center justify-center text-3xl font-black text-gray-600 mx-auto mb-6' }, '0'),
+      e('h2', { className: 'text-2xl font-black text-white mb-2' }, 'Your cart is empty'),
+      e('p', { className: 'text-gray-400 mb-8' }, 'Add some community-grown products to get started.'),
+      e('a', { href: 'produce_products.html', className: 'inline-block bg-green-800 hover:bg-green-700 text-white font-bold px-8 py-3 rounded-xl transition-colors' }, 'Browse Products')
+    );
+  }
 
-        <!-- Cart items render here -->
-        <div id="cartItems" class="item-list"></div>
+  return e('div', { className: 'max-w-2xl mx-auto px-4 sm:px-6 py-10' },
+    e('h1', { className: 'text-3xl font-black text-white mb-8' }, 'Shopping Cart'),
+    /* Items */
+    e('div', { className: 'flex flex-col gap-3 mb-6' },
+      cart.map(function(item) {
+        var lineTotal = (item.price * item.qty).toFixed(2);
+        return e('div', { key: item.id, className: 'bg-white/5 border border-white/10 rounded-2xl p-4 flex items-center gap-4 hover:border-white/20 transition-colors' },
+          e('div', { className: 'flex-1 min-w-0' },
+            e('p', { className: 'text-sm font-semibold text-white truncate' }, item.name),
+            e('p', { className: 'text-xs text-gray-400 mt-0.5' }, 'R' + parseFloat(item.price).toFixed(2) + ' each')
+          ),
+          e('div', { className: 'flex items-center rounded-xl overflow-hidden border border-white/15 bg-white/5 shrink-0' },
+            e('button', {
+              onClick: function() { item.qty <= 1 ? removeFromCart(item.id) : setQty(item.id, item.qty - 1); },
+              className: 'w-8 h-8 flex items-center justify-center text-gray-300 hover:bg-green-400/15 hover:text-green-400 transition-colors font-bold text-lg'
+            }, '-'),
+            e('span', { className: 'w-8 text-center text-sm font-bold text-white border-x border-white/10 leading-8' }, item.qty),
+            e('button', {
+              onClick: function() { setQty(item.id, item.qty + 1); },
+              className: 'w-8 h-8 flex items-center justify-center text-gray-300 hover:bg-green-400/15 hover:text-green-400 transition-colors font-bold text-lg'
+            }, '+')
+          ),
+          e('span', { className: 'text-sm font-black text-green-400 w-16 text-right shrink-0' }, 'R' + lineTotal),
+          e('button', {
+            onClick: function() { removeFromCart(item.id); },
+            className: 'w-7 h-7 flex items-center justify-center rounded-lg text-gray-600 hover:text-red-400 hover:bg-red-400/10 transition-colors text-sm shrink-0',
+            title: 'Remove'
+          }, 'x')
+        );
+      })
+    ),
+    /* Summary */
+    e('div', { className: 'bg-white/5 border border-white/10 rounded-2xl p-5' },
+      e('div', { className: 'flex justify-between text-sm text-gray-400 mb-2' },
+        e('span', null, 'Subtotal'), e('span', null, 'R' + cartTotal.toFixed(2))
+      ),
+      e('div', { className: 'flex justify-between font-black text-white text-lg border-t border-white/10 pt-3 mt-3' },
+        e('span', null, 'Total'), e('span', { className: 'text-green-400' }, 'R' + cartTotal.toFixed(2))
+      ),
+      e('div', { className: 'flex gap-3 mt-5' },
+        e('button', {
+          onClick: clearCart,
+          className: 'flex-1 py-3 rounded-xl border border-red-400/30 text-red-400 text-sm font-bold hover:bg-red-400/10 transition-colors'
+        }, 'Clear Cart'),
+        e('a', {
+          href: 'checkout.html',
+          className: 'flex-1 py-3 rounded-xl bg-green-800 hover:bg-green-700 text-white text-sm font-bold text-center transition-colors'
+        }, 'Checkout')
+      )
+    )
+  );
+}
 
-        <!-- Summary bar — hidden when cart is empty -->
-        <div class="cart-summary" id="cartSummary">
-            <div class="cart-summary-row">
-                <span class="summary-label">Subtotal</span>
-                <span class="summary-value" id="cartSubtotal">R0.00</span>
-            </div>
-            <div class="cart-summary-row summary-total-row">
-                <span class="summary-label">Total</span>
-                <span class="summary-value green" id="cartTotal">R0.00</span>
-            </div>
-            <div class="cart-actions">
-                <button class="btn btn-cart-danger" onclick="clearCart()">Clear Cart</button>
-                <a href="checkout.html" class="btn btn-primary">Checkout →</a>
-            </div>
-        </div>
+var navRoot    = document.getElementById('navbar-root');
+var footRoot   = document.getElementById('footer-root');
+var toggleRoot = document.getElementById('toggle-root');
 
-    </div>
-
-    <script src="../scripts/scripts.js"></script>
-    <script>
-    document.addEventListener('DOMContentLoaded', () => {
-        renderCart();
-    });
-
-    function renderCart() {
-        const cart      = getCart();
-        const container = document.getElementById('cartItems');
-        const summary   = document.getElementById('cartSummary');
-        const totalEl   = document.getElementById('cartTotal');
-        const subEl     = document.getElementById('cartSubtotal');
-
-        if (cart.length === 0) {
-            summary.style.display = 'none';
-            container.innerHTML = `
-                <div class="empty-state">
-                    <p>Your cart is empty.</p>
-                    <a href="produce_products.html" class="btn btn-primary">Browse Products</a>
-                </div>`;
-            return;
-        }
-
-        let total = 0;
-        container.innerHTML = cart.map(item => {
-            const lineTotal = item.price * item.qty;
-            total += lineTotal;
-            return `
-            <div class="item-card">
-                <div class="item-info">
-                    <span class="item-name">${item.name}</span>
-                    <span class="item-unit-price">R${parseFloat(item.price).toFixed(2)} each</span>
-                </div>
-                <div class="item-controls">
-                    <button class="qty-btn" onclick="changeQty('${item.id}', -1)">−</button>
-                    <span class="item-qty">${item.qty}</span>
-                    <button class="qty-btn" onclick="changeQty('${item.id}', 1)">+</button>
-                </div>
-                <span class="item-line-total">R${lineTotal.toFixed(2)}</span>
-                <button class="remove-btn" onclick="removeFromCart('${item.id}')" title="Remove">✕</button>
-            </div>`;
-        }).join('');
-
-        subEl.textContent   = `R${total.toFixed(2)}`;
-        totalEl.textContent = `R${total.toFixed(2)}`;
-        summary.style.display = 'block';
-    }
-
-    function changeQty(id, delta) {
-        const cart = getCart();
-        const item = cart.find(i => i.id === id);
-        if (!item) return;
-        item.qty += delta;
-        if (item.qty <= 0) {
-            saveCart(cart.filter(i => i.id !== id));
-        } else {
-            saveCart(cart);
-        }
-        renderCart();
-    }
-
-    function removeFromCart(id) {
-        saveCart(getCart().filter(item => item.id !== id));
-        renderCart();
-    }
-
-    function clearCart() {
-        saveCart([]);
-        renderCart();
-    }
-    </script>
+ReactDOM.createRoot(document.getElementById('app-root')).render(
+  e(StoreProvider, null,
+    e(RootsComponents.ScrollGradient),
+    ReactDOM.createPortal(e(RootsComponents.Navbar),        navRoot),
+    ReactDOM.createPortal(e(RootsComponents.Footer),        footRoot),
+    ReactDOM.createPortal(e(RootsComponents.LowDataToggle), toggleRoot),
+    e(CartApp)
+  )
+);
+</script>
 </body>
 </html>

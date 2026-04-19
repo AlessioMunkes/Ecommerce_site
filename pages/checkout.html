@@ -1,369 +1,373 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Checkout — Roots</title>
-    <link rel="stylesheet" href="../styles/styles.css" />
-
+  <meta charset="UTF-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Checkout — Roots</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>tailwind.config={theme:{extend:{colors:{green:{400:'#4ade80',700:'#15803d',800:'#015005'},soil:{700:'#382f26',800:'#1a3a2a',900:'#0f2417'}}}}}</script>
+  <style>
+    body{background:linear-gradient(to bottom,#0f2417,#1a3a2a,#0e3d20,#1a3a2a,#0f2417);background-size:100% 400%;min-height:100vh;color:#f9faf8;font-family:system-ui,sans-serif}
+    body.low-data{background:#0f2417!important}
+    ::-webkit-scrollbar{width:5px}::-webkit-scrollbar-track{background:#0f2417}::-webkit-scrollbar-thumb{background:#015005;border-radius:3px}
+    input,select,textarea{background:rgba(255,255,255,.06);color:#f9faf8}
+    input::placeholder,textarea::placeholder{color:#4b5563}
+    select option{background:#1a3a2a;color:#f9faf8}
+    input[type=radio]{accent-color:#4ade80}
+    input[type=checkbox]{accent-color:#4ade80}
+    .field-error{color:#f87171;font-size:11px;margin-top:2px;display:block}
+    .input-err{border-color:#ef4444!important}
+    .pay-panel{display:none}.pay-panel.active{display:block}
+    .checkout-step{display:none}.checkout-step.active{display:block}
+    .qr-grid{display:grid;grid-template-columns:repeat(10,18px);grid-template-rows:repeat(10,18px);gap:2px;padding:10px;background:#fff;border-radius:8px}
+    .qr-cell{border-radius:2px;background:#fff}.qr-cell.filled{background:#111}
+    .popup-overlay{position:fixed;inset:0;background:rgba(0,0,0,.7);display:flex;align-items:center;justify-content:center;z-index:999;opacity:0;pointer-events:none;transition:opacity .3s;backdrop-filter:blur(6px)}
+    .popup-overlay.visible{opacity:1;pointer-events:all}
+    .popup-box{transform:scale(.92);transition:transform .3s}
+    .popup-overlay.visible .popup-box{transform:scale(1)}
+  </style>
 </head>
 <body>
+<div id="navbar-root"></div>
 
-    <header class="header">
-        <div class="header-brand">
-            <h3><a href="index.html">Roots</a></h3>
-        </div>
-        <input type="checkbox" id="nav-toggle" class="nav-toggle">
-        <label for="nav-toggle" class="hamburger">
-            <span></span>
-            <span></span>
-            <span></span>
+<!-- ===================== EMPTY CART ===================== -->
+<div id="emptyState" class="hidden max-w-lg mx-auto px-4 py-24 text-center">
+  <div class="w-20 h-20 rounded-full bg-white/5 border border-white/10 flex items-center justify-center text-3xl font-black text-gray-600 mx-auto mb-6">0</div>
+  <h2 class="text-2xl font-black text-white mb-2">Your cart is empty</h2>
+  <p class="text-gray-400 mb-8">Add some products before checking out.</p>
+  <a href="produce_products.html" class="inline-block bg-green-800 hover:bg-green-700 text-white font-bold px-8 py-3 rounded-xl transition-colors">Browse Products</a>
+</div>
+
+<!-- ===================== CHECKOUT PAGE ===================== -->
+<div id="checkoutPage" class="max-w-2xl mx-auto px-4 sm:px-6 py-10 pb-24">
+
+  <!-- PROGRESS -->
+  <div class="flex items-center justify-center gap-0 mb-10" id="progressBar">
+    <div class="flex flex-col items-center gap-1" id="step-ind-1">
+      <div class="w-9 h-9 rounded-full border-2 flex items-center justify-center text-sm font-black transition-all border-green-400 bg-green-800/60 text-green-400">1</div>
+      <span class="text-[10px] font-bold uppercase tracking-wide text-green-400">Order</span>
+    </div>
+    <div class="h-px w-12 sm:w-16 bg-white/10 mb-4" id="line-1"></div>
+    <div class="flex flex-col items-center gap-1" id="step-ind-2">
+      <div class="w-9 h-9 rounded-full border-2 flex items-center justify-center text-sm font-black transition-all border-white/20 bg-white/5 text-gray-500">2</div>
+      <span class="text-[10px] font-bold uppercase tracking-wide text-gray-500">Delivery</span>
+    </div>
+    <div class="h-px w-12 sm:w-16 bg-white/10 mb-4" id="line-2"></div>
+    <div class="flex flex-col items-center gap-1" id="step-ind-3">
+      <div class="w-9 h-9 rounded-full border-2 flex items-center justify-center text-sm font-black transition-all border-white/20 bg-white/5 text-gray-500">3</div>
+      <span class="text-[10px] font-bold uppercase tracking-wide text-gray-500">Payment</span>
+    </div>
+    <div class="h-px w-12 sm:w-16 bg-white/10 mb-4" id="line-3"></div>
+    <div class="flex flex-col items-center gap-1" id="step-ind-4">
+      <div class="w-9 h-9 rounded-full border-2 flex items-center justify-center text-sm font-black transition-all border-white/20 bg-white/5 text-gray-500">4</div>
+      <span class="text-[10px] font-bold uppercase tracking-wide text-gray-500">Confirm</span>
+    </div>
+  </div>
+
+  <!-- STEP 1: ORDER SUMMARY -->
+  <section class="checkout-step active" id="step1">
+    <h2 class="text-2xl font-black text-white mb-6 pb-4 border-b border-white/10">Order Summary</h2>
+    <div id="orderItems" class="flex flex-col gap-3 mb-5"></div>
+    <div id="orderTotals" class="bg-white/5 border border-white/10 rounded-2xl p-5 flex flex-col gap-2 mb-6"></div>
+    <div class="flex justify-end">
+      <button onclick="goToStep(2)" class="bg-green-800 hover:bg-green-700 text-white font-bold px-8 py-3 rounded-xl transition-colors">Continue to Delivery</button>
+    </div>
+  </section>
+
+  <!-- STEP 2: DELIVERY -->
+  <section class="checkout-step" id="step2">
+    <h2 class="text-2xl font-black text-white mb-6 pb-4 border-b border-white/10">Delivery Options</h2>
+
+    <!-- Contact -->
+    <div class="bg-white/5 border border-white/10 rounded-2xl p-5 mb-4">
+      <h3 class="text-sm font-black text-white mb-4">Contact Details</h3>
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-3">
+        <div class="flex flex-col gap-1"><label class="text-[10px] font-bold uppercase tracking-widest text-gray-400">First Name *</label><input type="text" id="firstName" placeholder="e.g. Sipho" class="border border-white/15 rounded-xl px-3 py-2.5 text-sm outline-none focus:border-green-400 transition-colors"></div>
+        <div class="flex flex-col gap-1"><label class="text-[10px] font-bold uppercase tracking-widest text-gray-400">Last Name *</label><input type="text" id="lastName" placeholder="e.g. Dlamini" class="border border-white/15 rounded-xl px-3 py-2.5 text-sm outline-none focus:border-green-400 transition-colors"></div>
+      </div>
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+        <div class="flex flex-col gap-1"><label class="text-[10px] font-bold uppercase tracking-widest text-gray-400">Email *</label><input type="email" id="email" placeholder="you@example.com" class="border border-white/15 rounded-xl px-3 py-2.5 text-sm outline-none focus:border-green-400 transition-colors"></div>
+        <div class="flex flex-col gap-1"><label class="text-[10px] font-bold uppercase tracking-widest text-gray-400">Phone *</label><input type="tel" id="phone" placeholder="+27 82 000 0000" class="border border-white/15 rounded-xl px-3 py-2.5 text-sm outline-none focus:border-green-400 transition-colors"></div>
+      </div>
+    </div>
+
+    <!-- Fulfilment -->
+    <div class="bg-white/5 border border-white/10 rounded-2xl p-5 mb-4">
+      <h3 class="text-sm font-black text-white mb-4">How would you like to receive your order?</h3>
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+        <label id="label-collect" class="flex items-center gap-3 p-4 rounded-xl border-2 border-green-400 bg-green-400/5 cursor-pointer transition-all">
+          <input type="radio" name="fulfilment" value="collect" id="opt-collect" checked onchange="switchFulfilment()">
+          <div class="flex-1 min-w-0">
+            <div class="text-sm font-bold text-white">Collect</div>
+            <div class="text-xs text-gray-400">Free — pick up from distribution centre</div>
+          </div>
+          <span class="text-xs font-black text-green-400 bg-green-400/10 px-2.5 py-1 rounded-full border border-green-400/30 shrink-0">FREE</span>
         </label>
-        <nav class="links">
-            <a href="index.html">Home</a>
-            <a href="produce_products.html">Products</a>
-            <a href="newsletter.html">Newsletter</a>
-            <a href="about_us.html">About Us</a>
-            <a href="contact_us.html">Contact Us</a>
-            <a href="wishlist.html">Wishlist</a>
-            <a href="cart.html">Shopping Cart</a>
-        </nav>
-    </header>
-
-    <!-- EMPTY CART STATE -->
-    <div id="emptyState" class="empty-checkout" style="display:none;">
-        <div class="empty-icon">🛒</div>
-        <p>Your cart is empty.</p>
-        <a href="produce_products.html" class="btn btn-primary">Browse Products</a>
+        <label id="label-deliver" class="flex items-center gap-3 p-4 rounded-xl border-2 border-white/15 bg-white/5 cursor-pointer transition-all">
+          <input type="radio" name="fulfilment" value="deliver" id="opt-deliver" onchange="switchFulfilment()">
+          <div class="flex-1 min-w-0">
+            <div class="text-sm font-bold text-white">Deliver</div>
+            <div class="text-xs text-gray-400">R80 flat rate — 2 to 4 business days</div>
+          </div>
+          <span class="text-xs font-black text-yellow-400 bg-yellow-400/10 px-2.5 py-1 rounded-full border border-yellow-400/30 shrink-0">+R80</span>
+        </label>
+      </div>
     </div>
 
-    <!-- CHECKOUT WRAPPER -->
-    <div class="checkout-page" id="checkoutPage">
-
-        <!-- PROGRESS BAR -->
-        <div class="progress-bar">
-            <div class="progress-step active" id="step-ind-1">
-                <div class="step-circle">1</div>
-                <span>Order</span>
-            </div>
-            <div class="progress-line"></div>
-            <div class="progress-step" id="step-ind-2">
-                <div class="step-circle">2</div>
-                <span>Delivery</span>
-            </div>
-            <div class="progress-line"></div>
-            <div class="progress-step" id="step-ind-3">
-                <div class="step-circle">3</div>
-                <span>Payment</span>
-            </div>
-            <div class="progress-line"></div>
-            <div class="progress-step" id="step-ind-4">
-                <div class="step-circle">4</div>
-                <span>Confirm</span>
-            </div>
-        </div>
-
-        <!-- ═══════════════════════════════
-             STEP 1 — ORDER SUMMARY
-        ═══════════════════════════════ -->
-        <section class="checkout-step active" id="step1">
-            <h2 class="step-title">Order Summary</h2>
-
-            <div class="order-items" id="orderItems"></div>
-
-            <div class="order-totals" id="orderTotals"></div>
-
-            <div class="step-actions">
-                <div></div>
-                <button class="btn btn-primary" onclick="goToStep(2)">Continue to Delivery &rarr;</button>
-            </div>
-        </section>
-
-        <!-- ═══════════════════════════════
-             STEP 2 — DELIVERY OPTIONS
-        ═══════════════════════════════ -->
-        <section class="checkout-step" id="step2">
-            <h2 class="step-title">Delivery Options</h2>
-
-            <!-- Contact details — always shown -->
-            <div class="form-card">
-                <h3 class="form-card-title">Contact Details</h3>
-                <div class="form-row">
-                    <div class="form-group">
-                        <label>First Name *</label>
-                        <input type="text" id="firstName" placeholder="e.g. Sipho">
-                    </div>
-                    <div class="form-group">
-                        <label>Last Name *</label>
-                        <input type="text" id="lastName" placeholder="e.g. Dlamini">
-                    </div>
-                </div>
-                <div class="form-row">
-                    <div class="form-group">
-                        <label>Email *</label>
-                        <input type="email" id="email" placeholder="you@example.com">
-                    </div>
-                    <div class="form-group">
-                        <label>Phone *</label>
-                        <input type="tel" id="phone" placeholder="+27 82 000 0000">
-                    </div>
-                </div>
-            </div>
-
-            <!-- Fulfilment toggle -->
-            <div class="form-card">
-                <h3 class="form-card-title">How would you like to receive your order?</h3>
-                <div class="fulfilment-options">
-                    <label class="fulfilment-card" id="label-collect">
-                        <input type="radio" name="fulfilment" value="collect" id="opt-collect" checked onchange="switchFulfilment()">
-                        <div class="fulfilment-text">
-                            <strong>Collect</strong>
-                            <span>Free — pick up from distribution centre</span>
-                        </div>
-                        <span class="fulfilment-price-tag free">FREE</span>
-                    </label>
-                    <label class="fulfilment-card" id="label-deliver">
-                        <input type="radio" name="fulfilment" value="deliver" id="opt-deliver" onchange="switchFulfilment()">
-                        <div class="fulfilment-text">
-                            <strong>Deliver</strong>
-                            <span>R80 flat rate — 2–4 business days</span>
-                        </div>
-                        <span class="fulfilment-price-tag paid">+R80</span>
-                    </label>
-                </div>
-            </div>
-
-            <!-- Collection address (shown when collect) -->
-            <div class="form-card info-card" id="collectInfo">
-                <div>
-                    <h3 class="form-card-title" style="margin-bottom:6px;">Collection Address</h3>
-                    <p><strong>Roots Distribution Centre</strong></p>
-                    <p>12 Harvest Road, Khayelitsha, Cape Town, 7784</p>
-                    <p>Mon–Fri &nbsp;|&nbsp; 07:00 – 17:00</p>
-                    <p>Sat &nbsp;|&nbsp; 08:00 – 13:00</p>
-                    <p class="info-note">Bring your order confirmation email and a valid ID.</p>
-                </div>
-            </div>
-
-            <!-- Delivery address form (shown when deliver) -->
-            <div class="form-card" id="deliveryForm" style="display:none;">
-                <h3 class="form-card-title">Delivery Address</h3>
-                <div class="form-group">
-                    <label>Street Address *</label>
-                    <input type="text" id="street" placeholder="e.g. 45 Main Road">
-                </div>
-                <div class="form-row">
-                    <div class="form-group">
-                        <label>Suburb *</label>
-                        <input type="text" id="suburb" placeholder="e.g. Mitchells Plain">
-                    </div>
-                    <div class="form-group">
-                        <label>City *</label>
-                        <input type="text" id="city" placeholder="e.g. Cape Town">
-                    </div>
-                </div>
-                <div class="form-row">
-                    <div class="form-group">
-                        <label>Province *</label>
-                        <select id="province">
-                            <option value="">Select province</option>
-                            <option>Western Cape</option>
-                            <option>Eastern Cape</option>
-                            <option>KwaZulu-Natal</option>
-                            <option>Gauteng</option>
-                            <option>Limpopo</option>
-                            <option>Mpumalanga</option>
-                            <option>North West</option>
-                            <option>Northern Cape</option>
-                            <option>Free State</option>
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <label>Postal Code *</label>
-                        <input type="text" id="postalCode" placeholder="e.g. 7785" maxlength="4">
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label>Delivery Instructions <span class="optional">(optional)</span></label>
-                    <textarea id="deliveryNote" rows="2" placeholder="Gate code, landmark, etc."></textarea>
-                </div>
-            </div>
-
-            <!-- Live order total preview -->
-            <div class="mini-total" id="deliveryMiniTotal"></div>
-
-            <div class="step-actions">
-                <button class="btn btn-back" onclick="goToStep(1)">&larr; Back</button>
-                <button class="btn btn-primary" onclick="validateDelivery()">Continue to Payment &rarr;</button>
-            </div>
-        </section>
-
-        <!-- ═══════════════════════════════
-             STEP 3 — PAYMENT
-        ═══════════════════════════════ -->
-        <section class="checkout-step" id="step3">
-            <h2 class="step-title">Payment</h2>
-
-            <div class="form-card">
-                <h3 class="form-card-title">Payment Method</h3>
-                <div class="payment-tabs">
-                    <button class="pay-tab active" onclick="switchPayTab('card', this)"> Card</button>
-                    <button class="pay-tab" onclick="switchPayTab('eft', this)"> EFT</button>
-                    <button class="pay-tab" onclick="switchPayTab('wallet', this)"> Wallet</button>
-                </div>
-
-                <!-- Card -->
-                <div id="pay-card" class="pay-panel">
-                    <div class="card-preview" id="cardPreview">
-                        <div class="card-chip"></div>
-                        <div class="card-number-display" id="cardNumDisplay">•••• •••• •••• ••••</div>
-                        <div class="card-meta">
-                            <div>
-                                <div class="card-label">Card holder</div>
-                                <div class="card-value" id="cardNameDisplay">YOUR NAME</div>
-                            </div>
-                            <div>
-                                <div class="card-label">Expires</div>
-                                <div class="card-value" id="cardExpDisplay">MM/YY</div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label>Name on Card *</label>
-                        <input type="text" id="cardName" placeholder="As it appears on the card"
-                            oninput="document.getElementById('cardNameDisplay').textContent = this.value.toUpperCase() || 'YOUR NAME'">
-                    </div>
-                    <div class="form-group">
-                        <label>Card Number *</label>
-                        <input type="text" id="cardNumber" placeholder="0000 0000 0000 0000"
-                            maxlength="19" oninput="formatCardNumber(this)">
-                    </div>
-                    <div class="form-row">
-                        <div class="form-group">
-                            <label>Expiry Date *</label>
-                            <input type="text" id="cardExpiry" placeholder="MM/YY" maxlength="5"
-                                oninput="formatExpiry(this)">
-                        </div>
-                        <div class="form-group">
-                            <label>CVV *</label>
-                            <input type="text" id="cardCVV" placeholder="•••" maxlength="4"
-                                oninput="this.value = this.value.replace(/\D/g,'')">
-                        </div>
-                    </div>
-                </div>
-
-                <!-- EFT -->
-                <div id="pay-eft" class="pay-panel" style="display:none;">
-                    <div class="eft-details">
-                        <p>Transfer your payment to the following account. Use your order number as the reference.</p>
-                        <div class="eft-table">
-                            <div class="eft-row"><span>Bank</span><strong>FNB</strong></div>
-                            <div class="eft-row"><span>Account Name</span><strong>Roots Collective (Pty) Ltd</strong></div>
-                            <div class="eft-row"><span>Account Number</span><strong>62 000 123 456</strong></div>
-                            <div class="eft-row"><span>Branch Code</span><strong>250 655</strong></div>
-                            <div class="eft-row"><span>Account Type</span><strong>Cheque</strong></div>
-                            <div class="eft-row"><span>Reference</span><strong id="eftRef">ORDER-XXXX</strong></div>
-                        </div>
-                        <p class="info-note">Orders are processed within 24 hours of payment confirmation.</p>
-                    </div>
-                </div>
-
-                <!-- Wallet / SnapScan -->
-                <div id="pay-wallet" class="pay-panel" style="display:none;">
-                    <div class="wallet-options">
-                        <div class="wallet-option selected" id="wallet-snapscan" onclick="selectWallet(this, 'snapscan')">
-                            <div class="wallet-logo snap">S</div>
-                            <span>SnapScan</span>
-                        </div>
-                        <div class="wallet-option" id="wallet-ozow" onclick="selectWallet(this, 'ozow')">
-                            <div class="wallet-logo ozow">O</div>
-                            <span>Ozow</span>
-                        </div>
-                        <div class="wallet-option" id="wallet-zapper" onclick="selectWallet(this, 'zapper')">
-                            <div class="wallet-logo zap">Z</div>
-                            <span>Zapper</span>
-                        </div>
-                    </div>
-                    <div class="qr-placeholder">
-                        <div class="qr-grid" id="qrGrid"></div>
-                        <p class="qr-label" id="qrLabel">Scan with SnapScan to pay</p>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Order total -->
-            <div class="mini-total" id="paymentMiniTotal"></div>
-
-            <div class="step-actions">
-                <button class="btn btn-back" onclick="goToStep(2)">&larr; Back</button>
-                <button class="btn btn-primary" onclick="validatePayment()" id="payBtn">Review Order &rarr;</button>
-            </div>
-        </section>
-
-        <!-- ═══════════════════════════════
-             STEP 4 — REVIEW & CONFIRM
-        ═══════════════════════════════ -->
-        <section class="checkout-step" id="step4">
-            <h2 class="step-title">Review &amp; Confirm</h2>
-
-            <div class="review-grid">
-                <div class="review-card">
-                    <div class="review-card-header">
-                        <span>Order Items</span>
-                        <button class="edit-btn" onclick="goToStep(1)">Edit</button>
-                    </div>
-                    <div id="reviewItems"></div>
-                </div>
-                <div class="review-card">
-                    <div class="review-card-header">
-                        <span>Delivery</span>
-                        <button class="edit-btn" onclick="goToStep(2)">Edit</button>
-                    </div>
-                    <div id="reviewDelivery"></div>
-                </div>
-                <div class="review-card">
-                    <div class="review-card-header">
-                        <span>Payment</span>
-                        <button class="edit-btn" onclick="goToStep(3)">Edit</button>
-                    </div>
-                    <div id="reviewPayment"></div>
-                </div>
-            </div>
-
-            <div class="final-total" id="finalTotal"></div>
-
-            <label class="terms-check">
-                <input type="checkbox" id="termsCheck">
-                I agree to the <a href="#" onclick="return false;">Terms & Conditions</a> and <a href="#" onclick="return false;">Privacy Policy</a>
-            </label>
-
-            <div class="step-actions">
-                <button class="btn btn-back" onclick="goToStep(3)">&larr; Back</button>
-                <button class="btn btn-pay" onclick="placeOrder()" id="placeOrderBtn">
-                    Place Order
-                </button>
-            </div>
-        </section>
-
-    </div><!-- /checkout-page -->
-
-    <!-- ═══════════════════════════════
-         SUCCESS POPUP
-    ═══════════════════════════════ -->
-    <div class="popup-overlay" id="successPopup">
-        <div class="popup-box">
-            <div class="popup-tick">&#10003;</div>
-            <h2>Order Placed!</h2>
-            <p>Thank you for your order. A confirmation has been sent to <strong id="popupEmail"></strong>.</p>
-            <div class="popup-order-ref">
-                Order ref: <strong id="popupRef"></strong>
-            </div>
-            <p class="popup-sub">Your order will be ready for <span id="popupMethod"></span>.</p>
-            <button class="btn btn-primary" onclick="finishOrder()">Back to Home</button>
-        </div>
+    <!-- Collect info -->
+    <div id="collectInfo" class="bg-white/5 border border-white/10 rounded-2xl p-5 mb-4 flex gap-4">
+      <div class="w-9 h-9 rounded-xl bg-green-800/50 border border-green-400/20 text-green-400 text-sm font-black flex items-center justify-center shrink-0">P</div>
+      <div>
+        <h3 class="text-sm font-black text-white mb-1">Collection Address</h3>
+        <p class="text-sm text-white font-semibold">Roots Distribution Centre</p>
+        <p class="text-xs text-gray-400 mt-1">12 Harvest Road, Khayelitsha, Cape Town, 7784</p>
+        <p class="text-xs text-gray-400">Mon–Fri: 07:00 – 17:00 | Sat: 08:00 – 13:00</p>
+        <p class="text-xs text-gray-500 mt-2 italic">Bring your order confirmation email and a valid ID.</p>
+      </div>
     </div>
 
-    <script src="../scripts/scripts.js"></script>
-    
+    <!-- Delivery form -->
+    <div id="deliveryForm" class="bg-white/5 border border-white/10 rounded-2xl p-5 mb-4 hidden">
+      <h3 class="text-sm font-black text-white mb-4">Delivery Address</h3>
+      <div class="flex flex-col gap-3">
+        <div class="flex flex-col gap-1"><label class="text-[10px] font-bold uppercase tracking-widest text-gray-400">Street Address *</label><input type="text" id="street" placeholder="e.g. 45 Main Road" class="border border-white/15 rounded-xl px-3 py-2.5 text-sm outline-none focus:border-green-400 transition-colors"></div>
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+          <div class="flex flex-col gap-1"><label class="text-[10px] font-bold uppercase tracking-widest text-gray-400">Suburb *</label><input type="text" id="suburb" placeholder="e.g. Mitchells Plain" class="border border-white/15 rounded-xl px-3 py-2.5 text-sm outline-none focus:border-green-400 transition-colors"></div>
+          <div class="flex flex-col gap-1"><label class="text-[10px] font-bold uppercase tracking-widest text-gray-400">City *</label><input type="text" id="city" placeholder="e.g. Cape Town" class="border border-white/15 rounded-xl px-3 py-2.5 text-sm outline-none focus:border-green-400 transition-colors"></div>
+        </div>
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+          <div class="flex flex-col gap-1"><label class="text-[10px] font-bold uppercase tracking-widest text-gray-400">Province *</label>
+            <select id="province" class="border border-white/15 rounded-xl px-3 py-2.5 text-sm outline-none focus:border-green-400 transition-colors">
+              <option value="">Select province</option>
+              <option>Western Cape</option><option>Eastern Cape</option><option>KwaZulu-Natal</option>
+              <option>Gauteng</option><option>Limpopo</option><option>Mpumalanga</option>
+              <option>North West</option><option>Northern Cape</option><option>Free State</option>
+            </select>
+          </div>
+          <div class="flex flex-col gap-1"><label class="text-[10px] font-bold uppercase tracking-widest text-gray-400">Postal Code *</label><input type="text" id="postalCode" placeholder="e.g. 7785" maxlength="4" class="border border-white/15 rounded-xl px-3 py-2.5 text-sm outline-none focus:border-green-400 transition-colors"></div>
+        </div>
+        <div class="flex flex-col gap-1"><label class="text-[10px] font-bold uppercase tracking-widest text-gray-400">Delivery Instructions <span class="normal-case font-normal text-gray-500">(optional)</span></label><textarea id="deliveryNote" rows="2" placeholder="Gate code, landmark, etc." class="border border-white/15 rounded-xl px-3 py-2.5 text-sm outline-none focus:border-green-400 transition-colors resize-none"></textarea></div>
+      </div>
+    </div>
+
+    <div id="deliveryMiniTotal" class="bg-white/5 border border-white/10 rounded-2xl p-4 mb-5 flex flex-col gap-2"></div>
+    <div class="flex justify-between">
+      <button onclick="goToStep(1)" class="border border-white/20 text-gray-300 hover:border-white/40 hover:text-white font-bold px-6 py-3 rounded-xl transition-colors">Back</button>
+      <button onclick="validateDelivery()" class="bg-green-800 hover:bg-green-700 text-white font-bold px-8 py-3 rounded-xl transition-colors">Continue to Payment</button>
+    </div>
+  </section>
+
+  <!-- STEP 3: PAYMENT -->
+  <section class="checkout-step" id="step3">
+    <h2 class="text-2xl font-black text-white mb-6 pb-4 border-b border-white/10">Payment</h2>
+    <div class="bg-white/5 border border-white/10 rounded-2xl p-5 mb-4">
+      <h3 class="text-sm font-black text-white mb-4">Payment Method</h3>
+      <!-- Tabs -->
+      <div class="flex gap-2 mb-5">
+        <button id="tab-card-btn"   onclick="switchPayTab('card',   this)" class="flex-1 py-2.5 rounded-xl text-xs font-bold uppercase tracking-wide transition-all bg-green-800/60 border-2 border-green-400 text-green-400">Card</button>
+        <button id="tab-eft-btn"    onclick="switchPayTab('eft',    this)" class="flex-1 py-2.5 rounded-xl text-xs font-bold uppercase tracking-wide transition-all bg-white/5 border-2 border-white/15 text-gray-400 hover:text-gray-200">EFT</button>
+        <button id="tab-wallet-btn" onclick="switchPayTab('wallet', this)" class="flex-1 py-2.5 rounded-xl text-xs font-bold uppercase tracking-wide transition-all bg-white/5 border-2 border-white/15 text-gray-400 hover:text-gray-200">Wallet</button>
+      </div>
+
+      <!-- Card panel -->
+      <div id="pay-card" class="pay-panel active">
+        <div class="rounded-2xl p-5 mb-5" style="background:linear-gradient(135deg,#015005,#1a3a2a)">
+          <div class="w-9 h-7 rounded bg-gradient-to-br from-yellow-400 to-yellow-600 mb-5"></div>
+          <div class="text-lg font-mono tracking-widest text-white mb-4" id="cardNumDisplay">.... .... .... ....</div>
+          <div class="flex justify-between">
+            <div><div class="text-[9px] uppercase tracking-widest text-white/50 mb-0.5">Card holder</div><div class="text-sm font-bold text-white" id="cardNameDisplay">YOUR NAME</div></div>
+            <div><div class="text-[9px] uppercase tracking-widest text-white/50 mb-0.5">Expires</div><div class="text-sm font-bold text-white" id="cardExpDisplay">MM/YY</div></div>
+          </div>
+        </div>
+        <div class="flex flex-col gap-3">
+          <div class="flex flex-col gap-1"><label class="text-[10px] font-bold uppercase tracking-widest text-gray-400">Name on Card *</label><input type="text" id="cardName" placeholder="As it appears on the card" oninput="document.getElementById('cardNameDisplay').textContent=this.value.toUpperCase()||'YOUR NAME'" class="border border-white/15 rounded-xl px-3 py-2.5 text-sm outline-none focus:border-green-400 transition-colors"></div>
+          <div class="flex flex-col gap-1"><label class="text-[10px] font-bold uppercase tracking-widest text-gray-400">Card Number *</label><input type="text" id="cardNumber" placeholder="0000 0000 0000 0000" maxlength="19" oninput="formatCardNumber(this)" class="border border-white/15 rounded-xl px-3 py-2.5 text-sm font-mono outline-none focus:border-green-400 transition-colors"></div>
+          <div class="grid grid-cols-2 gap-3">
+            <div class="flex flex-col gap-1"><label class="text-[10px] font-bold uppercase tracking-widest text-gray-400">Expiry *</label><input type="text" id="cardExpiry" placeholder="MM/YY" maxlength="5" oninput="formatExpiry(this)" class="border border-white/15 rounded-xl px-3 py-2.5 text-sm outline-none focus:border-green-400 transition-colors"></div>
+            <div class="flex flex-col gap-1"><label class="text-[10px] font-bold uppercase tracking-widest text-gray-400">CVV *</label><input type="text" id="cardCVV" placeholder="..." maxlength="4" oninput="this.value=this.value.replace(/\D/g,'')" class="border border-white/15 rounded-xl px-3 py-2.5 text-sm outline-none focus:border-green-400 transition-colors"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- EFT panel -->
+      <div id="pay-eft" class="pay-panel">
+        <p class="text-sm text-gray-400 mb-4">Transfer your payment to the following account. Use your order number as the reference.</p>
+        <div class="flex flex-col gap-2 mb-4">
+          <div class="flex justify-between items-center px-4 py-3 bg-white/5 rounded-xl text-sm"><span class="text-gray-400">Bank</span><strong class="text-white">FNB</strong></div>
+          <div class="flex justify-between items-center px-4 py-3 bg-white/5 rounded-xl text-sm"><span class="text-gray-400">Account Name</span><strong class="text-white">Roots Collective (Pty) Ltd</strong></div>
+          <div class="flex justify-between items-center px-4 py-3 bg-white/5 rounded-xl text-sm"><span class="text-gray-400">Account Number</span><strong class="text-white">62 000 123 456</strong></div>
+          <div class="flex justify-between items-center px-4 py-3 bg-white/5 rounded-xl text-sm"><span class="text-gray-400">Branch Code</span><strong class="text-white">250 655</strong></div>
+          <div class="flex justify-between items-center px-4 py-3 bg-white/5 rounded-xl text-sm"><span class="text-gray-400">Reference</span><strong class="text-green-400" id="eftRef">ORDER-XXXX</strong></div>
+        </div>
+        <p class="text-xs text-gray-500 italic">Orders are processed within 24 hours of payment confirmation.</p>
+      </div>
+
+      <!-- Wallet panel -->
+      <div id="pay-wallet" class="pay-panel">
+        <div class="flex gap-3 mb-6">
+          <div id="wallet-snapscan" onclick="selectWallet(this,'snapscan')" class="flex-1 flex flex-col items-center gap-2 py-4 rounded-xl border-2 border-green-400 bg-green-400/5 cursor-pointer">
+            <div class="w-10 h-10 rounded-xl bg-red-600 text-white font-black text-lg flex items-center justify-center">S</div>
+            <span class="text-xs text-gray-300">SnapScan</span>
+          </div>
+          <div id="wallet-ozow" onclick="selectWallet(this,'ozow')" class="flex-1 flex flex-col items-center gap-2 py-4 rounded-xl border-2 border-white/15 bg-white/5 cursor-pointer">
+            <div class="w-10 h-10 rounded-xl bg-purple-600 text-white font-black text-lg flex items-center justify-center">O</div>
+            <span class="text-xs text-gray-300">Ozow</span>
+          </div>
+          <div id="wallet-zapper" onclick="selectWallet(this,'zapper')" class="flex-1 flex flex-col items-center gap-2 py-4 rounded-xl border-2 border-white/15 bg-white/5 cursor-pointer">
+            <div class="w-10 h-10 rounded-xl bg-yellow-600 text-white font-black text-lg flex items-center justify-center">Z</div>
+            <span class="text-xs text-gray-300">Zapper</span>
+          </div>
+        </div>
+        <div class="flex flex-col items-center gap-3">
+          <div class="qr-grid" id="qrGrid"></div>
+          <p class="text-xs text-gray-400" id="qrLabel">Scan with SnapScan to pay</p>
+        </div>
+      </div>
+    </div>
+
+    <div id="paymentMiniTotal" class="bg-white/5 border border-white/10 rounded-2xl p-4 mb-5 flex flex-col gap-2"></div>
+    <div class="flex justify-between">
+      <button onclick="goToStep(2)" class="border border-white/20 text-gray-300 hover:border-white/40 hover:text-white font-bold px-6 py-3 rounded-xl transition-colors">Back</button>
+      <button onclick="validatePayment()" id="payBtn" class="bg-green-800 hover:bg-green-700 text-white font-bold px-8 py-3 rounded-xl transition-colors">Review Order</button>
+    </div>
+  </section>
+
+  <!-- STEP 4: REVIEW -->
+  <section class="checkout-step" id="step4">
+    <h2 class="text-2xl font-black text-white mb-6 pb-4 border-b border-white/10">Review &amp; Confirm</h2>
+    <div class="flex flex-col gap-4 mb-6">
+      <div class="bg-white/5 border border-white/10 rounded-2xl overflow-hidden">
+        <div class="flex justify-between items-center px-4 py-3 bg-soil-700/60 border-b border-white/10">
+          <span class="text-xs font-bold uppercase tracking-widest text-gray-300">Order Items</span>
+          <button onclick="goToStep(1)" class="text-xs text-gray-400 hover:text-green-400 border border-white/15 hover:border-green-400/40 px-3 py-1 rounded-lg transition-colors">Edit</button>
+        </div>
+        <div id="reviewItems"></div>
+      </div>
+      <div class="bg-white/5 border border-white/10 rounded-2xl overflow-hidden">
+        <div class="flex justify-between items-center px-4 py-3 bg-soil-700/60 border-b border-white/10">
+          <span class="text-xs font-bold uppercase tracking-widest text-gray-300">Delivery</span>
+          <button onclick="goToStep(2)" class="text-xs text-gray-400 hover:text-green-400 border border-white/15 hover:border-green-400/40 px-3 py-1 rounded-lg transition-colors">Edit</button>
+        </div>
+        <div id="reviewDelivery"></div>
+      </div>
+      <div class="bg-white/5 border border-white/10 rounded-2xl overflow-hidden">
+        <div class="flex justify-between items-center px-4 py-3 bg-soil-700/60 border-b border-white/10">
+          <span class="text-xs font-bold uppercase tracking-widest text-gray-300">Payment</span>
+          <button onclick="goToStep(3)" class="text-xs text-gray-400 hover:text-green-400 border border-white/15 hover:border-green-400/40 px-3 py-1 rounded-lg transition-colors">Edit</button>
+        </div>
+        <div id="reviewPayment"></div>
+      </div>
+    </div>
+
+    <div id="finalTotal" class="bg-white/5 border border-white/10 rounded-2xl p-4 flex flex-col gap-2 mb-5"></div>
+
+    <label class="flex items-start gap-3 text-sm text-gray-400 cursor-pointer mb-6">
+      <input type="checkbox" id="termsCheck" class="mt-0.5 shrink-0">
+      <span>I agree to the <a href="#" onclick="return false" class="text-green-400 hover:underline">Terms &amp; Conditions</a> and <a href="#" onclick="return false" class="text-green-400 hover:underline">Privacy Policy</a></span>
+    </label>
+
+    <div class="flex justify-between">
+      <button onclick="goToStep(3)" class="border border-white/20 text-gray-300 hover:border-white/40 hover:text-white font-bold px-6 py-3 rounded-xl transition-colors">Back</button>
+      <button onclick="placeOrder()" id="placeOrderBtn" class="bg-green-800 hover:bg-green-700 text-white font-bold px-8 py-3.5 rounded-xl transition-colors text-base">Place Order</button>
+    </div>
+  </section>
+
+</div><!-- /checkoutPage -->
+
+<!-- SUCCESS POPUP -->
+<div class="popup-overlay" id="successPopup">
+  <div class="popup-box bg-soil-800 border border-green-400/30 rounded-2xl p-10 max-w-md w-11/12 text-center flex flex-col items-center gap-4">
+    <div class="w-16 h-16 rounded-full bg-green-400/15 border-2 border-green-400 flex items-center justify-center text-3xl text-green-400 font-black">✓</div>
+    <h2 class="text-2xl font-black text-white">Order Placed!</h2>
+    <p class="text-sm text-gray-300">Thank you for your order. A confirmation has been sent to <strong class="text-white" id="popupEmail"></strong>.</p>
+    <div class="bg-white/5 border border-white/10 rounded-xl px-5 py-3 text-sm text-gray-400">Order ref: <strong class="text-green-400" id="popupRef"></strong></div>
+    <p class="text-xs text-gray-500 italic">Your order will be ready for <span id="popupMethod"></span>.</p>
+    <button onclick="finishOrder()" class="bg-green-800 hover:bg-green-700 text-white font-bold px-8 py-3 rounded-xl transition-colors">Back to Home</button>
+  </div>
+</div>
+
+<div id="footer-root"></div>
+<div id="toggle-root"></div>
+<script src="https://unpkg.com/react@18/umd/react.production.min.js" crossorigin></script>
+<script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js" crossorigin></script>
+<script src="../scripts/shared-components.js"></script>
+<script src="../scripts/checkout.js"></script>
+<script>
+  var mountDiv = document.createElement('div');
+  document.body.appendChild(mountDiv);
+  ReactDOM.createRoot(mountDiv).render(
+    React.createElement(RootsStore.StoreProvider, null,
+      React.createElement(RootsComponents.ScrollGradient),
+      ReactDOM.createPortal(React.createElement(RootsComponents.Navbar),        document.getElementById('navbar-root')),
+      ReactDOM.createPortal(React.createElement(RootsComponents.Footer),        document.getElementById('footer-root')),
+      ReactDOM.createPortal(React.createElement(RootsComponents.LowDataToggle), document.getElementById('toggle-root'))
+    )
+  );
+
+  /* Override progress bar styling for new Tailwind classes */
+  function updateProgress(step) {
+    for (var i = 1; i <= 4; i++) {
+      var ind    = document.getElementById('step-ind-' + i);
+      if (!ind) continue;
+      var circle = ind.querySelector('div');
+      var label  = ind.querySelector('span');
+      if (i < step) {
+        circle.className = 'w-9 h-9 rounded-full border-2 flex items-center justify-center text-sm font-black transition-all border-green-400 bg-green-800/60 text-green-400';
+        label.className  = 'text-[10px] font-bold uppercase tracking-wide text-green-400';
+      } else if (i === step) {
+        circle.className = 'w-9 h-9 rounded-full border-2 flex items-center justify-center text-sm font-black transition-all border-green-400 bg-green-800/60 text-green-400';
+        label.className  = 'text-[10px] font-bold uppercase tracking-wide text-green-400';
+      } else {
+        circle.className = 'w-9 h-9 rounded-full border-2 flex items-center justify-center text-sm font-black transition-all border-white/20 bg-white/5 text-gray-500';
+        label.className  = 'text-[10px] font-bold uppercase tracking-wide text-gray-500';
+      }
+    }
+  }
+
+  /* Override renderOrderSummary to use Tailwind */
+  var _origGoToStep = goToStep;
+  goToStep = function(n) {
+    _origGoToStep(n);
+    updateProgress(n);
+  };
+
+  /* Tailwind-styled total rows */
+  function renderTotalRow(label, value, grand) {
+    var div = document.createElement('div');
+    div.className = 'flex justify-between text-sm ' + (grand ? 'font-black text-white border-t border-white/10 pt-3 mt-1' : 'text-gray-400');
+    div.innerHTML = '<span>' + label + '</span><span class="' + (grand ? 'text-green-400 text-base' : '') + '">' + value + '</span>';
+    return div;
+  }
+
+  /* Patch renderOrderSummary to use Tailwind cards */
+  var origRenderOS = window.renderOrderSummary;
+  if (typeof renderOrderSummary === 'function') {
+    window.renderOrderSummary = function() {
+      var cart = getCart();
+      var container = document.getElementById('orderItems');
+      var totalsEl  = document.getElementById('orderTotals');
+      if (!container || !totalsEl) return;
+
+      var subtotal = 0;
+      var html = '';
+      cart.forEach(function(item) {
+        var line = item.price * item.qty;
+        subtotal += line;
+        html += '<div class="bg-white/5 border border-white/10 rounded-xl p-4 flex items-center justify-between gap-4">' +
+          '<div><p class="text-sm font-semibold text-white">' + item.name + '</p>' +
+          '<p class="text-xs text-gray-400 mt-0.5">x' + item.qty + ' @ R' + parseFloat(item.price).toFixed(2) + '</p></div>' +
+          '<span class="text-sm font-black text-green-400">R' + line.toFixed(2) + '</span></div>';
+      });
+      container.innerHTML = html;
+
+      var isDeliver = document.getElementById('opt-deliver') && document.getElementById('opt-deliver').checked;
+      var delivery  = isDeliver ? 80 : 0;
+      var total     = subtotal + delivery;
+      totalsEl.innerHTML = '';
+      totalsEl.appendChild(renderTotalRow('Subtotal', 'R' + subtotal.toFixed(2), false));
+      totalsEl.appendChild(renderTotalRow('Delivery', delivery === 0 ? 'Free' : 'R' + delivery.toFixed(2), false));
+      totalsEl.appendChild(renderTotalRow('Total', 'R' + total.toFixed(2), true));
+    };
+  }
+</script>
 </body>
 </html>

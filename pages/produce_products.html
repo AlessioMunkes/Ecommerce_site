@@ -1,326 +1,254 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Roots — Products</title>
-    <link rel="stylesheet" href="../styles/styles.css" />
-    <link rel="stylesheet" href="../styles/products.css" />
+  <meta charset="UTF-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Products — Roots</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>tailwind.config={theme:{extend:{colors:{green:{400:'#4ade80',700:'#15803d',800:'#015005',900:'#012e04'},soil:{700:'#382f26',800:'#1a3a2a',900:'#0f2417'}}}}}</script>
+  <style>
+    body{background:linear-gradient(to bottom,#0f2417,#1a3a2a,#0e3d20,#1a3a2a,#0f2417);background-size:100% 400%;min-height:100vh;color:#f9faf8;font-family:system-ui,sans-serif}
+    body.low-data{background:#0f2417!important}
+    body.low-data img{display:none!important}
+    input[type=checkbox]{accent-color:#4ade80}
+    ::-webkit-scrollbar{width:5px}::-webkit-scrollbar-track{background:#0f2417}::-webkit-scrollbar-thumb{background:#015005;border-radius:3px}
+  </style>
 </head>
 <body>
 
-    <header class="header">
-        <div class="header-brand">
-            <h3><a href="index.html">Roots</a></h3>
-        </div>
-        <input type="checkbox" id="nav-toggle" class="nav-toggle">
-        <label for="nav-toggle" class="hamburger">
-            <span></span>
-            <span></span>
-            <span></span>
-        </label>
-        <nav class="links">
-            <a href="index.html">Home</a>
-            <a href="produce_products.html">Products</a>
-            <a href="newsletter.html">Newsletter</a>
-            <a href="about_us.html">About Us</a>
-            <a href="contact_us.html">Contact Us</a>
-            <a href="wishlist.html">Wishlist</a>
-            <a href="cart.html">Shopping Cart</a>
-        </nav>
-    </header>
+<div id="navbar-root"></div>
+<div id="app-root" class="min-h-screen"></div>
+<div id="footer-root"></div>
+<div id="toggle-root"></div>
 
-    <div class="products-page">
+<!-- Load React THEN shared components THEN app code -->
+<script src="https://unpkg.com/react@18/umd/react.production.min.js" crossorigin></script>
+<script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js" crossorigin></script>
+<script src="../scripts/shared-components.js"></script>
+<script>
+var useState  = React.useState;
+var useEffect = React.useEffect;
+var useMemo   = React.useMemo;
+var e         = React.createElement;
+var StoreProvider = RootsStore.StoreProvider;
+var useStore      = RootsStore.useStore;
 
-        <aside class="filter-sidebar">
-            <h2 class="filter-heading">Filter</h2>
-            <div class="filter-search-wrap">
-                <input type="text" class="filter-search" placeholder="Search products..." id="keywordSearch">
+var PRODUCTS = [
+  {id:'1',  name:'Spinach (1kg)',       category:'vegetables', price:45,  image:'../media/spinach-products.jpg'},
+  {id:'2',  name:'Tomatoes (1kg)',       category:'vegetables', price:30,  image:'../media/tomatoes-products.jpg'},
+  {id:'3',  name:'Lemons (1kg)',         category:'fruits',     price:60,  image:'../media/lemons-products.jpeg'},
+  {id:'4',  name:'Maize Meal (2kg)',     category:'grains',     price:55,  image:'../media/maize-meal-products.jpeg'},
+  {id:'5',  name:'Butternut Squash',     category:'vegetables', price:70,  image:'../media/butternut-products.jpeg'},
+  {id:'6',  name:'Seed Pack — Greens',   category:'seeds',      price:35,  image:'../media/greens-seedpack-products.jpeg'},
+  {id:'7',  name:'Gardening Gloves',     category:'equipment',  price:50,  image:'../media/equipment-products-1.jpg'},
+  {id:'8',  name:'Wooden Handle Hoe',    category:'equipment',  price:100, image:'../media/hoe-products.jpeg'},
+  {id:'9',  name:'Sorghum (1kg)',        category:'grains',     price:80,  image:'../media/sorghum-products.jpg'},
+  {id:'10', name:'Cabbage (1kg)',        category:'vegetables', price:100, image:'../media/cabbage-products.jpeg'},
+];
+var CATS = ['vegetables','fruits','grains','seeds','equipment'];
 
-            </div>
-            <div class="filter-group">
-                <p class="filter-group-label">Category</p>
-                <label class="filter-checkbox"><input type="checkbox" value="vegetables"> Vegetables</label>
-                <label class="filter-checkbox"><input type="checkbox" value="fruits"> Fruits</label>
-                <label class="filter-checkbox"><input type="checkbox" value="grains"> Grains</label>
-                <label class="filter-checkbox"><input type="checkbox" value="equipment"> Equipment</label>
-                <label class="filter-checkbox"><input type="checkbox" value="seeds"> Seeds</label>
-            </div>
-            <hr class="filter-divider">
-            <div class="filter-group">
-                <p class="filter-group-label">Price Range</p>
-                <div class="price-inputs">
-                    <div class="price-field">
-                        <label>From:</label>
-                        <input type="number" class="price-input" id="priceFrom" placeholder="R0" min="0">
-                    </div>
-                    <div class="price-field">
-                        <label>To:</label>
-                        <input type="number" class="price-input" id="priceTo" placeholder="R999" min="0">
-                    </div>
-                </div>
-            </div>
-            <button class="btn btn-primary filter-search-btn" id="applyFilters">Search</button>
-        </aside>
+function WishlistBtn(props) {
+  var store  = useStore();
+  var active = store.isInWishlist(props.product.id);
+  return e('button', {
+    onClick: function(ev) { ev.preventDefault(); ev.stopPropagation(); store.toggleWishlist(props.product); },
+    className: 'absolute top-2 right-2 w-9 h-9 rounded-full flex items-center justify-center border backdrop-blur-sm transition-all z-10 text-base ' +
+      (active ? 'bg-yellow-400/20 border-yellow-400 text-yellow-400' : 'bg-black/50 border-white/20 text-gray-400 hover:text-yellow-400 hover:border-yellow-400/50'),
+    title: active ? 'Remove from wishlist' : 'Add to wishlist'
+  }, active ? '★' : '☆');
+}
 
-        <main class="products-main">
+function CategoryBadge(props) {
+  var colours = {
+    vegetables:'bg-green-900/80 text-green-400 border-green-400/30',
+    fruits:    'bg-yellow-900/80 text-yellow-400 border-yellow-400/30',
+    grains:    'bg-amber-900/80 text-amber-400 border-amber-400/30',
+    seeds:     'bg-lime-900/80 text-lime-400 border-lime-400/30',
+    equipment: 'bg-blue-900/80 text-blue-400 border-blue-400/30',
+  };
+  return e('span', {
+    className: 'absolute bottom-2 left-2 text-[11px] font-bold uppercase tracking-wider px-2.5 py-1 rounded-full border ' + (colours[props.category] || colours.vegetables)
+  }, props.category.charAt(0).toUpperCase() + props.category.slice(1));
+}
 
-                <div class="title-container">
-                    <h1>Products</h1>
-                </div>
-            <div class="products-title-card">
-                <h1>Shop Equipment & Produce</h1>
-            </div>
+function ProductCard(props) {
+  var product = props.product;
+  var store   = useStore();
+  var qtyState   = useState(1);
+  var addedState = useState(false);
+  var qty   = qtyState[0];  var setQty   = qtyState[1];
+  var added = addedState[0]; var setAdded = addedState[1];
 
-            <div class="product-grid" id="productGrid">
+  function handleAdd() {
+    store.addToCart(product, qty);
+    setAdded(true);
+    setTimeout(function() { setAdded(false); }, 2000);
+  }
 
-                <div class="product-card" data-id="1" data-name="Spinach (1kg)" data-category="vegetables" data-price="45">
-                    <div class="product-img-wrap">
-                        <img src="../media/spinach-products.jpg" alt="Spinach (1kg)" class="product-img">
-                        <button class="wishlist-btn" title="Add to wishlist" onclick="handleWishlist(this)">&#9733;</button>
-                        <span class="product-badge">Vegetables</span>
-                    </div>
-                    <div class="product-body">
-                        <span class="product-name">Spinach (1kg)</span>
-                        <span class="product-price">R45.00</span>
-                    </div>
-                    <div class="product-qty-row">
-                        <div class="qty-control">
-                            <button class="qty-btn" onclick="changeCardQty(this, -1)">&#8722;</button>
-                            <span class="qty-display">1</span>
-                            <button class="qty-btn" onclick="changeCardQty(this, 1)">&#43;</button>
-                        </div>
-                        <span class="qty-subtotal">R45.00</span>
-                    </div>
-                    <div class="product-actions">
-                        <a href="product_detail.html?id=1" class="btn btn-info product-btn">Info</a>
-                        <button class="btn btn-cart product-btn" onclick="handleCart(this)">Add to Cart</button>
-                    </div>
-                </div>
+  return e('div', {
+    className: 'bg-white/5 border border-white/10 rounded-2xl overflow-hidden flex flex-col transition-all duration-200 hover:-translate-y-1 hover:border-green-400/30 hover:shadow-2xl hover:shadow-black/40'
+  },
+    /* Image */
+    e('div', { className: 'relative aspect-[4/3] overflow-hidden bg-black/20' },
+      e('img', { src: product.image, alt: product.name, className: 'w-full h-full object-cover transition-transform duration-300 group-hover:scale-105', loading: 'lazy' }),
+      e(WishlistBtn, { product: product }),
+      e(CategoryBadge, { category: product.category })
+    ),
+    /* Body */
+    e('div', { className: 'p-4 flex flex-col gap-3 flex-1' },
+      /* Name + Price */
+      e('div', { className: 'flex items-start justify-between gap-2' },
+        e('span', { className: 'text-sm font-semibold text-white leading-tight' }, product.name),
+        e('span', { className: 'text-base font-black text-green-400 shrink-0' }, 'R' + product.price)
+      ),
+      /* Qty + Subtotal */
+      e('div', { className: 'flex items-center justify-between' },
+        e('div', { className: 'flex items-center rounded-xl overflow-hidden border border-white/15 bg-white/5' },
+          e('button', {
+            onClick: function() { setQty(function(q) { return Math.max(1, q - 1); }); },
+            className: 'w-8 h-8 flex items-center justify-center text-gray-300 hover:bg-green-400/15 hover:text-green-400 transition-colors font-bold text-lg'
+          }, '-'),
+          e('span', { className: 'w-8 text-center text-sm font-bold text-white border-x border-white/10 leading-8' }, qty),
+          e('button', {
+            onClick: function() { setQty(function(q) { return Math.min(99, q + 1); }); },
+            className: 'w-8 h-8 flex items-center justify-center text-gray-300 hover:bg-green-400/15 hover:text-green-400 transition-colors font-bold text-lg'
+          }, '+')
+        ),
+        e('span', { className: 'text-sm font-bold text-green-300' }, 'R' + (product.price * qty).toFixed(2))
+      ),
+      /* Buttons */
+      e('div', { className: 'flex gap-2 mt-auto' },
+        e('a', {
+          href: 'product_detail.html?id=' + product.id,
+          className: 'flex-1 text-center py-2.5 text-xs font-bold uppercase tracking-wide rounded-xl border border-white/15 text-gray-300 hover:bg-white/10 hover:text-white transition-colors'
+        }, 'Info'),
+        e('button', {
+          onClick: handleAdd,
+          className: 'flex-1 py-2.5 text-xs font-bold uppercase tracking-wide rounded-xl transition-all ' +
+            (added ? 'bg-green-700 text-white' : 'bg-green-800 text-white hover:bg-green-700')
+        }, added ? ('Added ' + (qty > 1 ? qty + 'x' : '') + '!') : 'Add to Cart')
+      )
+    )
+  );
+}
 
-                <div class="product-card" data-id="2" data-name="Tomatoes (1kg)" data-category="vegetables" data-price="30">
-                    <div class="product-img-wrap">
-                        <img src="../media/tomatoes-products.jpg" alt="Tomatoes (1kg)" class="product-img">
-                        <button class="wishlist-btn" title="Add to wishlist" onclick="handleWishlist(this)">&#9733;</button>
-                        <span class="product-badge">Vegetables</span>
-                    </div>
-                    <div class="product-body">
-                        <span class="product-name">Tomatoes (1kg)</span>
-                        <span class="product-price">R30.00</span>
-                    </div>
-                    <div class="product-qty-row">
-                        <div class="qty-control">
-                            <button class="qty-btn" onclick="changeCardQty(this, -1)">&#8722;</button>
-                            <span class="qty-display">1</span>
-                            <button class="qty-btn" onclick="changeCardQty(this, 1)">&#43;</button>
-                        </div>
-                        <span class="qty-subtotal">R30.00</span>
-                    </div>
-                    <div class="product-actions">
-                        <a href="product_detail.html?id=2" class="btn btn-info product-btn">Info</a>
-                        <button class="btn btn-cart product-btn" onclick="handleCart(this)">Add to Cart</button>
-                    </div>
-                </div>
+function Sidebar(props) {
+  function toggle(cat) {
+    props.setCats(function(prev) {
+      return prev.includes(cat) ? prev.filter(function(c) { return c !== cat; }) : prev.concat([cat]);
+    });
+  }
+  return e('aside', {
+    className: 'w-full md:w-56 lg:w-60 shrink-0 bg-white/5 border border-white/10 rounded-2xl p-5 flex flex-col gap-5 h-fit md:sticky md:top-20'
+  },
+    e('h2', { className: 'text-xs font-black uppercase tracking-widest text-gray-300' }, 'Filters'),
+    /* Search */
+    e('input', {
+      type: 'text', value: props.search,
+      onChange: function(ev) { props.setSearch(ev.target.value); },
+      placeholder: 'Search products...',
+      className: 'w-full bg-black/20 border border-white/15 rounded-xl px-3 py-2.5 text-sm text-white placeholder-gray-600 outline-none focus:border-green-400 transition-colors'
+    }),
+    /* Categories */
+    e('div', null,
+      e('p', { className: 'text-[10px] font-bold uppercase tracking-widest text-gray-500 mb-3' }, 'Category'),
+      e('div', { className: 'flex flex-col gap-2.5' },
+        CATS.map(function(cat) {
+          return e('label', { key: cat, className: 'flex items-center gap-2.5 text-sm text-gray-300 cursor-pointer hover:text-white transition-colors' },
+            e('input', { type: 'checkbox', checked: props.cats.includes(cat), onChange: function() { toggle(cat); } }),
+            cat.charAt(0).toUpperCase() + cat.slice(1)
+          );
+        })
+      )
+    ),
+    e('hr', { className: 'border-white/10' }),
+    /* Price */
+    e('div', null,
+      e('p', { className: 'text-[10px] font-bold uppercase tracking-widest text-gray-500 mb-3' }, 'Price Range'),
+      e('div', { className: 'flex flex-col gap-2' },
+        e('div', { className: 'flex items-center gap-2' },
+          e('span', { className: 'text-xs text-gray-500 w-7' }, 'From'),
+          e('input', { type: 'number', min: 0, value: props.priceFrom, onChange: function(ev) { props.setPriceFrom(ev.target.value); }, placeholder: 'R0', className: 'flex-1 bg-black/20 border border-white/15 rounded-lg px-2 py-1.5 text-xs text-white placeholder-gray-600 outline-none focus:border-green-400 transition-colors' })
+        ),
+        e('div', { className: 'flex items-center gap-2' },
+          e('span', { className: 'text-xs text-gray-500 w-7' }, 'To'),
+          e('input', { type: 'number', min: 0, value: props.priceTo, onChange: function(ev) { props.setPriceTo(ev.target.value); }, placeholder: 'R999', className: 'flex-1 bg-black/20 border border-white/15 rounded-lg px-2 py-1.5 text-xs text-white placeholder-gray-600 outline-none focus:border-green-400 transition-colors' })
+        )
+      )
+    ),
+    e('button', {
+      onClick: props.onReset,
+      className: 'text-xs text-gray-600 hover:text-gray-300 transition-colors text-left underline underline-offset-2'
+    }, 'Reset filters')
+  );
+}
 
-                <div class="product-card" data-id="3" data-name="Lemons (1kg)" data-category="fruits" data-price="60">
-                    <div class="product-img-wrap">
-                        <img src="../media/lemons-products.jpeg" alt="Lemons (1kg)" class="product-img">
-                        <button class="wishlist-btn" title="Add to wishlist" onclick="handleWishlist(this)">&#9733;</button>
-                        <span class="product-badge">Fruits</span>
-                    </div>
-                    <div class="product-body">
-                        <span class="product-name">Lemons (1kg)</span>
-                        <span class="product-price">R60.00</span>
-                    </div>
-                    <div class="product-qty-row">
-                        <div class="qty-control">
-                            <button class="qty-btn" onclick="changeCardQty(this, -1)">&#8722;</button>
-                            <span class="qty-display">1</span>
-                            <button class="qty-btn" onclick="changeCardQty(this, 1)">&#43;</button>
-                        </div>
-                        <span class="qty-subtotal">R60.00</span>
-                    </div>
-                    <div class="product-actions">
-                        <a href="product_detail.html?id=3" class="btn btn-info product-btn">Info</a>
-                        <button class="btn btn-cart product-btn" onclick="handleCart(this)">Add to Cart</button>
-                    </div>
-                </div>
+function ProductsApp() {
+  var searchState    = useState('');
+  var catsState      = useState([]);
+  var priceFromState = useState('');
+  var priceToState   = useState('');
+  var search    = searchState[0];    var setSearch    = searchState[1];
+  var cats      = catsState[0];      var setCats      = catsState[1];
+  var priceFrom = priceFromState[0]; var setPriceFrom = priceFromState[1];
+  var priceTo   = priceToState[0];   var setPriceTo   = priceToState[1];
 
-                <div class="product-card" data-id="4" data-name="Maize Meal (2kg)" data-category="grains" data-price="55">
-                    <div class="product-img-wrap">
-                        <img src="../media/maize-meal-products.jpeg" alt="Maize Meal" class="product-img">
-                        <button class="wishlist-btn" title="Add to wishlist" onclick="handleWishlist(this)">&#9733;</button>
-                        <span class="product-badge">Grains</span>
-                    </div>
-                    <div class="product-body">
-                        <span class="product-name">Maize Meal (2kg)</span>
-                        <span class="product-price">R55.00</span>
-                    </div>
-                    <div class="product-qty-row">
-                        <div class="qty-control">
-                            <button class="qty-btn" onclick="changeCardQty(this, -1)">&#8722;</button>
-                            <span class="qty-display">1</span>
-                            <button class="qty-btn" onclick="changeCardQty(this, 1)">&#43;</button>
-                        </div>
-                        <span class="qty-subtotal">R55.00</span>
-                    </div>
-                    <div class="product-actions">
-                        <a href="product_detail.html?id=4" class="btn btn-info product-btn">Info</a>
-                        <button class="btn btn-cart product-btn" onclick="handleCart(this)">Add to Cart</button>
-                    </div>
-                </div>
+  useEffect(function() {
+    var f = new URLSearchParams(window.location.search).get('filter');
+    if (f && CATS.indexOf(f) !== -1) setCats([f]);
+  }, []);
 
-                <div class="product-card" data-id="5" data-name="Butternut Squash (1kg)" data-category="vegetables" data-price="70">
-                    <div class="product-img-wrap">
-                        <img src="../media/butternut-products.jpeg" alt="Butternut Squash (1kg)" class="product-img">
-                        <button class="wishlist-btn" title="Add to wishlist" onclick="handleWishlist(this)">&#9733;</button>
-                        <span class="product-badge">Vegetables</span>
-                    </div>
-                    <div class="product-body">
-                        <span class="product-name">Butternut Squash (1kg)</span>
-                        <span class="product-price">R70.00</span>
-                    </div>
-                    <div class="product-qty-row">
-                        <div class="qty-control">
-                            <button class="qty-btn" onclick="changeCardQty(this, -1)">&#8722;</button>
-                            <span class="qty-display">1</span>
-                            <button class="qty-btn" onclick="changeCardQty(this, 1)">&#43;</button>
-                        </div>
-                        <span class="qty-subtotal">R70.00</span>
-                    </div>
-                    <div class="product-actions">
-                        <a href="product_detail.html?id=5" class="btn btn-info product-btn">Info</a>
-                        <button class="btn btn-cart product-btn" onclick="handleCart(this)">Add to Cart</button>
-                    </div>
-                </div>
+  var filtered = useMemo(function() {
+    var kw   = search.toLowerCase();
+    var from = parseFloat(priceFrom) || 0;
+    var to   = parseFloat(priceTo)   || Infinity;
+    return PRODUCTS.filter(function(p) {
+      return (!kw || p.name.toLowerCase().indexOf(kw) !== -1) &&
+             (!cats.length || cats.indexOf(p.category) !== -1) &&
+             p.price >= from && p.price <= to;
+    });
+  }, [search, cats, priceFrom, priceTo]);
 
-                <div class="product-card" data-id="6" data-name="Seed Pack — Greens" data-category="seeds" data-price="35">
-                    <div class="product-img-wrap">
-                        <img src="../media/greens-seedpack-products.jpeg" alt="Seed Pack" class="product-img">
-                        <button class="wishlist-btn" title="Add to wishlist" onclick="handleWishlist(this)">&#9733;</button>
-                        <span class="product-badge">Seeds</span>
-                    </div>
-                    <div class="product-body">
-                        <span class="product-name">Seed Pack — Greens</span>
-                        <span class="product-price">R35.00</span>
-                    </div>
-                    <div class="product-qty-row">
-                        <div class="qty-control">
-                            <button class="qty-btn" onclick="changeCardQty(this, -1)">&#8722;</button>
-                            <span class="qty-display">1</span>
-                            <button class="qty-btn" onclick="changeCardQty(this, 1)">&#43;</button>
-                        </div>
-                        <span class="qty-subtotal">R35.00</span>
-                    </div>
-                    <div class="product-actions">
-                        <a href="product_detail.html?id=6" class="btn btn-info product-btn">Info</a>
-                        <button class="btn btn-cart product-btn" onclick="handleCart(this)">Add to Cart</button>
-                    </div>
-                </div>
+  function reset() { setSearch(''); setCats([]); setPriceFrom(''); setPriceTo(''); }
 
-                <div class="product-card" data-id="7" data-name="gloves" data-category="equipment" data-price="50">
-                    <div class="product-img-wrap">
-                        <img src="../media/equipment-products-1.jpg" alt="gloves" class="product-img">
-                        <button class="wishlist-btn" title="Add to wishlist" onclick="handleWishlist(this)">&#9733;</button>
-                        <span class="product-badge">Equipment</span>
-                    </div>
-                    <div class="product-body">
-                        <span class="product-name">gloves</span>
-                        <span class="product-price">R50.00</span>
-                    </div>
-                    <div class="product-qty-row">
-                        <div class="qty-control">
-                            <button class="qty-btn" onclick="changeCardQty(this, -1)">&#8722;</button>
-                            <span class="qty-display">1</span>
-                            <button class="qty-btn" onclick="changeCardQty(this, 1)">&#43;</button>
-                        </div>
-                        <span class="qty-subtotal">R50.00</span>
-                    </div>
-                    <div class="product-actions">
-                        <a href="product_detail.html?id=7" class="btn btn-info product-btn">Info</a>
-                        <button class="btn btn-cart product-btn" onclick="handleCart(this)">Add to Cart</button>
-                    </div>
-                </div>
+  return e('div', { className: 'max-w-7xl mx-auto px-4 sm:px-6 py-10' },
+    /* Page heading */
+    e('div', { className: 'text-center mb-10' },
+      e('h1', { className: 'text-4xl font-black text-white mb-1' }, 'Products'),
+      e('p', { className: 'text-gray-400 text-sm' }, filtered.length + ' item' + (filtered.length !== 1 ? 's' : '') + ' available')
+    ),
+    /* Layout */
+    e('div', { className: 'flex flex-col md:flex-row gap-6 items-start' },
+      e(Sidebar, { search: search, setSearch: setSearch, cats: cats, setCats: setCats, priceFrom: priceFrom, setPriceFrom: setPriceFrom, priceTo: priceTo, setPriceTo: setPriceTo, onReset: reset }),
+      e('div', { className: 'flex-1 min-w-0' },
+        filtered.length === 0
+          ? e('div', { className: 'text-center py-20 text-gray-500' },
+              e('div', { className: 'w-16 h-16 rounded-full bg-white/5 border border-white/10 flex items-center justify-center text-2xl font-black text-gray-600 mx-auto mb-4' }, '?'),
+              e('p', { className: 'text-lg font-medium mb-4' }, 'No products match your filters.'),
+              e('button', { onClick: reset, className: 'text-green-400 hover:underline text-sm' }, 'Clear filters')
+            )
+          : e('div', { className: 'grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-5' },
+              filtered.map(function(p) { return e(ProductCard, { key: p.id, product: p }); })
+            )
+      )
+    )
+  );
+}
 
-                <div class="product-card" data-id="8" data-name="Wooden handle hoe" data-category="equipment" data-price="100">
-                    <div class="product-img-wrap">
-                        <img src="../media/hoe-products.jpeg" alt="Wooden handle hoe" class="product-img">
-                        <button class="wishlist-btn" title="Add to wishlist" onclick="handleWishlist(this)">&#9733;</button>
-                        <span class="product-badge">Equipment</span>
-                    </div>
-                    <div class="product-body">
-                        <span class="product-name">Wooden handle hoe</span>
-                        <span class="product-price">R100.00</span>
-                    </div>
-                    <div class="product-qty-row">
-                        <div class="qty-control">
-                            <button class="qty-btn" onclick="changeCardQty(this, -1)">&#8722;</button>
-                            <span class="qty-display">1</span>
-                            <button class="qty-btn" onclick="changeCardQty(this, 1)">&#43;</button>
-                        </div>
-                        <span class="qty-subtotal">R100.00</span>
-                    </div>
-                    <div class="product-actions">
-                        <a href="product_detail.html?id=8" class="btn btn-info product-btn">Info</a>
-                        <button class="btn btn-cart product-btn" onclick="handleCart(this)">Add to Cart</button>
-                    </div>
-                </div>
+/* Mount everything */
+var navRoot    = document.getElementById('navbar-root');
+var footRoot   = document.getElementById('footer-root');
+var toggleRoot = document.getElementById('toggle-root');
+var appRoot    = document.getElementById('app-root');
 
-                <div class="product-card" data-id="9" data-name="Sorghum (1kg)" data-category="grains" data-price="80">
-                    <div class="product-img-wrap">
-                        <img src="../media/sorghum-products.jpg" alt="Sorghum" class="product-img">
-                        <button class="wishlist-btn" title="Add to wishlist" onclick="handleWishlist(this)">&#9733;</button>
-                        <span class="product-badge">Grains</span>
-                    </div>
-                    <div class="product-body">
-                        <span class="product-name">Sorghum (1kg)</span>
-                        <span class="product-price">R80.00</span>
-                    </div>
-                    <div class="product-qty-row">
-                        <div class="qty-control">
-                            <button class="qty-btn" onclick="changeCardQty(this, -1)">&#8722;</button>
-                            <span class="qty-display">1</span>
-                            <button class="qty-btn" onclick="changeCardQty(this, 1)">&#43;</button>
-                        </div>
-                        <span class="qty-subtotal">R80.00</span>
-                    </div>
-                    <div class="product-actions">
-                        <a href="product_detail.html?id=9" class="btn btn-info product-btn">Info</a>
-                        <button class="btn btn-cart product-btn" onclick="handleCart(this)">Add to Cart</button>
-                    </div>
-                </div>
-
-                <div class="product-card" data-id="10" data-name="Cabbage (1kg)" data-category="vegetables" data-price="100">
-                    <div class="product-img-wrap">
-                        <img src="../media/cabbage-products.jpeg" alt="Cabbage" class="product-img">
-                        <button class="wishlist-btn" title="Add to wishlist" onclick="handleWishlist(this)">&#9733;</button>
-                        <span class="product-badge">Vegetables</span>
-                    </div>
-                    <div class="product-body">
-                        <span class="product-name">Cabbage (1kg)</span>
-                        <span class="product-price">R100.00</span>
-                    </div>
-                    <div class="product-qty-row">
-                        <div class="qty-control">
-                            <button class="qty-btn" onclick="changeCardQty(this, -1)">&#8722;</button>
-                            <span class="qty-display">1</span>
-                            <button class="qty-btn" onclick="changeCardQty(this, 1)">&#43;</button>
-                        </div>
-                        <span class="qty-subtotal">R100.00</span>
-                    </div>
-                    <div class="product-actions">
-                        <a href="product_detail.html?id=10" class="btn btn-info product-btn">Info</a>
-                        <button class="btn btn-cart product-btn" onclick="handleCart(this)">Add to Cart</button>
-                    </div>
-                </div>
-
-            </div>
-
-            <p class="no-results" id="noResults" style="display:none;">No products match your filters.</p>
-
-        </main>
-    </div>
-
-    <script src="../scripts/scripts.js"></script>
+ReactDOM.createRoot(appRoot).render(
+  e(StoreProvider, null,
+    e(RootsComponents.ScrollGradient),
+    ReactDOM.createPortal(e(RootsComponents.Navbar),        navRoot),
+    ReactDOM.createPortal(e(RootsComponents.Footer),        footRoot),
+    ReactDOM.createPortal(e(RootsComponents.LowDataToggle), toggleRoot),
+    e(ProductsApp)
+  )
+);
+</script>
 </body>
 </html>

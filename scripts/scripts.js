@@ -16,10 +16,10 @@ window.addEventListener('scroll', () => {
 /* -------------------------------------------------------
    LOCALSTORAGE HELPERS — available on every page
 ------------------------------------------------------- */
-function getCart()              { return JSON.parse(localStorage.getItem('cart'))     || []; }
-function getWishlist()          { return JSON.parse(localStorage.getItem('wishlist')) || []; }
-function saveCart(cart)         { localStorage.setItem('cart',     JSON.stringify(cart)); }
-function saveWishlist(wishlist) { localStorage.setItem('wishlist', JSON.stringify(wishlist)); }
+function getCart()              { return JSON.parse(localStorage.getItem('roots-cart'))     || []; }
+function getWishlist()          { return JSON.parse(localStorage.getItem('roots-wishlist')) || []; }
+function saveCart(cart)         { localStorage.setItem('roots-cart',     JSON.stringify(cart)); }
+function saveWishlist(wishlist) { localStorage.setItem('roots-wishlist', JSON.stringify(wishlist)); }
 
 function addToCart(id, name, price, qty) {
     qty = qty || 1;
@@ -175,17 +175,22 @@ let orderRef       = '';
 /* -------------------------------------------------------
    INIT
 ------------------------------------------------------- */
-document.addEventListener('DOMContentLoaded', () => {
-    const cart = getCart();
+document.addEventListener('DOMContentLoaded', function() {
+    // Only run on the checkout page
+    if (!document.getElementById('checkoutPage')) return;
+
+    var cart = getCart();
 
     if (!cart || cart.length === 0) {
         document.getElementById('checkoutPage').style.display = 'none';
-        document.getElementById('emptyState').style.display   = 'flex';
+        var es = document.getElementById('emptyState');
+        if (es) { es.style.display = 'flex'; es.classList.remove('hidden'); }
         return;
     }
 
     orderRef = 'RTX-' + Math.random().toString(36).substr(2, 6).toUpperCase();
-    document.getElementById('eftRef').textContent = orderRef;
+    var eftEl = document.getElementById('eftRef');
+    if (eftEl) eftEl.textContent = orderRef;
 
     renderOrderSummary();
     updateMiniTotals();
@@ -196,13 +201,24 @@ document.addEventListener('DOMContentLoaded', () => {
    STEP NAVIGATION
 ------------------------------------------------------- */
 function goToStep(n) {
-    document.querySelectorAll('.checkout-step').forEach(s => s.classList.remove('active'));
+    document.querySelectorAll('.checkout-step').forEach(function(s) { s.classList.remove('active'); });
     document.getElementById('step' + n).classList.add('active');
 
-    document.querySelectorAll('.progress-step').forEach((s, i) => {
-        s.classList.toggle('active',    i + 1 === n);
-        s.classList.toggle('completed', i + 1 < n);
-    });
+    // Update Tailwind-based progress indicators (step-ind-N IDs)
+    for (var i = 1; i <= 4; i++) {
+        var ind = document.getElementById('step-ind-' + i);
+        if (!ind) continue;
+        var circle = ind.querySelector('div');
+        var label  = ind.querySelector('span');
+        if (!circle || !label) continue;
+        if (i <= n) {
+            circle.className = 'w-9 h-9 rounded-full border-2 flex items-center justify-center text-sm font-black transition-all border-green-400 bg-green-800/60 text-green-400';
+            label.className  = 'text-[10px] font-bold uppercase tracking-wide text-green-400';
+        } else {
+            circle.className = 'w-9 h-9 rounded-full border-2 flex items-center justify-center text-sm font-black transition-all border-white/20 bg-white/5 text-gray-500';
+            label.className  = 'text-[10px] font-bold uppercase tracking-wide text-gray-500';
+        }
+    }
 
     currentStep = n;
     window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -215,51 +231,52 @@ function goToStep(n) {
    RENDER ORDER SUMMARY (step 1)
 ------------------------------------------------------- */
 function renderOrderSummary() {
-    const cart      = getCart();
-    const container = document.getElementById('orderItems');
-    const totalsEl  = document.getElementById('orderTotals');
+    var cart      = getCart();
+    var container = document.getElementById('orderItems');
+    var totalsEl  = document.getElementById('orderTotals');
+    if (!container || !totalsEl) return;
 
-    let subtotal = 0;
-    container.innerHTML = cart.map(item => {
-        const line = item.price * item.qty;
+    var subtotal = 0;
+    var html = '';
+    cart.forEach(function(item) {
+        var line = item.price * item.qty;
         subtotal += line;
-        return `
-        <div class="order-item">
-            <div class="order-item-info">
-                <span class="order-item-name">${item.name}</span>
-                <span class="order-item-qty">x${item.qty} &nbsp;@&nbsp; R${parseFloat(item.price).toFixed(2)}</span>
-            </div>
-            <span class="order-item-total">R${line.toFixed(2)}</span>
-        </div>`;
-    }).join('');
+        html += '<div class="bg-white/5 border border-white/10 rounded-xl p-4 flex items-center justify-between gap-4">' +
+            '<div><p class="text-sm font-semibold text-white">' + item.name + '</p>' +
+            '<p class="text-xs text-gray-400 mt-0.5">x' + item.qty + ' @ R' + parseFloat(item.price).toFixed(2) + '</p></div>' +
+            '<span class="text-sm font-black text-green-400">R' + line.toFixed(2) + '</span></div>';
+    });
+    container.innerHTML = html;
 
-    const isDeliver  = document.querySelector('input[name="fulfilment"]:checked')?.value === 'deliver';
-    const delivery   = isDeliver ? DELIVERY_FEE : 0;
-    const total      = subtotal + delivery;
+    var fulfilmentEl = document.querySelector('input[name="fulfilment"]:checked');
+    var isDeliver    = fulfilmentEl && fulfilmentEl.value === 'deliver';
+    var delivery     = isDeliver ? DELIVERY_FEE : 0;
+    var total        = subtotal + delivery;
 
-    totalsEl.innerHTML = `
-        <div class="total-row"><span>Subtotal</span><span>R${subtotal.toFixed(2)}</span></div>
-        <div class="total-row"><span>Delivery</span><span>${delivery === 0 ? '<em>Free</em>' : 'R' + delivery.toFixed(2)}</span></div>
-        <div class="total-row grand"><span>Total</span><span>R${total.toFixed(2)}</span></div>`;
+    totalsEl.innerHTML =
+        '<div class="flex justify-between text-sm text-gray-400"><span>Subtotal</span><span>R' + subtotal.toFixed(2) + '</span></div>' +
+        '<div class="flex justify-between text-sm text-gray-400"><span>Delivery</span><span>' + (delivery === 0 ? 'Free' : 'R' + delivery.toFixed(2)) + '</span></div>' +
+        '<div class="flex justify-between text-white font-black text-base border-t border-white/10 pt-3 mt-2"><span>Total</span><span class=\"text-green-400\">R' + total.toFixed(2) + '</span></div>';
 }
 
 /* -------------------------------------------------------
    MINI TOTAL (steps 2 & 3)
 ------------------------------------------------------- */
 function updateMiniTotals() {
-    const cart      = getCart();
-    const subtotal  = cart.reduce((s, i) => s + i.price * i.qty, 0);
-    const isDeliver = document.querySelector('input[name="fulfilment"]:checked')?.value === 'deliver';
-    const delivery  = isDeliver ? DELIVERY_FEE : 0;
-    const total     = subtotal + delivery;
+    var cart      = getCart();
+    var subtotal  = cart.reduce(function(s, i) { return s + i.price * i.qty; }, 0);
+    var fulfilmentEl = document.querySelector('input[name="fulfilment"]:checked');
+    var isDeliver    = fulfilmentEl && fulfilmentEl.value === 'deliver';
+    var delivery  = isDeliver ? DELIVERY_FEE : 0;
+    var total     = subtotal + delivery;
 
-    const html = `
-        <div class="mini-total-row"><span>Subtotal</span><span>R${subtotal.toFixed(2)}</span></div>
-        <div class="mini-total-row"><span>Delivery</span><span>${delivery === 0 ? 'Free' : 'R' + delivery.toFixed(2)}</span></div>
-        <div class="mini-total-row grand"><span>Order Total</span><span>R${total.toFixed(2)}</span></div>`;
+    var html =
+        '<div class="flex justify-between text-sm text-gray-400"><span>Subtotal</span><span>R' + subtotal.toFixed(2) + '</span></div>' +
+        '<div class="flex justify-between text-sm text-gray-400"><span>Delivery</span><span>' + (delivery === 0 ? 'Free' : 'R' + delivery.toFixed(2)) + '</span></div>' +
+        '<div class="flex justify-between text-white font-black border-t border-white/10 pt-3 mt-2"><span>Order Total</span><span class=\"text-green-400\">R' + total.toFixed(2) + '</span></div>';
 
-    const d = document.getElementById('deliveryMiniTotal');
-    const p = document.getElementById('paymentMiniTotal');
+    var d = document.getElementById('deliveryMiniTotal');
+    var p = document.getElementById('paymentMiniTotal');
     if (d) d.innerHTML = html;
     if (p) p.innerHTML = html;
 }
@@ -268,13 +285,23 @@ function updateMiniTotals() {
    FULFILMENT TOGGLE
 ------------------------------------------------------- */
 function switchFulfilment() {
-    const isDeliver = document.getElementById('opt-deliver').checked;
+    var isDeliver = document.getElementById('opt-deliver').checked;
 
-    document.getElementById('deliveryForm').style.display = isDeliver ? 'block' : 'none';
-    document.getElementById('collectInfo').style.display  = isDeliver ? 'none'  : 'block';
+    var df = document.getElementById('deliveryForm');
+    var ci = document.getElementById('collectInfo');
+    if (df) { df.style.display = isDeliver ? 'block' : 'none'; df.classList.toggle('hidden', !isDeliver); }
+    if (ci) { ci.style.display = isDeliver ? 'none'  : 'block'; ci.classList.toggle('hidden', isDeliver); }
 
-    document.getElementById('label-collect').classList.toggle('selected', !isDeliver);
-    document.getElementById('label-deliver').classList.toggle('selected',  isDeliver);
+    var lc = document.getElementById('label-collect');
+    var ld = document.getElementById('label-deliver');
+    if (lc) {
+        lc.className = lc.className.replace('border-green-400 bg-green-400/5','border-white/15 bg-white/5');
+        if (!isDeliver) { lc.className = lc.className.replace('border-white/15 bg-white/5','border-green-400 bg-green-400/5'); }
+    }
+    if (ld) {
+        ld.className = ld.className.replace('border-green-400 bg-green-400/5','border-white/15 bg-white/5');
+        if (isDeliver) { ld.className = ld.className.replace('border-white/15 bg-white/5','border-green-400 bg-green-400/5'); }
+    }
 
     updateMiniTotals();
     renderOrderSummary();
@@ -282,33 +309,39 @@ function switchFulfilment() {
 
 // Set initial selected state
 document.addEventListener('DOMContentLoaded', () => {
-    document.getElementById('label-collect').classList.add('selected');
+    var lc = document.getElementById('label-collect');
+    if (lc) lc.classList.add('selected');
 });
 
 /* -------------------------------------------------------
    VALIDATION HELPERS
 ------------------------------------------------------- */
 function setError(id, msg) {
-    const el  = document.getElementById(id);
-    const err = el.parentElement.querySelector('.field-error');
-    el.classList.add('input-error');
+    var el  = document.getElementById(id);
+    if (!el) return;
+    var err = el.parentElement.querySelector('.field-error');
+    el.style.borderColor = '#ef4444';
     if (err) { err.textContent = msg; return; }
-    const span = document.createElement('span');
-    span.className   = 'field-error';
+    var span = document.createElement('span');
+    span.className   = 'field-error block text-red-400 text-xs mt-1';
     span.textContent = msg;
     el.parentElement.appendChild(span);
 }
 
 function clearError(id) {
-    const el  = document.getElementById(id);
-    const err = el.parentElement.querySelector('.field-error');
-    el.classList.remove('input-error');
+    var el  = document.getElementById(id);
+    if (!el) return;
+    var err = el.parentElement.querySelector('.field-error');
+    el.style.borderColor = '';
     if (err) err.remove();
 }
 
 function clearAll(ids) { ids.forEach(clearError); }
 
-function isEmpty(id) { return !document.getElementById(id).value.trim(); }
+function isEmpty(id) {
+    var el = document.getElementById(id);
+    return !el || !el.value.trim();
+}
 
 function isValidEmail(v) { return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v); }
 
@@ -318,23 +351,23 @@ function isValidPhone(v) { return /^[\d\s+()-]{7,15}$/.test(v.trim()); }
    VALIDATE STEP 2 — DELIVERY
 ------------------------------------------------------- */
 function validateDelivery() {
-    const ids = ['firstName','lastName','email','phone'];
+    var ids = ['firstName','lastName','email','phone'];
     clearAll(ids);
-    let ok = true;
+    var ok = true;
 
     if (isEmpty('firstName')) { setError('firstName', 'First name is required'); ok = false; }
     if (isEmpty('lastName'))  { setError('lastName',  'Last name is required');  ok = false; }
 
-    const email = document.getElementById('email').value.trim();
+    var email = document.getElementById('email').value.trim();
     if (!email) { setError('email', 'Email is required'); ok = false; }
     else if (!isValidEmail(email)) { setError('email', 'Enter a valid email address'); ok = false; }
 
-    const phone = document.getElementById('phone').value.trim();
+    var phone = document.getElementById('phone').value.trim();
     if (!phone) { setError('phone', 'Phone number is required'); ok = false; }
     else if (!isValidPhone(phone)) { setError('phone', 'Enter a valid phone number'); ok = false; }
 
     if (document.getElementById('opt-deliver').checked) {
-        const dIds = ['street','suburb','city','province','postalCode'];
+        var dIds = ['street','suburb','city','province','postalCode'];
         clearAll(dIds);
 
         if (isEmpty('street'))     { setError('street',     'Street address is required'); ok = false; }
@@ -342,7 +375,7 @@ function validateDelivery() {
         if (isEmpty('city'))       { setError('city',       'City is required');            ok = false; }
         if (!document.getElementById('province').value) { setError('province', 'Select a province'); ok = false; }
 
-        const pc = document.getElementById('postalCode').value.trim();
+        var pc = document.getElementById('postalCode').value.trim();
         if (!pc) { setError('postalCode', 'Postal code is required'); ok = false; }
         else if (!/^\d{4}$/.test(pc)) { setError('postalCode', 'Enter a 4-digit postal code'); ok = false; }
     }
@@ -355,27 +388,44 @@ function validateDelivery() {
 ------------------------------------------------------- */
 function switchPayTab(tab, btn) {
     activePayTab = tab;
-    document.querySelectorAll('.pay-tab').forEach(b => b.classList.remove('active'));
-    btn.classList.add('active');
-    document.querySelectorAll('.pay-panel').forEach(p => p.style.display = 'none');
-    document.getElementById('pay-' + tab).style.display = 'block';
+    // Reset all tab buttons
+    var tabBtns = ['tab-card-btn','tab-eft-btn','tab-wallet-btn'];
+    tabBtns.forEach(function(id) {
+        var b = document.getElementById(id);
+        if (!b) return;
+        b.className = b.className
+            .replace('bg-green-800/60 border-green-400 text-green-400','bg-white/5 border-white/15 text-gray-400 hover:text-gray-200');
+    });
+    // Activate clicked tab
+    if (btn) {
+        btn.className = btn.className
+            .replace('bg-white/5 border-white/15 text-gray-400 hover:text-gray-200','bg-green-800/60 border-green-400 text-green-400');
+    }
+    // Show correct panel
+    document.querySelectorAll('.pay-panel').forEach(function(p) { p.classList.remove('active'); });
+    var panel = document.getElementById('pay-' + tab);
+    if (panel) panel.classList.add('active');
 }
 
 /* -------------------------------------------------------
    CARD NUMBER / EXPIRY FORMATTING
 ------------------------------------------------------- */
 function formatCardNumber(input) {
-    let v = input.value.replace(/\D/g, '').substr(0, 16);
+    var v = input.value.replace(/[^0-9]/g, '').substr(0, 16);
     input.value = v.replace(/(.{4})/g, '$1 ').trim();
-    const display = v.padEnd(16, '•').replace(/(.{4})/g, '$1 ').trim();
-    document.getElementById('cardNumDisplay').textContent = display;
+    var padded = v;
+    while (padded.length < 16) { padded += '.'; }
+    var display = padded.replace(/(.{4})/g, '$1 ').trim();
+    var el = document.getElementById('cardNumDisplay');
+    if (el) el.textContent = display;
 }
 
 function formatExpiry(input) {
-    let v = input.value.replace(/\D/g, '').substr(0, 4);
-    if (v.length >= 2) v = v.substr(0, 2) + '/' + v.substr(2);
+    var v = input.value.replace(/[^0-9]/g, '').substr(0, 4);
+    if (v.length >= 2) { v = v.substr(0, 2) + '/' + v.substr(2); }
     input.value = v;
-    document.getElementById('cardExpDisplay').textContent = v || 'MM/YY';
+    var el = document.getElementById('cardExpDisplay');
+    if (el) el.textContent = v || 'MM/YY';
 }
 
 /* -------------------------------------------------------
@@ -383,29 +433,38 @@ function formatExpiry(input) {
 ------------------------------------------------------- */
 function selectWallet(el, name) {
     activeWallet = name;
-    document.querySelectorAll('.wallet-option').forEach(w => w.classList.remove('selected'));
-    el.classList.add('selected');
-    document.getElementById('qrLabel').textContent = 'Scan with ' +
-        name.charAt(0).toUpperCase() + name.slice(1) + ' to pay';
+    // Reset all wallet options to unselected Tailwind classes
+    var walletIds = ['wallet-snapscan','wallet-ozow','wallet-zapper'];
+    walletIds.forEach(function(id) {
+        var w = document.getElementById(id);
+        if (!w) return;
+        w.className = w.className
+            .replace('border-green-400 bg-green-400/5','border-white/15 bg-white/5');
+    });
+    // Activate selected
+    el.className = el.className
+        .replace('border-white/15 bg-white/5','border-green-400 bg-green-400/5');
+    var ql = document.getElementById('qrLabel');
+    if (ql) ql.textContent = 'Scan with ' + name.charAt(0).toUpperCase() + name.slice(1) + ' to pay';
 }
 
 /* -------------------------------------------------------
    FAKE QR CODE GENERATOR
 ------------------------------------------------------- */
 function generateQR() {
-    const grid = document.getElementById('qrGrid');
+    var grid = document.getElementById('qrGrid');
     if (!grid) return;
-    let html = '';
-    for (let i = 0; i < 100; i++) {
-        html += `<div class="qr-cell ${Math.random() > 0.5 ? 'filled' : ''}"></div>`;
+    var html = '';
+    for (var i = 0; i < 100; i++) {
+        html += '<div class="qr-cell ' + (Math.random() > 0.5 ? 'filled' : '') + '"></div>';
     }
     grid.innerHTML = html;
-    // Corner markers
-    [0, 9, 90].forEach(idx => {
-        for (let r = 0; r < 3; r++) {
-            for (let c = 0; c < 3; c++) {
-                const cell = grid.children[idx + r * 10 + c];
-                if (cell) cell.classList.add('filled', 'marker');
+    var corners = [0, 9, 90];
+    corners.forEach(function(idx) {
+        for (var r = 0; r < 3; r++) {
+            for (var c = 0; c < 3; c++) {
+                var cell = grid.children[idx + r * 10 + c];
+                if (cell) { cell.classList.add('filled'); cell.classList.add('marker'); }
             }
         }
     });
@@ -418,24 +477,24 @@ function validatePayment() {
     if (activePayTab === 'card') {
         const ids = ['cardName','cardNumber','cardExpiry','cardCVV'];
         clearAll(ids);
-        let ok = true;
+        var ok = true;
 
         if (isEmpty('cardName'))   { setError('cardName',   'Name on card is required'); ok = false; }
 
-        const num = document.getElementById('cardNumber').value.replace(/\s/g, '');
+        var num = document.getElementById('cardNumber').value.replace(/\s/g, '');
         if (!num)        { setError('cardNumber', 'Card number is required'); ok = false; }
         else if (num.length !== 16) { setError('cardNumber', 'Enter a valid 16-digit card number'); ok = false; }
 
-        const exp = document.getElementById('cardExpiry').value;
+        var exp = document.getElementById('cardExpiry').value;
         if (!exp) { setError('cardExpiry', 'Expiry date is required'); ok = false; }
         else {
-            const [mm, yy] = exp.split('/');
-            const now = new Date();
-            const expDate = new Date(2000 + parseInt(yy), parseInt(mm) - 1);
+            var parts = exp.split('/'); var mm = parts[0]; var yy = parts[1];
+            var now = new Date();
+            var expDate = new Date(2000 + parseInt(yy), parseInt(mm) - 1);
             if (!mm || !yy || expDate < now) { setError('cardExpiry', 'Card has expired or date is invalid'); ok = false; }
         }
 
-        const cvv = document.getElementById('cardCVV').value;
+        var cvv = document.getElementById('cardCVV').value;
         if (!cvv) { setError('cardCVV', 'CVV is required'); ok = false; }
         else if (!/^\d{3,4}$/.test(cvv)) { setError('cardCVV', 'Enter a valid 3 or 4-digit CVV'); ok = false; }
 
@@ -454,91 +513,112 @@ function validatePayment() {
    RENDER REVIEW (step 4)
 ------------------------------------------------------- */
 function renderReview() {
-    const cart      = getCart();
-    const isDeliver = document.getElementById('opt-deliver').checked;
-    const subtotal  = cart.reduce((s, i) => s + i.price * i.qty, 0);
-    const delivery  = isDeliver ? DELIVERY_FEE : 0;
-    const total     = subtotal + delivery;
+    var cart      = getCart();
+    var isDeliver = document.getElementById('opt-deliver') && document.getElementById('opt-deliver').checked;
+    var subtotal  = cart.reduce(function(s, i) { return s + i.price * i.qty; }, 0);
+    var delivery  = isDeliver ? DELIVERY_FEE : 0;
+    var total     = subtotal + delivery;
 
     // Items
-    document.getElementById('reviewItems').innerHTML =
-        cart.map(i => `
-        <div class="review-line">
-            <span>${i.name} x${i.qty}</span>
-            <span>R${(i.price * i.qty).toFixed(2)}</span>
-        </div>`).join('');
+    var riEl = document.getElementById('reviewItems');
+    if (riEl) {
+        var riHtml = '';
+        cart.forEach(function(item) {
+            riHtml += '<div class="flex justify-between px-4 py-2.5 text-sm text-gray-300 border-b border-white/5">' +
+                '<span>' + item.name + ' x' + item.qty + '</span>' +
+                '<span class="text-white font-semibold">R' + (item.price * item.qty).toFixed(2) + '</span></div>';
+        });
+        riEl.innerHTML = riHtml;
+    }
 
     // Delivery
-    let deliveryHTML = '';
+    var deliveryHTML = '';
+    var rl = '<div class="flex justify-between px-4 py-2.5 text-sm border-b border-white/5">';
+    var rs = '<span class="text-gray-400">';
+    var rv = '</span><span class="text-white font-semibold">';
+    var re = '</span></div>';
+    function rlRow(label, val) { return rl + rs + label + rv + val + re; }
+
     if (isDeliver) {
-        deliveryHTML = `
-            <div class="review-line"><span>Method</span><span>Home Delivery (+R${DELIVERY_FEE})</span></div>
-            <div class="review-line"><span>${document.getElementById('street').value}</span></div>
-            <div class="review-line"><span>${document.getElementById('suburb').value}, ${document.getElementById('city').value}</span></div>
-            <div class="review-line"><span>${document.getElementById('province').value}, ${document.getElementById('postalCode').value}</span></div>`;
+        deliveryHTML =
+            rlRow('Method', 'Home Delivery (+R' + DELIVERY_FEE + ')') +
+            rlRow('Address', document.getElementById('street').value) +
+            rlRow('Suburb/City', document.getElementById('suburb').value + ', ' + document.getElementById('city').value) +
+            rlRow('Province', document.getElementById('province').value + ', ' + document.getElementById('postalCode').value);
     } else {
-        deliveryHTML = `
-            <div class="review-line"><span>Method</span><span>Collection (Free)</span></div>
-            <div class="review-line"><span>12 Harvest Road, Khayelitsha, CT</span></div>`;
+        deliveryHTML =
+            rlRow('Method', 'Collection (Free)') +
+            rlRow('Address', '12 Harvest Road, Khayelitsha, CT');
     }
-    deliveryHTML += `
-        <div class="review-line"><span>Contact</span><span>${document.getElementById('firstName').value} ${document.getElementById('lastName').value}</span></div>
-        <div class="review-line"><span>Email</span><span>${document.getElementById('email').value}</span></div>`;
-    document.getElementById('reviewDelivery').innerHTML = deliveryHTML;
+    deliveryHTML +=
+        rlRow('Contact', document.getElementById('firstName').value + ' ' + document.getElementById('lastName').value) +
+        rlRow('Email', document.getElementById('email').value);
+    var rdEl = document.getElementById('reviewDelivery');
+    if (rdEl) rdEl.innerHTML = deliveryHTML;
 
     // Payment
-    let payHTML = '';
+    var payHTML = '';
     if (activePayTab === 'card') {
-        const num = document.getElementById('cardNumber').value;
-        const last4 = num.replace(/\s/g, '').substr(-4);
-        payHTML = `
-            <div class="review-line"><span>Method</span><span>Credit / Debit Card</span></div>
-            <div class="review-line"><span>Card</span><span>•••• •••• •••• ${last4}</span></div>
-            <div class="review-line"><span>Name</span><span>${document.getElementById('cardName').value}</span></div>`;
+        var num   = document.getElementById('cardNumber').value;
+        var last4 = num.replace(/\s/g, '').substr(-4);
+        payHTML =
+            rlRow('Method', 'Credit / Debit Card') +
+            rlRow('Card',   '.... .... .... ' + last4) +
+            rlRow('Name',   document.getElementById('cardName').value);
     } else if (activePayTab === 'eft') {
-        payHTML = `<div class="review-line"><span>Method</span><span>EFT / Bank Transfer</span></div>
-                   <div class="review-line"><span>Ref</span><span>${orderRef}</span></div>`;
+        payHTML = rlRow('Method', 'EFT / Bank Transfer') + rlRow('Reference', orderRef);
     } else {
-        payHTML = `<div class="review-line"><span>Method</span><span>${activeWallet.charAt(0).toUpperCase() + activeWallet.slice(1)}</span></div>`;
+        payHTML = rlRow('Method', activeWallet.charAt(0).toUpperCase() + activeWallet.slice(1));
     }
-    document.getElementById('reviewPayment').innerHTML = payHTML;
+    var rpEl = document.getElementById('reviewPayment');
+    if (rpEl) rpEl.innerHTML = payHTML;
 
     // Final total
-    document.getElementById('finalTotal').innerHTML = `
-        <div class="total-row"><span>Subtotal</span><span>R${subtotal.toFixed(2)}</span></div>
-        <div class="total-row"><span>Delivery</span><span>${delivery === 0 ? '<em>Free</em>' : 'R' + delivery.toFixed(2)}</span></div>
-        <div class="total-row grand"><span>Total to Pay</span><span>R${total.toFixed(2)}</span></div>`;
+    var ftEl = document.getElementById('finalTotal');
+    if (ftEl) ftEl.innerHTML =
+        '<div class="flex justify-between text-sm text-gray-400"><span>Subtotal</span><span>R' + subtotal.toFixed(2) + '</span></div>' +
+        '<div class="flex justify-between text-sm text-gray-400"><span>Delivery</span><span>' + (delivery === 0 ? 'Free' : 'R' + delivery.toFixed(2)) + '</span></div>' +
+        '<div class="flex justify-between text-white font-black text-base border-t border-white/10 pt-3 mt-2"><span>Total to Pay</span><span class=\"text-green-400\">R' + total.toFixed(2) + '</span></div>';
 }
 
 /* -------------------------------------------------------
    PLACE ORDER
 ------------------------------------------------------- */
 function placeOrder() {
-    if (!document.getElementById('termsCheck').checked) {
-        const err = document.querySelector('.terms-error');
+    var termsCheck = document.getElementById('termsCheck');
+    if (!termsCheck || !termsCheck.checked) {
+        var err = document.querySelector('.terms-error');
         if (!err) {
-            const span = document.createElement('span');
-            span.className   = 'terms-error field-error';
-            span.textContent = 'Please accept the terms and conditions';
-            document.querySelector('.terms-check').after(span);
+            var span = document.createElement('span');
+            span.className   = 'terms-error field-error block text-red-400 text-xs mt-1 mb-3';
+            span.textContent = 'Please accept the terms and conditions to continue';
+            var termsLabel = document.querySelector('label[for="termsCheck"], label:has(#termsCheck)');
+            if (termsLabel) { termsLabel.after(span); }
+            else { termsCheck.parentElement.after(span); }
         }
         return;
     }
 
-    const btn = document.getElementById('placeOrderBtn');
+    var btn = document.getElementById('placeOrderBtn');
     btn.textContent = 'Processing...';
     btn.disabled    = true;
+    btn.classList.add('opacity-60', 'cursor-not-allowed');
 
-    // Simulate payment processing delay
-    setTimeout(() => {
-        const isDeliver = document.getElementById('opt-deliver').checked;
-        document.getElementById('popupEmail').textContent  = document.getElementById('email').value;
-        document.getElementById('popupRef').textContent    = orderRef;
-        document.getElementById('popupMethod').textContent = isDeliver
-            ? 'delivery (2–4 business days)'
+    setTimeout(function() {
+        var isDeliver = document.getElementById('opt-deliver').checked;
+        var emailEl   = document.getElementById('email');
+        var popEmail  = document.getElementById('popupEmail');
+        var popRef    = document.getElementById('popupRef');
+        var popMethod = document.getElementById('popupMethod');
+        var popup     = document.getElementById('successPopup');
+
+        if (popEmail)  popEmail.textContent  = emailEl ? emailEl.value : '';
+        if (popRef)    popRef.textContent    = orderRef;
+        if (popMethod) popMethod.textContent = isDeliver
+            ? 'delivery (2 to 4 business days)'
             : 'collection at Roots Distribution Centre';
 
-        document.getElementById('successPopup').classList.add('visible');
+        if (popup) popup.classList.add('visible');
         saveCart([]);
     }, 1800);
 }
@@ -980,20 +1060,26 @@ let currentQty     = 1;
 /* -------------------------------------------------------
    INIT
 ------------------------------------------------------- */
-document.addEventListener('DOMContentLoaded', () => {
-    const id      = new URLSearchParams(window.location.search).get('id');
-    const product = PRODUCTS[id];
- 
+document.addEventListener('DOMContentLoaded', function() {
+    // Only run on the OLD (non-React) product detail page
+    // The React version handles its own rendering
+    if (!document.getElementById('detailPage') && !document.getElementById('notFound')) return;
+    // If this is the React version (has app-root), skip - React handles everything
+    if (document.getElementById('app-root')) return;
+
+    var id      = new URLSearchParams(window.location.search).get('id');
+    var product = PRODUCTS[id];
+
     if (!product) {
         document.getElementById('notFound').style.display  = 'flex';
         document.getElementById('detailPage').style.display = 'none';
         return;
     }
- 
+
     currentProduct = product;
     document.title = product.name + ' — Roots';
     document.getElementById('detailPage').style.display = 'block';
- 
+
     renderBreadcrumb(product);
     renderHero(product);
     renderChips(product);
@@ -1128,92 +1214,87 @@ function detailAddToCart() {
    TABS
 ------------------------------------------------------- */
 function renderTabs(p) {
-    // Description
-    document.getElementById('tab-description').innerHTML = `
-        <div class="tab-content-body">${p.description}</div>`;
- 
-    // Nutrition / Details
-    document.getElementById('tab-nutrition').innerHTML = `
-        <div class="nutrition-table">
-            ${p.nutrition.map(row => `
-            <div class="nutrition-row">
-                <span class="nutrition-label">${row.label}</span>
-                <span class="nutrition-value">${row.value}</span>
-            </div>`).join('')}
-        </div>`;
- 
-    // Reviews
-    const avgRating = p.reviews.reduce((s, r) => s + r.rating, 0) / p.reviews.length;
-    document.getElementById('tab-reviews').innerHTML = `
-        <div class="reviews-header">
-            <div class="reviews-avg">
-                <span class="avg-number">${avgRating.toFixed(1)}</span>
-                <div class="avg-stars">${renderStars(avgRating)}</div>
-                <span class="avg-count">${p.reviews.length} review${p.reviews.length !== 1 ? 's' : ''}</span>
-            </div>
-        </div>
-        <div class="reviews-list">
-            ${p.reviews.map(r => `
-            <div class="review-card">
-                <div class="review-top">
-                    <span class="review-author">${r.author}</span>
-                    <span class="review-stars">${renderStars(r.rating)}</span>
-                    <span class="review-date">${r.date}</span>
-                </div>
-                <p class="review-body">${r.body}</p>
-            </div>`).join('')}
-        </div>`;
+    if (document.getElementById('app-root')) return;
+    var tdEl = document.getElementById('tab-description');
+    if (tdEl) tdEl.innerHTML = '<div class="tab-content-body">' + p.description + '</div>';
+
+    var tnEl = document.getElementById('tab-nutrition');
+    if (tnEl) {
+        var nHtml = '<div class="nutrition-table">';
+        p.nutrition.forEach(function(row) {
+            nHtml += '<div class="nutrition-row"><span class="nutrition-label">' + row.label +
+                     '</span><span class="nutrition-value">' + row.value + '</span></div>';
+        });
+        nHtml += '</div>';
+        tnEl.innerHTML = nHtml;
+    }
+
+    var trEl = document.getElementById('tab-reviews');
+    if (trEl && p.reviews && p.reviews.length) {
+        var avgRating = p.reviews.reduce(function(s, r) { return s + r.rating; }, 0) / p.reviews.length;
+        var rHtml = '<div class="reviews-header"><div class="reviews-avg">' +
+            '<span class="avg-number">' + avgRating.toFixed(1) + '</span>' +
+            '<span class="avg-stars">' + renderStars(avgRating) + '</span>' +
+            '<span class="avg-count">' + p.reviews.length + ' review' + (p.reviews.length !== 1 ? 's' : '') + '</span>' +
+            '</div></div><div class="reviews-list">';
+        p.reviews.forEach(function(r) {
+            rHtml += '<div class="review-card"><div class="review-top">' +
+                '<span class="review-author">' + r.author + '</span>' +
+                '<span class="review-stars">' + renderStars(r.rating) + '</span>' +
+                '<span class="review-date">' + r.date + '</span>' +
+                '</div><p class="review-body">' + r.body + '</p></div>';
+        });
+        rHtml += '</div>';
+        trEl.innerHTML = rHtml;
+    }
 }
  
 function renderStars(rating) {
-    return Array.from({ length: 5 }, (_, i) =>
-        `<span class="${i < Math.round(rating) ? 'star filled' : 'star'}">★</span>`
-    ).join('');
+    var html = '';
+    for (var i = 0; i < 5; i++) {
+        html += '<span class="' + (i < Math.round(rating) ? 'star filled' : 'star') + '">*</span>';
+    }
+    return html;
 }
  
 function switchDetailTab(name, btn) {
-    document.querySelectorAll('.detail-tab').forEach(b => b.classList.remove('active'));
-    document.querySelectorAll('.detail-tab-panel').forEach(p => p.style.display = 'none');
+    document.querySelectorAll('.detail-tab').forEach(function(b) { b.classList.remove('active'); });
+    document.querySelectorAll('.detail-tab-panel').forEach(function(p) { p.style.display = 'none'; });
     btn.classList.add('active');
-    document.getElementById('tab-' + name).style.display = 'block';
+    var panel = document.getElementById('tab-' + name);
+    if (panel) panel.style.display = 'block';
 }
  
 /* -------------------------------------------------------
    RELATED PRODUCTS
 ------------------------------------------------------- */
 function renderRelated(p) {
-    const related = Object.values(PRODUCTS)
-        .filter(prod => prod.id !== p.id && prod.category === p.category)
-        .slice(0, 4);
- 
-    // If not enough in same category, fill from others
+    if (document.getElementById('app-root')) return;
+    var allProds = Object.values(PRODUCTS);
+    var related = allProds.filter(function(prod) { return prod.id !== p.id && prod.category === p.category; }).slice(0, 4);
     if (related.length < 3) {
-        const others = Object.values(PRODUCTS)
-            .filter(prod => prod.id !== p.id && prod.category !== p.category)
-            .slice(0, 4 - related.length);
-        related.push(...others);
+        var others = allProds.filter(function(prod) { return prod.id !== p.id && prod.category !== p.category; }).slice(0, 4 - related.length);
+        related = related.concat(others);
     }
  
-    document.getElementById('relatedGrid').innerHTML = related.map(prod => `
-        <div class="related-card">
-            <a href="product_detail.html?id=${prod.id}" class="related-img-link">
-                <div class="related-img-wrap">
-                    <img src="${prod.image}" alt="${prod.name}" class="related-img">
-                    <span class="product-badge">${prod.badge}</span>
-                </div>
-            </a>
-            <div class="related-body">
-                <span class="related-name">${prod.name}</span>
-                <span class="related-price">R${prod.price.toFixed(2)}</span>
-            </div>
-            <div class="related-actions">
-                <a href="product_detail.html?id=${prod.id}" class="btn btn-info related-btn">View</a>
-                <button class="btn btn-cart related-btn"
-                    onclick="addToCart('${prod.id}','${prod.name}',${prod.price},1); this.textContent='✓'; setTimeout(()=>this.textContent='Add',1800)">
-                    Add
-                </button>
-            </div>
-        </div>`).join('');
+    var rgEl = document.getElementById('relatedGrid');
+    if (!rgEl) return;
+    var rHtml = '';
+    related.forEach(function(prod) {
+        rHtml += '<div class="related-card">' +
+            '<a href="product_detail.html?id=' + prod.id + '" class="related-img-link">' +
+            '<div class="related-img-wrap">' +
+            '<img src="' + prod.image + '" alt="' + prod.name + '" class="related-img">' +
+            '<span class="product-badge">' + prod.badge + '</span></div></a>' +
+            '<div class="related-body">' +
+            '<span class="related-name">' + prod.name + '</span>' +
+            '<span class="related-price">R' + prod.price.toFixed(2) + '</span></div>' +
+            '<div class="related-actions">' +
+            '<a href="product_detail.html?id=' + prod.id + '" class="btn btn-info related-btn">View</a>' +
+            '<button class="btn btn-cart related-btn" onclick="addToCart(\'' + prod.id + '\',\'' + prod.name + '\',' + prod.price + ',1);this.textContent=\'Added!\';setTimeout(function(){this.textContent=\'Add\';}.bind(this),1800)">Add</button>' +
+            '</div></div>';
+    });
+    rgEl.innerHTML = rHtml;
 }
 
 /* =====================================================

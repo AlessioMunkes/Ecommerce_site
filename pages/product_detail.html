@@ -1,146 +1,276 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Product — Roots</title>
-    <link rel="stylesheet" href="../styles/styles.css" />
+  <meta charset="UTF-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Product — Roots</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>tailwind.config={theme:{extend:{colors:{green:{400:'#4ade80',700:'#15803d',800:'#015005'},soil:{700:'#382f26',800:'#1a3a2a',900:'#0f2417'}}}}}</script>
+  <style>
+    body{background:linear-gradient(to bottom,#0f2417,#1a3a2a,#0e3d20,#1a3a2a,#0f2417);background-size:100% 400%;min-height:100vh;color:#f9faf8;font-family:system-ui,sans-serif}
+    body.low-data{background:#0f2417!important}body.low-data img{display:none!important}
+    ::-webkit-scrollbar{width:5px}::-webkit-scrollbar-track{background:#0f2417}::-webkit-scrollbar-thumb{background:#015005;border-radius:3px}
+  </style>
 </head>
 <body>
+<div id="navbar-root"></div>
+<div id="app-root" class="min-h-screen"></div>
+<div id="footer-root"></div>
+<div id="toggle-root"></div>
 
-    <!-- NAVBAR -->
-    <header class="header">
-        <div class="header-brand">
-            <h3><a href="index.html">Roots</a></h3>
-        </div>
-        <input type="checkbox" id="nav-toggle" class="nav-toggle">
-        <label for="nav-toggle" class="hamburger">
-            <span></span>
-            <span></span>
-            <span></span>
-        </label>
-        <nav class="links">
-            <a href="index.html">Home</a>
-            <a href="produce_products.html">Products</a>
-            <a href="newsletter.html">Newsletter</a>
-            <a href="about_us.html">About Us</a>
-            <a href="contact_us.html">Contact Us</a>
-            <a href="wishlist.html">Wishlist</a>
-            <a href="cart.html">Shopping Cart</a>
-        </nav>
-    </header>
+<script src="https://unpkg.com/react@18/umd/react.production.min.js" crossorigin></script>
+<script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js" crossorigin></script>
+<script src="../scripts/shared-components.js"></script>
+<script src="../scripts/product_detail.js"></script>
+<script>
+var useState  = React.useState;
+var useEffect = React.useEffect;
+var e         = React.createElement;
+var StoreProvider = RootsStore.StoreProvider;
+var useStore      = RootsStore.useStore;
 
-    <!-- NOT FOUND STATE -->
-    <div id="notFound" class="not-found" style="display:none;">
-        <div class="not-found-icon">&#128269;</div>
-        <p>Product not found.</p>
-        <a href="produce_products.html" class="btn btn-primary">Back to Products</a>
-    </div>
+function StarRating(props) {
+  var stars = [];
+  for (var i = 1; i <= 5; i++) {
+    stars.push(e('span', { key: i, className: i <= props.rating ? 'text-yellow-400' : 'text-gray-600' }, i <= props.rating ? '★' : '☆'));
+  }
+  return e('span', { className: 'flex gap-0.5 text-sm' }, stars);
+}
 
-    <!-- DETAIL PAGE — filled by JS -->
-    <div class="detail-page" id="detailPage" style="display:none;">
+function DetailApp() {
+  var store = useStore();
+  var productId = new URLSearchParams(window.location.search).get('id');
+  var product = PRODUCTS[productId];
 
-        <!-- BREADCRUMB -->
-        <nav class="breadcrumb" id="breadcrumb"></nav>
+  var qtyState     = useState(1);
+  var tabState     = useState('description');
+  var addedState   = useState(false);
+  var qty    = qtyState[0];  var setQty    = qtyState[1];
+  var tab    = tabState[0];  var setTab    = tabState[1];
+  var added  = addedState[0]; var setAdded = addedState[1];
 
-        <!-- MAIN LAYOUT: image left, info right -->
-        <div class="detail-main">
+  useEffect(function() {
+    if (product) { document.title = product.name + ' — Roots'; }
+  }, []);
 
-            <!-- LEFT — images -->
-            <div class="detail-img-col">
-                <div class="detail-img-wrap">
-                    <img id="detailMainImg" src="" alt="" class="detail-main-img">
-                    <button class="detail-wishlist-btn" id="detailWishlistBtn" title="Add to wishlist"
-                        onclick="detailToggleWishlist()">&#9733;</button>
-                    <span class="detail-badge" id="detailBadge"></span>
-                </div>
-                <!-- Thumbnail strip — shown if product has multiple images -->
-                <div class="detail-thumbs" id="detailThumbs"></div>
-            </div>
+  if (!product) {
+    return e('div', { className: 'max-w-2xl mx-auto px-4 py-24 text-center' },
+      e('div', { className: 'w-20 h-20 rounded-full bg-white/5 border border-white/10 flex items-center justify-center text-2xl font-black text-gray-600 mx-auto mb-6' }, '?'),
+      e('h2', { className: 'text-2xl font-black text-white mb-2' }, 'Product not found'),
+      e('a', { href: 'produce_products.html', className: 'inline-block bg-green-800 hover:bg-green-700 text-white font-bold px-6 py-3 rounded-xl transition-colors mt-4' }, 'Back to Products')
+    );
+  }
 
-            <!-- RIGHT — product info -->
-            <div class="detail-info-col">
+  var isWishlisted = store.isInWishlist(product.id);
+  var lineTotal    = (product.price * qty).toFixed(2);
+  var related      = Object.values(PRODUCTS).filter(function(p) { return p.id !== product.id && p.category === product.category; }).slice(0, 4);
+  if (related.length < 3) {
+    var others = Object.values(PRODUCTS).filter(function(p) { return p.id !== product.id && p.category !== product.category; }).slice(0, 4 - related.length);
+    related = related.concat(others);
+  }
 
-                <h1 class="detail-name" id="detailName"></h1>
+  function handleAddToCart() {
+    store.addToCart(product, qty);
+    setAdded(true);
+    setTimeout(function() { setAdded(false); }, 2000);
+  }
 
-                <div class="detail-meta-row">
-                    <span class="detail-category" id="detailCategory"></span>
-                    <span class="detail-stock" id="detailStock"></span>
-                </div>
+  return e('div', { className: 'max-w-6xl mx-auto px-4 sm:px-8 py-8 pb-24' },
 
-                <div class="detail-price-row">
-                    <span class="detail-price" id="detailPrice"></span>
-                    <span class="detail-price-unit" id="detailPriceUnit"></span>
-                </div>
+    /* Breadcrumb */
+    e('nav', { className: 'flex items-center gap-2 text-xs text-gray-500 mb-8 flex-wrap' },
+      e('a', { href: 'index.html', className: 'hover:text-green-400 transition-colors' }, 'Home'),
+      e('span', null, '/'),
+      e('a', { href: 'produce_products.html', className: 'hover:text-green-400 transition-colors' }, 'Products'),
+      e('span', null, '/'),
+      e('a', { href: 'produce_products.html?filter=' + product.category, className: 'hover:text-green-400 transition-colors' }, product.category.charAt(0).toUpperCase() + product.category.slice(1)),
+      e('span', null, '/'),
+      e('span', { className: 'text-gray-300' }, product.name)
+    ),
 
-                <p class="detail-description" id="detailDescription"></p>
+    /* Main hero grid */
+    e('div', { className: 'grid grid-cols-1 lg:grid-cols-2 gap-10 mb-12' },
 
-                <!-- Key details chips -->
-                <div class="detail-chips" id="detailChips"></div>
+      /* Image */
+      e('div', { className: 'flex flex-col gap-3' },
+        e('div', { className: 'relative rounded-2xl overflow-hidden border-2 border-green-800/60 shadow-2xl aspect-[4/3]' },
+          e('img', { id: 'detailMainImg', src: product.image, alt: product.name, className: 'w-full h-full object-cover' }),
+          e('button', {
+            onClick: function() { store.toggleWishlist(product); },
+            className: 'absolute top-3 right-3 w-10 h-10 rounded-full border backdrop-blur-sm flex items-center justify-center text-xl transition-all ' +
+              (isWishlisted ? 'bg-yellow-400/20 border-yellow-400 text-yellow-400' : 'bg-black/50 border-white/20 text-gray-400 hover:text-yellow-400'),
+            title: isWishlisted ? 'Remove from wishlist' : 'Add to wishlist'
+          }, isWishlisted ? '★' : '☆'),
+          e('span', { className: 'absolute bottom-3 left-3 text-[11px] font-bold uppercase tracking-wider px-3 py-1 rounded-full bg-green-900/80 text-green-400 border border-green-400/30' }, product.badge)
+        )
+      ),
 
-                <!-- Farmer / collective info -->
-                <div class="detail-farmer-card" id="detailFarmerCard"></div>
+      /* Info */
+      e('div', { className: 'flex flex-col gap-4' },
+        e('div', null,
+          e('h1', { className: 'text-3xl font-black text-white mb-2' }, product.name),
+          e('div', { className: 'flex items-center gap-3 flex-wrap' },
+            e('span', { className: 'text-xs font-bold uppercase tracking-widest text-green-400' }, product.category.charAt(0).toUpperCase() + product.category.slice(1)),
+            e('span', { className: 'text-xs font-bold px-2.5 py-1 rounded-full ' + (product.stock ? 'bg-green-400/10 text-green-400' : 'bg-red-400/10 text-red-400') }, product.stock ? 'In Stock' : 'Out of Stock')
+          )
+        ),
+        e('div', { className: 'flex items-baseline gap-2' },
+          e('span', { className: 'text-4xl font-black text-green-400' }, 'R' + product.price),
+          e('span', { className: 'text-sm text-gray-400' }, product.priceUnit)
+        ),
+        e('p', { className: 'text-sm text-gray-300 leading-relaxed' }, product.description),
 
-                <!-- Quantity + cart -->
-                <div class="detail-purchase">
-                    <div class="qty-control detail-qty">
-                        <button class="qty-btn" onclick="detailChangeQty(-1)">&#8722;</button>
-                        <span class="qty-display" id="detailQtyDisplay">1</span>
-                        <button class="qty-btn" onclick="detailChangeQty(1)">&#43;</button>
-                    </div>
-                    <span class="detail-line-total" id="detailLineTotal"></span>
-                </div>
+        /* Chips */
+        e('div', { className: 'grid grid-cols-2 gap-2' },
+          product.chips.map(function(chip, i) {
+            return e('div', { key: i, className: 'bg-white/5 border border-white/10 rounded-xl p-3 flex items-center gap-3' },
+              e('div', { className: 'flex flex-col' },
+                e('span', { className: 'text-[10px] font-bold uppercase tracking-widest text-gray-500' }, chip.label),
+                e('span', { className: 'text-xs font-semibold text-white mt-0.5' }, chip.value)
+              )
+            );
+          })
+        ),
 
-                <div class="detail-action-btns">
-                    <button class="btn btn-primary detail-cart-btn" id="detailCartBtn"
-                        onclick="detailAddToCart()">Add to Cart</button>
-                    <a href="checkout.html" class="btn btn-outline-green detail-buy-btn">Buy Now</a>
-                </div>
+        /* Farmer card */
+        e('div', { className: 'bg-green-800/15 border border-green-400/20 rounded-xl p-4 flex items-start gap-4' },
+          e('div', { className: 'w-10 h-10 rounded-full bg-green-400/10 border border-green-400/20 flex items-center justify-center text-lg shrink-0' }, 'F'),
+          e('div', null,
+            e('div', { className: 'text-[10px] font-bold uppercase tracking-widest text-gray-500 mb-0.5' }, 'Grown by'),
+            e('div', { className: 'text-sm font-bold text-green-400' }, product.farmer.name),
+            e('div', { className: 'text-xs text-gray-400' }, product.farmer.location),
+            e('p', { className: 'text-xs text-gray-400 mt-1.5 leading-relaxed' }, product.farmer.note)
+          )
+        ),
 
-                <!-- Delivery info strip -->
-                <div class="detail-delivery-strip">
-                    <div class="delivery-item">
+        /* Qty + total */
+        e('div', { className: 'flex items-center gap-4' },
+          e('div', { className: 'flex items-center rounded-xl overflow-hidden border border-white/15 bg-white/5' },
+            e('button', { onClick: function() { setQty(Math.max(1, qty - 1)); }, className: 'w-10 h-10 flex items-center justify-center text-gray-300 hover:bg-green-400/15 hover:text-green-400 transition-colors font-bold text-xl' }, '-'),
+            e('span', { className: 'w-10 text-center text-sm font-black text-white border-x border-white/10 leading-10' }, qty),
+            e('button', { onClick: function() { setQty(Math.min(99, qty + 1)); }, className: 'w-10 h-10 flex items-center justify-center text-gray-300 hover:bg-green-400/15 hover:text-green-400 transition-colors font-bold text-xl' }, '+')
+          ),
+          e('span', { className: 'text-2xl font-black text-green-400' }, 'R' + lineTotal)
+        ),
 
-                        <span>Collect free from distribution centre</span>
-                    </div>
-                    <div class="delivery-item">
+        /* Action buttons */
+        e('div', { className: 'flex gap-3' },
+          e('button', {
+            onClick: handleAddToCart,
+            className: 'flex-1 py-3.5 rounded-xl font-bold transition-all text-sm ' + (added ? 'bg-green-700 text-white' : 'bg-green-800 hover:bg-green-700 text-white')
+          }, added ? ('Added ' + (qty > 1 ? qty + 'x' : '') + '!') : 'Add to Cart'),
+          e('a', {
+            href: 'checkout.html',
+            className: 'flex-1 py-3.5 rounded-xl font-bold text-sm text-center border-2 border-green-400 text-green-400 hover:bg-green-400 hover:text-black transition-all'
+          }, 'Buy Now')
+        ),
 
-                        <span>Delivery from R80 — 2–4 business days</span>
-                    </div>
-                    <div class="delivery-item">
+        /* Delivery strip */
+        e('div', { className: 'bg-white/5 border border-white/10 rounded-xl p-4 flex flex-col gap-2.5' },
+          [
+            ['C', 'Collect free from distribution centre'],
+            ['D', 'Delivery from R80 — 2 to 4 business days'],
+            ['Q', 'Community-grown and quality checked'],
+          ].map(function(row, i) {
+            return e('div', { key: i, className: 'flex items-center gap-3 text-xs text-gray-400' },
+              e('div', { className: 'w-5 h-5 rounded bg-green-800/50 border border-green-400/20 text-green-400 text-[10px] font-black flex items-center justify-center shrink-0' }, row[0]),
+              row[1]
+            );
+          })
+        )
+      )
+    ),
 
-                        <span>Community-grown &amp; quality checked</span>
-                    </div>
-                </div>
+    /* TABS */
+    e('div', { className: 'mb-12' },
+      e('div', { className: 'flex border-b border-white/10 mb-6' },
+        ['description', 'nutrition', 'reviews'].map(function(t) {
+          var labels = { description: 'Description', nutrition: 'Nutrition / Details', reviews: 'Reviews' };
+          return e('button', {
+            key: t,
+            onClick: function() { setTab(t); },
+            className: 'px-5 py-3 text-sm font-bold border-b-2 transition-colors -mb-px ' +
+              (tab === t ? 'border-green-400 text-green-400' : 'border-transparent text-gray-500 hover:text-gray-300')
+          }, labels[t]);
+        })
+      ),
 
-            </div><!-- /detail-info-col -->
-        </div><!-- /detail-main -->
+      /* Description */
+      tab === 'description' && e('div', { className: 'text-sm text-gray-300 leading-relaxed max-w-3xl' }, product.description),
 
-        <!-- TABS: Description / Nutrition / Reviews -->
-        <div class="detail-tabs-section">
-            <div class="detail-tabs" id="detailTabs">
-                <button class="detail-tab active" onclick="switchDetailTab('description', this)">Description</button>
-                <button class="detail-tab" onclick="switchDetailTab('nutrition', this)">Nutrition / Details</button>
-                <button class="detail-tab" onclick="switchDetailTab('reviews', this)">Reviews</button>
-            </div>
+      /* Nutrition */
+      tab === 'nutrition' && e('div', { className: 'max-w-lg border border-white/10 rounded-xl overflow-hidden' },
+        product.nutrition.map(function(row, i) {
+          return e('div', {
+            key: i,
+            className: 'flex justify-between px-4 py-3 text-sm border-b border-white/5 ' + (i % 2 === 0 ? '' : 'bg-white/3')
+          },
+            e('span', { className: 'text-gray-400' }, row.label),
+            e('span', { className: 'text-white font-semibold' }, row.value)
+          );
+        })
+      ),
 
-            <div class="detail-tab-panel" id="tab-description"></div>
-            <div class="detail-tab-panel" id="tab-nutrition"  style="display:none;"></div>
-            <div class="detail-tab-panel" id="tab-reviews"   style="display:none;"></div>
-        </div>
+      /* Reviews */
+      tab === 'reviews' && e('div', { className: 'flex flex-col gap-4 max-w-2xl' },
+        product.reviews.map(function(review, i) {
+          return e('div', { key: i, className: 'bg-white/5 border border-white/10 rounded-xl p-5' },
+            e('div', { className: 'flex items-center gap-3 mb-3 flex-wrap' },
+              e('span', { className: 'text-sm font-bold text-white' }, review.author),
+              e(StarRating, { rating: review.rating }),
+              e('span', { className: 'text-xs text-gray-500 ml-auto' }, review.date)
+            ),
+            e('p', { className: 'text-sm text-gray-300 leading-relaxed' }, review.body)
+          );
+        })
+      )
+    ),
 
-        <!-- RELATED PRODUCTS -->
-        <div class="related-section">
-            <div class="section-title-card">You Might Also Like</div>
-            <div class="related-grid" id="relatedGrid"></div>
-        </div>
+    /* RELATED */
+    related.length > 0 && e('div', null,
+      e('div', { className: 'text-center mb-6' },
+        e('span', { className: 'inline-block bg-soil-700/80 border border-white/10 text-white text-xs font-bold uppercase tracking-widest px-5 py-2 rounded-lg' }, 'You Might Also Like')
+      ),
+      e('div', { className: 'grid grid-cols-2 sm:grid-cols-4 gap-4' },
+        related.map(function(p) {
+          return e('div', { key: p.id, className: 'bg-white/5 border border-white/10 rounded-xl overflow-hidden hover:-translate-y-1 hover:border-green-400/30 transition-all' },
+            e('a', { href: 'product_detail.html?id=' + p.id },
+              e('div', { className: 'aspect-[4/3] overflow-hidden bg-black/20' },
+                e('img', { src: p.image, alt: p.name, className: 'w-full h-full object-cover', loading: 'lazy' })
+              )
+            ),
+            e('div', { className: 'p-3' },
+              e('div', { className: 'flex justify-between items-start gap-1 mb-2' },
+                e('span', { className: 'text-xs font-semibold text-white leading-tight' }, p.name),
+                e('span', { className: 'text-xs font-black text-green-400 shrink-0' }, 'R' + p.price)
+              ),
+              e('div', { className: 'flex gap-1.5' },
+                e('a', { href: 'product_detail.html?id=' + p.id, className: 'flex-1 text-center py-1.5 text-[11px] font-bold rounded-lg border border-white/15 text-gray-300 hover:bg-white/10 transition-colors' }, 'View'),
+                e('button', {
+                  onClick: function() { store.addToCart(p, 1); },
+                  className: 'flex-1 py-1.5 text-[11px] font-bold rounded-lg bg-green-800 hover:bg-green-700 text-white transition-colors'
+                }, 'Add')
+              )
+            )
+          );
+        })
+      )
+    )
+  );
+}
 
-    </div><!-- /detail-page -->
+var navRoot    = document.getElementById('navbar-root');
+var footRoot   = document.getElementById('footer-root');
+var toggleRoot = document.getElementById('toggle-root');
 
-    <footer class="footer">
-        <p>Roots &copy; 2026 — Growing Together</p>
-    </footer>
-
-    <script src="../scripts/scripts.js"></script>
+ReactDOM.createRoot(document.getElementById('app-root')).render(
+  e(StoreProvider, null,
+    e(RootsComponents.ScrollGradient),
+    ReactDOM.createPortal(e(RootsComponents.Navbar),        navRoot),
+    ReactDOM.createPortal(e(RootsComponents.Footer),        footRoot),
+    ReactDOM.createPortal(e(RootsComponents.LowDataToggle), toggleRoot),
+    e(DetailApp)
+  )
+);
+</script>
 </body>
 </html>

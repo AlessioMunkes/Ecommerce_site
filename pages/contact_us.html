@@ -1,215 +1,220 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Contact Us - Roots</title>
-    <link rel="stylesheet" href="../styles/styles.css" />
-    <link rel="stylesheet" href="../styles/contact.css" />
+  <meta charset="UTF-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Contact Us — Roots</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>tailwind.config={theme:{extend:{colors:{green:{400:'#4ade80',700:'#15803d',800:'#015005'},soil:{700:'#382f26',800:'#1a3a2a',900:'#0f2417'}}}}}</script>
+  <style>
+    body{background:linear-gradient(to bottom,#0f2417,#1a3a2a,#0e3d20,#1a3a2a,#0f2417);background-size:100% 400%;min-height:100vh;color:#f9faf8;font-family:system-ui,sans-serif}
+    body.low-data{background:#0f2417!important}
+    ::-webkit-scrollbar{width:5px}::-webkit-scrollbar-track{background:#0f2417}::-webkit-scrollbar-thumb{background:#015005;border-radius:3px}
+    input,select,textarea{background:rgba(255,255,255,.06)}
+    input[type=checkbox]{accent-color:#4ade80}
+    .input-highlight{border-color:#4ade80!important;box-shadow:0 0 0 3px rgba(74,222,128,.2)}
+  </style>
 </head>
 <body>
-    <header class="header">
-        <div class="header-brand">
-            <h3><a href="index.html">Roots</a></h3>
-        </div>
-        <input type="checkbox" id="nav-toggle" class="nav-toggle">
-        <label for="nav-toggle" class="hamburger">
-            <span></span>
-            <span></span>
-            <span></span>
-        </label>
-        <nav class="links">
-            <a href="index.html">Home</a>
-            <a href="produce_products.html">Products</a>
-            <a href="newsletter.html">Newsletter</a>
-            <a href="about_us.html">About Us</a>
-            <a href="contact_us.html">Contact Us</a>
-            <a href="wishlist.html">Wishlist</a>
-            <a href="cart.html">Shopping Cart</a>
-        </nav>
-    </header>
+<div id="navbar-root"></div>
 
-    <!-- TITLE CARD -->
-    <div class="title-container">
-        <h1>Contact Us</h1>
+<div class="max-w-5xl mx-auto px-4 sm:px-8 py-12 pb-24">
+
+  <!-- Title -->
+  <div class="text-center mb-12">
+    <h1 class="text-4xl sm:text-5xl font-black text-white mb-2">Contact Us</h1>
+    <p class="text-gray-400">We would love to hear from you</p>
+  </div>
+
+  <!-- GET IN TOUCH -->
+  <section class="mb-12">
+    <div class="mb-6">
+      <span class="inline-block bg-soil-700/80 border border-white/10 text-white text-xs font-bold uppercase tracking-widest px-5 py-2 rounded-lg">Get In Touch</span>
     </div>
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
 
-    <!-- CONTACT INFORMATION SECTION -->
-    <section class="contact-info-section">
-        <div class="section-container">
-            <h2 class="section-heading">Get In Touch</h2>
+      <!-- Email form -->
+      <div class="bg-white/5 border border-white/10 rounded-2xl p-6">
+        <h3 class="text-base font-black text-green-400 mb-1">Send us an Email</h3>
+        <p class="text-sm text-gray-400 mb-5">Have questions? Send us an email and we will get back to you as soon as possible.</p>
+        <form id="contactForm" class="flex flex-col gap-4">
+          <div class="flex flex-col gap-1.5">
+            <label class="text-[11px] font-bold uppercase tracking-widest text-gray-400">Name</label>
+            <input type="text" id="name" name="name" placeholder="Your full name" class="border border-white/15 rounded-xl px-3.5 py-2.5 text-sm text-white placeholder-gray-600 outline-none focus:border-green-400 transition-colors">
+          </div>
+          <div class="flex flex-col gap-1.5">
+            <label class="text-[11px] font-bold uppercase tracking-widest text-gray-400">Email</label>
+            <input type="email" id="contactEmail" name="email" placeholder="your.email@example.com" class="border border-white/15 rounded-xl px-3.5 py-2.5 text-sm text-white placeholder-gray-600 outline-none focus:border-green-400 transition-colors">
+          </div>
+          <div class="flex flex-col gap-1.5">
+            <label class="text-[11px] font-bold uppercase tracking-widest text-gray-400">Subject</label>
+            <input type="text" id="subject" name="subject" placeholder="What is this about?" class="border border-white/15 rounded-xl px-3.5 py-2.5 text-sm text-white placeholder-gray-600 outline-none focus:border-green-400 transition-colors">
+          </div>
+          <div class="flex flex-col gap-1.5">
+            <label class="text-[11px] font-bold uppercase tracking-widest text-gray-400">Message</label>
+            <textarea id="message" name="message" rows="4" placeholder="Your message here..." class="border border-white/15 rounded-xl px-3.5 py-2.5 text-sm text-white placeholder-gray-600 outline-none focus:border-green-400 transition-colors resize-none"></textarea>
+          </div>
+          <button type="submit" id="contactSubmitBtn" class="bg-green-800 hover:bg-green-700 text-white font-bold py-2.5 rounded-xl transition-colors">Send Email</button>
+        </form>
+      </div>
 
-            <!-- Two cards side by side -->
-            <div class="contact-methods-row">
-
-                <!-- Email form -->
-                <div class="contact-method">
-                    <h3>Send us an Email</h3>
-                    <p>Have questions? Send us an email and we'll get back to you as soon as possible.</p>
-                    <form class="contact-form" id="contactForm">
-                        <div class="form-group">
-                            <label for="name">Name</label>
-                            <input type="text" id="name" name="name" placeholder="Your full name">
-                        </div>
-                        <div class="form-group">
-                            <label for="email">Email</label>
-                            <input type="email" id="email" name="email" placeholder="your.email@example.com">
-                        </div>
-                        <div class="form-group">
-                            <label for="subject">Subject</label>
-                            <input type="text" id="subject" name="subject" placeholder="What is this about?">
-                        </div>
-                        <div class="form-group">
-                            <label for="message">Message</label>
-                            <textarea id="message" name="message" rows="5" placeholder="Your message here..."></textarea>
-                        </div>
-                        <button type="submit" class="btn btn-primary">Send Email</button>
-                    </form>
-                </div>
-
-                <!-- Call info -->
-                <div class="contact-method">
-                    <h3>Call Us</h3>
-                    <p>Prefer to speak directly? Give us a call during business hours.</p>
-                    <div class="call-info">
-                        <p><strong>Phone:</strong> +27 21 123 4567</p>
-                        <p><strong>Hours:</strong> Monday – Friday, 8:00 AM – 5:00 PM (SAST)</p>
-                        <p><strong>Support:</strong> We're here to help with any questions about our products, collectives, and payouts.</p>
-                        <p><strong>WhatsApp:</strong> +27 82 123 4567</p>
-                    </div>
-                </div>
-
-            </div><!-- /contact-methods-row -->
+      <!-- Call info -->
+      <div class="bg-white/5 border border-white/10 rounded-2xl p-6 flex flex-col gap-5">
+        <div>
+          <h3 class="text-base font-black text-green-400 mb-1">Call Us</h3>
+          <p class="text-sm text-gray-400">Prefer to speak directly? Give us a call during business hours.</p>
         </div>
-    </section>
-
-    <!-- SELLER APPLICATION SECTION -->
-    <section class="seller-application-section" id="become-a-seller">
-        <div class="section-container">
-            <h2 class="section-heading">Become a Seller</h2>
-            <p class="section-description">Are you a farmer interested in selling your crops with Roots? Apply now to join our community collective.</p>
-
-            <form class="seller-form" id="sellerForm">
-                <div class="form-row">
-                    <div class="form-group">
-                        <label for="seller-name">Full Name</label>
-                        <input type="text" id="seller-name" name="seller-name" placeholder="Your full name">
-                    </div>
-                    <div class="form-group">
-                        <label for="seller-email">Email</label>
-                        <input type="email" id="seller-email" name="seller-email" placeholder="your.email@example.com">
-                    </div>
-                </div>
-
-                <div class="form-row">
-                    <div class="form-group">
-                        <label for="seller-phone">Phone</label>
-                        <input type="tel" id="seller-phone" name="seller-phone" placeholder="+27 82 000 0000">
-                    </div>
-                    <div class="form-group">
-                        <label for="farm-name">Farm Name</label>
-                        <input type="text" id="farm-name" name="farm-name" placeholder="Your farm name">
-                    </div>
-                </div>
-
-                <div class="form-group">
-                    <label for="farm-location">Farm Location</label>
-                    <input type="text" id="farm-location" name="farm-location" placeholder="Township, City">
-                </div>
-
-                <div class="form-group">
-                    <label>What crops do you grow? (Check all that apply)</label>
-                    <div class="checkbox-group">
-                        <label class="checkbox"><input type="checkbox" name="crop-types" value="vegetables"> Vegetables</label>
-                        <label class="checkbox"><input type="checkbox" name="crop-types" value="fruits"> Fruits</label>
-                        <label class="checkbox"><input type="checkbox" name="crop-types" value="grains"> Grains</label>
-                        <label class="checkbox"><input type="checkbox" name="crop-types" value="seeds"> Seeds</label>
-                        <label class="checkbox"><input type="checkbox" name="crop-types" value="other"> Other</label>
-                    </div>
-                </div>
-
-                <div class="form-row">
-                    <div class="form-group">
-                        <label for="farm-size">Farm Size (meters)</label>
-                        <input type="number" id="farm-size" name="farm-size" placeholder="e.g., 2">
-                    </div>
-                    <div class="form-group">
-                        <label for="years-farming">Years of Farming Experience</label>
-                        <input type="number" id="years-farming" name="years-farming" placeholder="e.g., 5">
-                    </div>
-                </div>
-
-                <div class="form-group">
-                    <label for="about-farm">Tell us about your farm</label>
-                    <textarea id="about-farm" name="about-farm" rows="4" placeholder="Share information about your farm, practices, and what makes your crops special..."></textarea>
-                </div>
-
-                <div class="form-group">
-                    <label for="why-join">Why do you want to join Roots?</label>
-                    <textarea id="why-join" name="why-join" rows="3" placeholder="Tell us your motivation..."></textarea>
-                </div>
-
-                <button type="submit" class="btn btn-primary btn-large">Submit Application</button>
-            </form>
+        <div class="flex flex-col gap-4">
+          <div class="bg-black/20 rounded-xl p-4">
+            <div class="text-[10px] font-bold uppercase tracking-widest text-gray-500 mb-1">Phone</div>
+            <div class="text-sm font-semibold text-white">+27 21 123 4567</div>
+          </div>
+          <div class="bg-black/20 rounded-xl p-4">
+            <div class="text-[10px] font-bold uppercase tracking-widest text-gray-500 mb-1">WhatsApp</div>
+            <div class="text-sm font-semibold text-white">+27 82 123 4567</div>
+          </div>
+          <div class="bg-black/20 rounded-xl p-4">
+            <div class="text-[10px] font-bold uppercase tracking-widest text-gray-500 mb-1">Hours</div>
+            <div class="text-sm text-gray-300">Monday – Friday, 8:00 AM – 5:00 PM (SAST)</div>
+          </div>
+          <div class="bg-black/20 rounded-xl p-4">
+            <div class="text-[10px] font-bold uppercase tracking-widest text-gray-500 mb-1">Support</div>
+            <div class="text-sm text-gray-300">We are here to help with any questions about our products, collectives, and payouts.</div>
+          </div>
         </div>
-    </section>
+      </div>
 
-    <footer class="footer">
-        <p>Roots © 2026 — Growing Together</p>
-    </footer>
+    </div>
+  </section>
 
-    <script src="../scripts/scripts.js"></script>
-    <script>
-    /* ── Scroll to & highlight seller form if arriving from #become-a-seller ── */
-    if (window.location.hash === '#become-a-seller') {
-        window.addEventListener('load', () => {
-            const section = document.getElementById('become-a-seller');
-            const firstInput = document.getElementById('seller-name');
+  <!-- BECOME A SELLER -->
+  <section id="become-a-seller" class="scroll-mt-20">
+    <div class="mb-6">
+      <span class="inline-block bg-soil-700/80 border border-white/10 text-white text-xs font-bold uppercase tracking-widest px-5 py-2 rounded-lg">Become a Seller</span>
+    </div>
+    <div class="bg-white/5 border border-white/10 rounded-2xl p-6 sm:p-8">
+      <h2 class="text-xl font-black text-white mb-1">Apply to Join the Collective</h2>
+      <p class="text-sm text-gray-400 mb-7">Are you a farmer interested in selling your crops with Roots? Apply now to join our community collective.</p>
 
-            if (section) {
-                // Small delay so the page is fully painted before scrolling
-                setTimeout(() => {
-                    section.scrollIntoView({ behavior: 'smooth', block: 'start' });
-                }, 120);
-            }
+      <form id="sellerForm" class="flex flex-col gap-5">
 
-            if (firstInput) {
-                setTimeout(() => {
-                    firstInput.focus();
-                    firstInput.classList.add('input-highlight');
-                    // Remove the highlight glow after 2.5 s
-                    setTimeout(() => firstInput.classList.remove('input-highlight'), 2500);
-                }, 600);
-            }
-        });
-    }
-    </script>
-    <script>
-        // Contact form feedback
-        document.getElementById('contactForm').addEventListener('submit', function(e) {
-            e.preventDefault();
-            const btn = this.querySelector('button[type="submit"]');
-            btn.textContent = '✓ Message Sent!';
-            btn.style.backgroundColor = '#015005';
-            this.reset();
-            setTimeout(() => {
-                btn.textContent = 'Send Email';
-                btn.style.backgroundColor = '';
-            }, 3000);
-        });
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div class="flex flex-col gap-1.5">
+            <label class="text-[11px] font-bold uppercase tracking-widest text-gray-400">Full Name *</label>
+            <input type="text" id="seller-name" name="seller-name" placeholder="Your full name" class="border border-white/15 rounded-xl px-3.5 py-2.5 text-sm text-white placeholder-gray-600 outline-none focus:border-green-400 transition-colors">
+          </div>
+          <div class="flex flex-col gap-1.5">
+            <label class="text-[11px] font-bold uppercase tracking-widest text-gray-400">Email *</label>
+            <input type="email" id="seller-email" name="seller-email" placeholder="your.email@example.com" class="border border-white/15 rounded-xl px-3.5 py-2.5 text-sm text-white placeholder-gray-600 outline-none focus:border-green-400 transition-colors">
+          </div>
+        </div>
 
-        // Seller form feedback
-        document.getElementById('sellerForm').addEventListener('submit', function(e) {
-            e.preventDefault();
-            const btn = this.querySelector('button[type="submit"]');
-            btn.textContent = '✓ Application Submitted!';
-            btn.style.backgroundColor = '#015005';
-            this.reset();
-            setTimeout(() => {
-                btn.textContent = 'Submit Application';
-                btn.style.backgroundColor = '';
-            }, 3000);
-        });
-    </script>
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div class="flex flex-col gap-1.5">
+            <label class="text-[11px] font-bold uppercase tracking-widest text-gray-400">Phone *</label>
+            <input type="tel" id="seller-phone" name="seller-phone" placeholder="+27 82 000 0000" class="border border-white/15 rounded-xl px-3.5 py-2.5 text-sm text-white placeholder-gray-600 outline-none focus:border-green-400 transition-colors">
+          </div>
+          <div class="flex flex-col gap-1.5">
+            <label class="text-[11px] font-bold uppercase tracking-widest text-gray-400">Farm Name</label>
+            <input type="text" id="farm-name" name="farm-name" placeholder="Your farm or collective name" class="border border-white/15 rounded-xl px-3.5 py-2.5 text-sm text-white placeholder-gray-600 outline-none focus:border-green-400 transition-colors">
+          </div>
+        </div>
+
+        <div class="flex flex-col gap-1.5">
+          <label class="text-[11px] font-bold uppercase tracking-widest text-gray-400">Farm Location</label>
+          <input type="text" id="farm-location" name="farm-location" placeholder="Township, City" class="border border-white/15 rounded-xl px-3.5 py-2.5 text-sm text-white placeholder-gray-600 outline-none focus:border-green-400 transition-colors">
+        </div>
+
+        <div class="flex flex-col gap-2">
+          <label class="text-[11px] font-bold uppercase tracking-widest text-gray-400">What crops do you grow?</label>
+          <div class="flex flex-wrap gap-x-6 gap-y-2.5 mt-1">
+            <label class="flex items-center gap-2 text-sm text-gray-300 cursor-pointer"><input type="checkbox" name="crop-types" value="vegetables"> Vegetables</label>
+            <label class="flex items-center gap-2 text-sm text-gray-300 cursor-pointer"><input type="checkbox" name="crop-types" value="fruits"> Fruits</label>
+            <label class="flex items-center gap-2 text-sm text-gray-300 cursor-pointer"><input type="checkbox" name="crop-types" value="grains"> Grains</label>
+            <label class="flex items-center gap-2 text-sm text-gray-300 cursor-pointer"><input type="checkbox" name="crop-types" value="seeds"> Seeds</label>
+            <label class="flex items-center gap-2 text-sm text-gray-300 cursor-pointer"><input type="checkbox" name="crop-types" value="other"> Other</label>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div class="flex flex-col gap-1.5">
+            <label class="text-[11px] font-bold uppercase tracking-widest text-gray-400">Farm Size (square metres)</label>
+            <input type="number" id="farm-size" name="farm-size" placeholder="e.g. 500" class="border border-white/15 rounded-xl px-3.5 py-2.5 text-sm text-white placeholder-gray-600 outline-none focus:border-green-400 transition-colors [appearance:textfield]">
+          </div>
+          <div class="flex flex-col gap-1.5">
+            <label class="text-[11px] font-bold uppercase tracking-widest text-gray-400">Years of Farming Experience</label>
+            <input type="number" id="years-farming" name="years-farming" placeholder="e.g. 5" class="border border-white/15 rounded-xl px-3.5 py-2.5 text-sm text-white placeholder-gray-600 outline-none focus:border-green-400 transition-colors [appearance:textfield]">
+          </div>
+        </div>
+
+        <div class="flex flex-col gap-1.5">
+          <label class="text-[11px] font-bold uppercase tracking-widest text-gray-400">Tell us about your farm</label>
+          <textarea id="about-farm" name="about-farm" rows="4" placeholder="Share information about your farm, practices, and what makes your crops special..." class="border border-white/15 rounded-xl px-3.5 py-2.5 text-sm text-white placeholder-gray-600 outline-none focus:border-green-400 transition-colors resize-none"></textarea>
+        </div>
+
+        <div class="flex flex-col gap-1.5">
+          <label class="text-[11px] font-bold uppercase tracking-widest text-gray-400">Why do you want to join Roots?</label>
+          <textarea id="why-join" name="why-join" rows="3" placeholder="Tell us your motivation..." class="border border-white/15 rounded-xl px-3.5 py-2.5 text-sm text-white placeholder-gray-600 outline-none focus:border-green-400 transition-colors resize-none"></textarea>
+        </div>
+
+        <button type="submit" id="sellerSubmitBtn" class="bg-green-800 hover:bg-green-700 text-white font-bold py-3.5 rounded-xl transition-colors text-base">Submit Application</button>
+      </form>
+    </div>
+  </section>
+
+</div>
+
+<div id="footer-root"></div>
+<div id="toggle-root"></div>
+<script src="https://unpkg.com/react@18/umd/react.production.min.js" crossorigin></script>
+<script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js" crossorigin></script>
+<script src="../scripts/shared-components.js"></script>
+<script>
+  var mountDiv = document.createElement('div');
+  document.body.appendChild(mountDiv);
+  ReactDOM.createRoot(mountDiv).render(
+    React.createElement(RootsStore.StoreProvider, null,
+      React.createElement(RootsComponents.ScrollGradient),
+      ReactDOM.createPortal(React.createElement(RootsComponents.Navbar),        document.getElementById('navbar-root')),
+      ReactDOM.createPortal(React.createElement(RootsComponents.Footer),        document.getElementById('footer-root')),
+      ReactDOM.createPortal(React.createElement(RootsComponents.LowDataToggle), document.getElementById('toggle-root'))
+    )
+  );
+
+  /* Contact form */
+  document.getElementById('contactForm').addEventListener('submit', function(ev) {
+    ev.preventDefault();
+    var btn = document.getElementById('contactSubmitBtn');
+    btn.textContent = 'Message Sent!';
+    btn.classList.add('bg-green-700');
+    this.reset();
+    setTimeout(function() { btn.textContent = 'Send Email'; btn.classList.remove('bg-green-700'); }, 3000);
+  });
+
+  /* Seller form */
+  document.getElementById('sellerForm').addEventListener('submit', function(ev) {
+    ev.preventDefault();
+    var btn = document.getElementById('sellerSubmitBtn');
+    btn.textContent = 'Application Submitted!';
+    btn.classList.add('bg-green-700');
+    this.reset();
+    setTimeout(function() { btn.textContent = 'Submit Application'; btn.classList.remove('bg-green-700'); }, 3000);
+  });
+
+  /* Scroll + highlight on anchor */
+  if (window.location.hash === '#become-a-seller') {
+    window.addEventListener('load', function() {
+      var section = document.getElementById('become-a-seller');
+      var firstInput = document.getElementById('seller-name');
+      if (section) { setTimeout(function() { section.scrollIntoView({ behavior: 'smooth', block: 'start' }); }, 150); }
+      if (firstInput) {
+        setTimeout(function() {
+          firstInput.focus();
+          firstInput.classList.add('input-highlight');
+          setTimeout(function() { firstInput.classList.remove('input-highlight'); }, 2500);
+        }, 650);
+      }
+    });
+  }
+</script>
 </body>
 </html>

@@ -1,122 +1,127 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-    <link rel="Stylesheet" href="../styles/styles.css" />
+  <meta charset="UTF-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Newsletter — Roots</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>tailwind.config={theme:{extend:{colors:{green:{400:'#4ade80',700:'#15803d',800:'#015005'},soil:{700:'#382f26',800:'#1a3a2a',900:'#0f2417'}}}}}</script>
+  <style>
+    body{background:linear-gradient(to bottom,#0f2417,#1a3a2a,#0e3d20,#1a3a2a,#0f2417);background-size:100% 400%;min-height:100vh;color:#f9faf8;font-family:system-ui,sans-serif}
+    body.low-data{background:#0f2417!important}body.low-data img{display:none!important}
+    ::-webkit-scrollbar{width:5px}::-webkit-scrollbar-track{background:#0f2417}::-webkit-scrollbar-thumb{background:#015005;border-radius:3px}
+    input[type=email]{background:rgba(255,255,255,.06)}
+  </style>
 </head>
 <body>
-     <header class="header">
-        <div class="header-brand">
-            <h3><a href="index.html">Roots</a></h3>
-        </div>
-        <input type="checkbox" id="nav-toggle" class="nav-toggle">
-        <label for="nav-toggle" class="hamburger">
-            <span></span>
-            <span></span>
-            <span></span>
-        </label>
-        <nav class="links">
-            <a href="index.html">Home</a>
-            <a href="produce_products.html">Products</a>
-            <a href="newsletter.html">Newsletter</a>
-            <a href="about_us.html">About Us</a>
-            <a href="contact_us.html">Contact Us</a>
-            <a href="wishlist.html">Wishlist</a>
-            <a href="cart.html">Shopping Cart</a>
-        </nav>
-    </header>
+<div id="navbar-root"></div>
 
-    <!-- PAGE BODY -->
-    <div class="newsletter-page">
- 
-        <div class="title-container">
-            <h1>Newsletter</h1>
+<div class="max-w-5xl mx-auto px-4 sm:px-8 py-12 pb-24">
+
+  <!-- Title -->
+  <div class="text-center mb-4">
+    <h1 class="text-4xl font-black text-white">Newsletter</h1>
+  </div>
+
+  <!-- Issue card -->
+  <div class="text-center mb-10">
+    <span class="inline-block bg-soil-700/80 border border-white/10 text-white text-sm font-bold px-6 py-2.5 rounded-lg">Community Impact — April 2026</span>
+  </div>
+
+  <!-- Two-column article -->
+  <article class="grid grid-cols-1 lg:grid-cols-2 gap-0 bg-white/5 border border-white/10 rounded-2xl overflow-hidden mb-10">
+
+    <!-- Left: image + captions -->
+    <div class="p-6 sm:p-8 flex flex-col gap-6 border-b lg:border-b-0 lg:border-r border-white/10">
+      <div class="rounded-xl overflow-hidden border border-white/10">
+        <img src="../media/newsletter.jpeg" alt="Community farm" class="w-full h-64 object-cover">
+      </div>
+      <div class="flex flex-col gap-3">
+        <p class="text-sm text-gray-300 leading-relaxed">Farmers from Nyanga harvested over a ton of spinach this month, with each contributing member receiving their proportional payout within 48 hours of sale.</p>
+        <p class="text-sm text-gray-300 leading-relaxed">New irrigation channels funded by last quarter's equipment pool are already showing results, with water usage down 30% across participating plots.</p>
+        <p class="text-sm text-gray-300 leading-relaxed">We welcomed 14 new farming families this April, bringing the total community membership to 312 households across 14 townships.</p>
+        <p class="text-sm text-gray-300 leading-relaxed">Seed sharing initiative launched — members can now list surplus seeds through the platform free of charge.</p>
+      </div>
+    </div>
+
+    <!-- Right: segments -->
+    <div class="p-6 sm:p-8 flex flex-col gap-8">
+
+      <div>
+        <div class="inline-block bg-soil-700 border border-white/10 text-white text-xs font-bold uppercase tracking-widest px-4 py-1.5 rounded-lg mb-4">This Month in Numbers</div>
+        <div class="flex flex-col gap-2.5">
+          <p class="text-sm text-gray-300 leading-relaxed">Total produce sold: <strong class="text-white">4,820 kg</strong> across all communities.</p>
+          <p class="text-sm text-gray-300 leading-relaxed">Average payout per farmer: <strong class="text-green-400">R3,750</strong> — up 18% from March.</p>
+          <p class="text-sm text-gray-300 leading-relaxed">Equipment pool purchases: <strong class="text-white">3 drip irrigation systems</strong> and <strong class="text-white">12 hand tool sets.</strong></p>
+          <p class="text-sm text-gray-300 leading-relaxed">New members joined: <strong class="text-white">14 households</strong> across Khayelitsha, Mitchells Plain, Gugulethu, Bonteheuwel and Langa.</p>
         </div>
-        <!-- NEWSLETTER TITLE CARD -->
-        <div class="newsletter-title-card">
-            <h1>Community Impact — April 2026</h1>
+      </div>
+
+      <div>
+        <div class="inline-block bg-soil-700 border border-white/10 text-white text-xs font-bold uppercase tracking-widest px-4 py-1.5 rounded-lg mb-4">Spotlight: Equipment Sharing</div>
+        <div class="flex flex-col gap-2.5">
+          <p class="text-sm text-gray-300 leading-relaxed">This month we piloted a tool-sharing rotation between three neighbouring plots. Farmers reported saving an average of R320 each by borrowing instead of buying.</p>
+          <p class="text-sm text-gray-300 leading-relaxed">The rotation system is now being rolled out to any community that would like to join. Contact us to learn more.</p>
+          <p class="text-sm text-gray-300 leading-relaxed">Next month's bulk order closes on the 20th — submit equipment requests before then to qualify for the discount.</p>
         </div>
- 
-        <!-- MAIN ARTICLE -->
-        <article class="newsletter-article">
- 
-            <!-- LEFT COLUMN: image + caption text -->
-            <div class="newsletter-left">
-                <div class="newsletter-img-wrap">
-                    <img src="../media/newsletter.jpeg" alt="Community farm" class="newsletter-img">
-                </div>
-                <div class="newsletter-caption">
-                    <p>Farmers from Nyanga harvested over a ton of spinach this month, with each contributing member receiving their proportional payout within 48 hours of sale.</p>
-                    <p>New irrigation channels funded by last quarter's equipment pool are already showing results, with water usage down 30% across participating plots.</p>
-                    <p>We welcomed 14 new farming families this April, bringing the total community membership to 312 households across 14 townships.</p>
-                    <p>Seed sharing initiative launched — members can now list surplus seeds through the platform free of charge.</p>
-                </div>
-            </div>
- 
-            <!-- DIVIDER -->
-            <div class="newsletter-divider"></div>
- 
-            <!-- RIGHT COLUMN: subtitle + segments -->
-            <div class="newsletter-right">
- 
-                <!-- Subtitle block -->
-                <div class="newsletter-segment">
-                    <h2 class="newsletter-subtitle">This Month in Numbers</h2>
-                    <p>Total produce sold: <strong>4,820 kg</strong> across all communities.</p>
-                    <p>Average payout per farmer: <strong>R3,750</strong> — up 18% from March.</p>
-                    <p>Equipment pool purchases: <strong>3 drip irrigation systems</strong> and <strong>12 hand tool sets.</strong></p>
-                    <p>New members joined: <strong>14 households</strong> 3 from Khayelitsha, 4 from Mitchells Plain, 4 from Gugulethu, 2 from Bonteheuwel and 1 from Langa.</p>
-                </div>
- 
-                <!-- Segment block -->
-                <div class="newsletter-segment">
-                    <h2 class="newsletter-subtitle">Spotlight: Equipment Sharing</h2>
-                    <p>This month we piloted a tool-sharing rotation between three neighbouring plots. Farmers reported saving an average of R320 each by borrowing instead of buying.</p>
-                    <p>The rotation system is now being rolled out to any community that would like to join. Contact us to learn more.</p>
-                    <p>Next month's bulk order closes on the 20th — submit your equipment requests before then to qualify for the discount.</p>
-                </div>
- 
-                <!-- Segment block -->
-                <div class="newsletter-segment">
-                    <h2 class="newsletter-subtitle">Upcoming Events</h2>
-                    <p>Soil health workshop — Saturday 26 April, Gugulethu Community Hall, 10:00–13:00.</p>
-                    <p>Payout day — Friday 2 May. All members will receive their April earnings via EFT.</p>
-                    <p>New season planting guide available, members will receive an email or sms about recommended crops to plant.</p>
-                </div>
- 
-            </div>
-        </article>
- 
-        <!-- SUBSCRIBE BANNER -->
-        <div class="newsletter-subscribe">
-            <p>Get the next issue delivered to your inbox</p>
-            <div class="subscribe-form">
-                <input type="email" placeholder="your@email.com" class="subscribe-input" id="subEmail">
-                <button class="btn btn-primary" id="subBtn">Subscribe</button>
-            </div>
+      </div>
+
+      <div>
+        <div class="inline-block bg-soil-700 border border-white/10 text-white text-xs font-bold uppercase tracking-widest px-4 py-1.5 rounded-lg mb-4">Upcoming Events</div>
+        <div class="flex flex-col gap-2.5">
+          <p class="text-sm text-gray-300 leading-relaxed">Soil health workshop — Saturday 26 April, Gugulethu Community Hall, 10:00–13:00.</p>
+          <p class="text-sm text-gray-300 leading-relaxed">Payout day — Friday 2 May. All members will receive their April earnings via EFT.</p>
+          <p class="text-sm text-gray-300 leading-relaxed">New season planting guide available — members will receive an email or SMS about recommended crops to plant.</p>
         </div>
- 
-    </div><!-- /newsletter-page -->
- 
-    <script src="../scripts/scripts.js"></script>
-    <script>
-        const subBtn   = document.getElementById('subBtn');
-        const subEmail = document.getElementById('subEmail');
-        subBtn.addEventListener('click', () => {
-            if (!subEmail.value.includes('@')) {
-                subEmail.style.borderColor = '#c0622a';
-                return;
-            }
-            subBtn.textContent = '✓ Subscribed!';
-            subBtn.style.backgroundColor = '#015005';
-            subEmail.value = '';
-            setTimeout(() => {
-                subBtn.textContent = 'Subscribe';
-                subBtn.style.backgroundColor = '';
-            }, 3000);
-        });
-    </script>
+      </div>
+
+    </div>
+  </article>
+
+  <!-- Subscribe banner -->
+  <div class="bg-white/5 border border-white/10 rounded-2xl p-6 sm:p-8 flex flex-col sm:flex-row items-center justify-between gap-5">
+    <p class="text-base font-bold text-white text-center sm:text-left">Get the next issue delivered to your inbox</p>
+    <div class="flex gap-3 w-full sm:w-auto">
+      <input type="email" placeholder="your@email.com" id="subEmail"
+        class="flex-1 sm:w-56 border border-white/15 rounded-xl px-4 py-2.5 text-sm text-white placeholder-gray-600 outline-none focus:border-green-400 transition-colors">
+      <button id="subBtn" class="bg-green-800 hover:bg-green-700 text-white font-bold px-6 py-2.5 rounded-xl transition-colors whitespace-nowrap">Subscribe</button>
+    </div>
+  </div>
+
+</div>
+
+<div id="footer-root"></div>
+<div id="toggle-root"></div>
+<script src="https://unpkg.com/react@18/umd/react.production.min.js" crossorigin></script>
+<script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js" crossorigin></script>
+<script src="../scripts/shared-components.js"></script>
+<script>
+  var mountDiv = document.createElement('div');
+  document.body.appendChild(mountDiv);
+  ReactDOM.createRoot(mountDiv).render(
+    React.createElement(RootsStore.StoreProvider, null,
+      React.createElement(RootsComponents.ScrollGradient),
+      ReactDOM.createPortal(React.createElement(RootsComponents.Navbar),        document.getElementById('navbar-root')),
+      ReactDOM.createPortal(React.createElement(RootsComponents.Footer),        document.getElementById('footer-root')),
+      ReactDOM.createPortal(React.createElement(RootsComponents.LowDataToggle), document.getElementById('toggle-root'))
+    )
+  );
+
+  var subBtn   = document.getElementById('subBtn');
+  var subEmail = document.getElementById('subEmail');
+  subBtn.addEventListener('click', function() {
+    if (!subEmail.value.includes('@')) {
+      subEmail.style.borderColor = '#ef4444';
+      setTimeout(function() { subEmail.style.borderColor = ''; }, 2000);
+      return;
+    }
+    subBtn.textContent = 'Subscribed!';
+    subBtn.style.backgroundColor = '#15803d';
+    subEmail.value = '';
+    setTimeout(function() {
+      subBtn.textContent = 'Subscribe';
+      subBtn.style.backgroundColor = '';
+    }, 3000);
+  });
+</script>
 </body>
 </html>

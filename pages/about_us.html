@@ -1,224 +1,167 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>About Us — Roots</title>
-    <link rel="stylesheet" href="../styles/styles.css" />
+  <meta charset="UTF-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>About Us — Roots</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>tailwind.config={theme:{extend:{colors:{green:{400:'#4ade80',700:'#15803d',800:'#015005'},soil:{700:'#382f26',800:'#1a3a2a',900:'#0f2417'}}}}}</script>
+  <style>
+    body{background:linear-gradient(to bottom,#0f2417,#1a3a2a,#0e3d20,#1a3a2a,#0f2417);background-size:100% 400%;min-height:100vh;color:#f9faf8;font-family:system-ui,sans-serif}
+    body.low-data{background:#0f2417!important}body.low-data img{display:none!important}
+    ::-webkit-scrollbar{width:5px}::-webkit-scrollbar-track{background:#0f2417}::-webkit-scrollbar-thumb{background:#015005;border-radius:3px}
+  </style>
 </head>
 <body>
+<div id="navbar-root"></div>
 
-    <!-- NAVBAR -->
-    <header class="header">
-        <div class="header-brand">
-            <h3><a href="index.html">Roots</a></h3>
-        </div>
-        <input type="checkbox" id="nav-toggle" class="nav-toggle">
-        <label for="nav-toggle" class="hamburger">
-            <span></span>
-            <span></span>
-            <span></span>
-        </label>
-        <nav class="links">
-            <a href="index.html">Home</a>
-            <a href="produce_products.html">Products</a>
-            <a href="newsletter.html">Newsletter</a>
-            <a href="about_us.html">About Us</a>
-            <a href="contact_us.html">Contact Us</a>
-            <a href="wishlist.html">Wishlist</a>
-            <a href="cart.html">Shopping Cart</a>
-        </nav>
-    </header>
+<!-- PAGE TITLE -->
+<div class="text-center pt-14 pb-4 px-4">
+  <h1 class="text-4xl sm:text-5xl font-black text-white">About Us</h1>
+</div>
 
-    <!-- ═══════════════════════════════════════════
-         PAGE TITLE
-    ═══════════════════════════════════════════ -->
-    <div class="title-container">
-        <h1>About Us</h1>
+<div class="max-w-6xl mx-auto px-4 sm:px-8 pb-24">
+
+  <!-- MISSION -->
+  <section class="py-12">
+    <div class="text-center mb-8">
+      <span class="inline-block bg-soil-700/80 border border-white/10 text-white text-xs font-bold uppercase tracking-widest px-5 py-2 rounded-lg">Our Mission</span>
     </div>
+    <div class="bg-white/5 border border-white/10 rounded-2xl p-8 sm:p-12 flex items-start gap-6">
+      <span class="text-6xl font-black text-green-400/30 leading-none font-serif shrink-0 select-none">"</span>
+      <p class="text-xl sm:text-2xl text-white leading-relaxed italic text-center flex-1">
+        To empower township farmers by giving every farmer a fair, proportional share of what they grow and the tools they need to grow more. Through this we can enable food and job security for our communities and create a more just and sustainable food system for all.
+      </p>
+      <span class="text-6xl font-black text-green-400/30 leading-none font-serif shrink-0 select-none self-end">"</span>
+    </div>
+  </section>
 
-    <div class="about-page">
+  <!-- OUR STORY -->
+  <section class="py-12 border-t border-white/10">
+    <div class="text-center mb-10">
+      <span class="inline-block bg-soil-700/80 border border-white/10 text-white text-xs font-bold uppercase tracking-widest px-5 py-2 rounded-lg">Our Story</span>
+    </div>
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+      <div class="rounded-2xl overflow-hidden border border-white/10 shadow-xl">
+        <img src="../media/story-about-us.jpeg" alt="Our story" class="w-full h-[380px] object-cover">
+      </div>
+      <div>
+        <h2 class="text-2xl font-black text-white mb-5">How Roots Began</h2>
+        <p class="text-gray-300 leading-relaxed mb-4">Roots began as a small project with 3 households in Makhaza, Khayelitsha in early 2020. Our farmers had extra crops that they would sell to their neighbours but still had excess and needed another way to sell.</p>
+        <p class="text-gray-300 leading-relaxed mb-4">We wanted to find a way to support local farmers and create a more equitable food system, so we started by connecting with a few farmers we knew and helping them sell their produce directly to buyers in the city and other areas.</p>
+        <p class="text-gray-300 leading-relaxed">Today, we are continuously expanding to more communities and farmers, whilst we grow our operations and are able to provide more support and tools to better serve our farmers and buyers.</p>
+      </div>
+    </div>
+  </section>
 
-        <!-- ═══════════════════════════════════════════
-             SECTION 1 — MISSION STATEMENT
-             Full-width centred banner
-        ═══════════════════════════════════════════ -->
-        <section class="about-section mission-section">
-            <div class="section-title-card">Our Mission</div>
-            <div class="mission-card">
-                <div class="mission-quote-mark">&ldquo;</div>
-                <p class="mission-statement">
-                    To empower township farmers by giving every farmer a fair, proportional share of what they grow and the tools they need to grow more. Through this we can enable food and job secuirity for our communities and create a more just and sustainable food system for all.
-                </p>
-                <div class="mission-quote-mark right">&rdquo;</div>
-            </div>
-        </section>
+  <!-- HOW IT WORKS -->
+  <section class="py-12 border-t border-white/10">
+    <div class="text-center mb-10">
+      <span class="inline-block bg-soil-700/80 border border-white/10 text-white text-xs font-bold uppercase tracking-widest px-5 py-2 rounded-lg">How It Works</span>
+    </div>
+    <div class="grid grid-cols-1 sm:grid-cols-3 gap-6">
+      <div class="bg-white/5 border border-white/10 rounded-2xl p-7 text-center hover:-translate-y-1 transition-transform">
+        <div class="w-12 h-12 rounded-full bg-green-800/60 border border-green-400/30 text-green-400 font-black text-lg flex items-center justify-center mx-auto mb-4">1</div>
+        <h3 class="text-base font-black text-green-400 mb-3">Sign Up</h3>
+        <p class="text-sm text-gray-400 leading-relaxed">Get in touch with us and apply to learn if you can join the network. We also provide resources to help if work still has to be done.</p>
+      </div>
+      <div class="bg-white/5 border border-white/10 rounded-2xl p-7 text-center hover:-translate-y-1 transition-transform">
+        <div class="w-12 h-12 rounded-full bg-green-800/60 border border-green-400/30 text-green-400 font-black text-lg flex items-center justify-center mx-auto mb-4">2</div>
+        <h3 class="text-base font-black text-green-400 mb-3">Contribute Your Harvest</h3>
+        <p class="text-sm text-gray-400 leading-relaxed">Farmers contribute their harvest by delivery to our distribution center or through a pickup service we provide at a small cost.</p>
+      </div>
+      <div class="bg-white/5 border border-white/10 rounded-2xl p-7 text-center hover:-translate-y-1 transition-transform">
+        <div class="w-12 h-12 rounded-full bg-green-800/60 border border-green-400/30 text-green-400 font-black text-lg flex items-center justify-center mx-auto mb-4">3</div>
+        <h3 class="text-base font-black text-green-400 mb-3">Earn Your Share</h3>
+        <p class="text-sm text-gray-400 leading-relaxed">Farmers receive payment based on quantity and quality of their produce. Small farms are not charged for their first 6 months of selling.</p>
+      </div>
+    </div>
+  </section>
 
-        <!-- ═══════════════════════════════════════════
-             SECTION 2 — OUR STORY
-             Image left, text right
-        ═══════════════════════════════════════════ -->
-        <section class="about-section">
-            <div class="section-title-card">Our Story</div>
-            <div class="about-two-col">
-                <div class="about-img-col">
-                    <!-- Replace src with your actual image -->
-                    <img src="../media/story-about-us.jpeg" alt="Our story" class="image about-img">
-                </div>
-                <div class="about-text-col">
-                    <h2 class="section-subheading">How Roots Began</h2>
-                    <p>
-                        Roots began as a small project with 3 households in Makhaza, Kayeltsha in early 2020. Our farmers had extra crops that they would sell to their neighbours but they still had excess and needed another way to also sell.
-                    </p>
-                    <p>
-                        We wanted to find a way to support local farmers and create a more equitable food system, so we started by connecting with a few farmers we knew and helping them sell their produce directly to buyers in the city and other areas.
-                    </p>
-                    <p>
-                        Today, we are continuously expanding to more communities and farmers, whilst we grow our opperations and are able to provide more support and tools to better serve our farmers and buyers. We are proud of how far we've come and are excited for the future as we continue to grow together with our communities. 
-                    </p>
-                </div>
-            </div>
-        </section>
+  <!-- IMPACT STATS -->
+  <section class="py-12 border-t border-white/10">
+    <div class="text-center mb-10">
+      <span class="inline-block bg-soil-700/80 border border-white/10 text-white text-xs font-bold uppercase tracking-widest px-5 py-2 rounded-lg">Our Impact</span>
+    </div>
+    <div class="grid grid-cols-2 sm:grid-cols-4 gap-5">
+      <div class="bg-green-800/20 border border-green-400/20 rounded-2xl p-6 text-center hover:bg-green-800/30 transition-colors">
+        <div class="text-4xl font-black text-green-400 mb-2">300+</div>
+        <div class="text-xs font-bold uppercase tracking-widest text-gray-400">Farmers in network</div>
+      </div>
+      <div class="bg-green-800/20 border border-green-400/20 rounded-2xl p-6 text-center hover:bg-green-800/30 transition-colors">
+        <div class="text-4xl font-black text-green-400 mb-2">14</div>
+        <div class="text-xs font-bold uppercase tracking-widest text-gray-400">Communities served</div>
+      </div>
+      <div class="bg-green-800/20 border border-green-400/20 rounded-2xl p-6 text-center hover:bg-green-800/30 transition-colors">
+        <div class="text-4xl font-black text-green-400 mb-2">20t+</div>
+        <div class="text-xs font-bold uppercase tracking-widest text-gray-400">Tonnes sold to date</div>
+      </div>
+      <div class="bg-green-800/20 border border-green-400/20 rounded-2xl p-6 text-center hover:bg-green-800/30 transition-colors">
+        <div class="text-4xl font-black text-green-400 mb-2">R1m+</div>
+        <div class="text-xs font-bold uppercase tracking-widest text-gray-400">Paid back to farmers</div>
+      </div>
+    </div>
+  </section>
 
-        <!-- ═══════════════════════════════════════════
-             SECTION 3 — HOW IT WORKS
-             Three step cards in a row
-        ═══════════════════════════════════════════ -->
-        <section class="about-section">
-            <div class="section-title-card">How It Works</div>
-            <div class="how-it-works-grid">
+  <!-- VALUES -->
+  <section class="py-12 border-t border-white/10">
+    <div class="text-center mb-10">
+      <span class="inline-block bg-soil-700/80 border border-white/10 text-white text-xs font-bold uppercase tracking-widest px-5 py-2 rounded-lg">Our Values</span>
+    </div>
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+      <div class="flex flex-col gap-6">
+        <div class="bg-white/5 border border-white/10 rounded-xl p-5">
+          <h3 class="text-base font-black text-white mb-2">Fairness</h3>
+          <p class="text-sm text-gray-400 leading-relaxed">We are looking to uplift these communities by ensuring fair compensation, support and transparent practices for all our farmers.</p>
+        </div>
+        <div class="bg-white/5 border border-white/10 rounded-xl p-5">
+          <h3 class="text-base font-black text-white mb-2">Community First</h3>
+          <p class="text-sm text-gray-400 leading-relaxed">We prioritize the needs and voices of our community members in all our decisions, ensuring they are at the center of our efforts and that we reinvest in local infrastructure.</p>
+        </div>
+        <div class="bg-white/5 border border-white/10 rounded-xl p-5">
+          <h3 class="text-base font-black text-white mb-2">Sustainability</h3>
+          <p class="text-sm text-gray-400 leading-relaxed">We are committed to sustainable farming practices that protect our environment. This includes focusing on soil health, efficient water use, seasonal crops, and encouraging organic practices.</p>
+        </div>
+        <div class="bg-white/5 border border-white/10 rounded-xl p-5">
+          <h3 class="text-base font-black text-white mb-2">Transparency</h3>
+          <p class="text-sm text-gray-400 leading-relaxed">Farmers get detailed monthly reports showing exactly what was sold, at what price, where the sales went, and what their share will be.</p>
+        </div>
+      </div>
+      <div class="rounded-2xl overflow-hidden border border-white/10 shadow-xl">
+        <img src="../media/our-values-about-us.jpg" alt="Our values" class="w-full h-full object-cover min-h-[400px]">
+      </div>
+    </div>
+  </section>
 
-                <div class="hiw-card">
-                    <h3 class="hiw-title">1. Sign up</h3>
-                    <p class="hiw-body">
-                        Get in touch with us and apply to learn if you can join the network. We also provide some resources to help if work still has to be done.
-                    </p>
-                </div>
+  <!-- CTA -->
+  <section class="py-12 border-t border-white/10">
+    <div class="bg-gradient-to-br from-green-800/30 to-soil-700/40 border border-green-400/20 rounded-2xl p-10 sm:p-16 text-center">
+      <h2 class="text-3xl sm:text-4xl font-black text-white mb-4">Ready to grow with us?</h2>
+      <p class="text-gray-300 max-w-2xl mx-auto leading-relaxed mb-8">Are you looking to get started and contribute your harvest? Put in a sign up request today! Or if you are a buyer looking to support our farmers, browse our produce selection and shop with us today.</p>
+      <div class="flex flex-wrap gap-4 justify-center">
+        <a href="contact_us.html" class="bg-green-800 hover:bg-green-700 text-white font-bold px-8 py-3.5 rounded-xl transition-colors">Become a Seller</a>
+        <a href="produce_products.html" class="border border-green-400 text-green-400 hover:bg-green-400 hover:text-black font-bold px-8 py-3.5 rounded-xl transition-colors">Shop Produce</a>
+      </div>
+    </div>
+  </section>
 
-                <div class="hiw-card">
-                    <h3 class="hiw-title">2. Contribute Your Harvest</h3>
-                    <p class="hiw-body">
-                        Farmers contribute their harvest by delivery to our distribution center or through a pickup service we provide at a small cost.
-                    </p>
-                </div>
+</div>
 
-                <div class="hiw-card">
-                    <h3 class="hiw-title">3. Earn Your Share</h3>
-                    <p class="hiw-body">
-                        Farmers receive payment based on the quantity and quality of their produce. The "proportional share" is calculated by considering the total produce sold and the individual contribution of each farmer. Small farms won't be chraged for their first 6 months of selling.
-                    </p>
-                </div>
-
-            </div>
-        </section>
-
-        <!-- ═══════════════════════════════════════════
-             SECTION 4 — IMPACT STATS
-             Four stat cards in a row
-        ═══════════════════════════════════════════ -->
-        <section class="about-section stats-section">
-            <div class="section-title-card">Our Impact</div>
-            <div class="stats-grid">
-
-                <div class="stat-card">
-                    <span class="stat-number">300+</span>
-                    <!-- Replace 000 with your real number -->
-                    <span class="stat-label">Farmers in network</span>
-                </div>
-
-                <div class="stat-card">
-                    <span class="stat-number">14</span>
-                    <!-- Replace with number of communities/townships -->
-                    <span class="stat-label">Communities served</span>
-                </div>
-
-                <div class="stat-card">
-                    <span class="stat-number">20t+</span>
-                    <!-- Replace with tonnes of produce sold -->
-                    <span class="stat-label">Tonnes sold to date</span>
-                </div>
-
-                <div class="stat-card">
-                    <span class="stat-number">R1m+</span>
-                    <!-- Replace with total farmer earnings -->
-                    <span class="stat-label">Paid back to farmers</span>
-                </div>
-
-            </div>
-        </section>
-
-        <!-- ═══════════════════════════════════════════
-             SECTION 5 — OUR VALUES
-             Text left, image right
-        ═══════════════════════════════════════════ -->
-        <section class="about-section">
-            <div class="section-title-card">Our Values</div>
-            <div class="about-two-col reverse">
-                <div class="about-text-col">
-                    <div class="values-list">
-
-                        <div class="value-item">
-                            <div class="value-body">
-                                <h3 class="value-title">Fairness</h3>
-                                <p>We are looking to uplift these communities by ensuring fair compensation, support and transparent practices for all our farmers.</p>
-                            </div>
-                        </div>
-
-                        <div class="value-item">
-                            <div class="value-body">
-                                <h3 class="value-title">Community First</h3>
-                                <p>We prioritize the needs and voices of our community members in all our decisions, ensuring that they are at the center of our efforts and that we reinvest in local infrastructure.</p>
-                            </div>
-                        </div>
-
-                        <div class="value-item">
-                            <div class="value-body">
-                                <h3 class="value-title">Sustainability</h3>
-                                <p>We are committed to promoting sustainable farming practices that protect our environment and ensure long-term productivity. This includes focusing on soil health, efficient water use, planting seasonal crops, and encouraging organic practices.</p>
-                            </div>
-                        </div>
-
-                        <div class="value-item">
-                            <div class="value-body">
-                                <h3 class="value-title">Transparency</h3>
-                                <p>Farmers will get detailed reports every month showing exactly what was sold, at what price, where the sales went and what their share will be.</p>
-                            </div>
-                        </div>
-
-                    </div>
-                </div>
-                <div class="about-img-col">
-                    <!-- Replace src with your actual image -->
-                    <img src="../media/our-values-about-us.jpg" alt="Our values" class="image about-img">
-                </div>
-            </div>
-        </section>
-
-
-
-        <!-- ═══════════════════════════════════════════
-             SECTION 7 — CALL TO ACTION
-             Centred banner with two buttons
-        ═══════════════════════════════════════════ -->
-        <section class="about-section cta-section">
-            <div class="cta-card">
-                <h2 class="cta-heading">Ready to grow with us?</h2>
-                <p class="cta-body">
-                    Are you looking to get started and contribute your harvest? Put in a sign up request today! Or if you're a buyer looking to support our farmers, browse our produce selection and shop with us today!
-                </p>
-                <div class="cta-buttons">
-                    <a href="contact_us.html" class="btn btn-primary">Become a Seller</a>
-                    <a href="produce_products.html" class="btn btn-outline-green">Shop Produce</a>
-                </div>
-            </div>
-        </section>
-
-    </div><!-- /about-page -->
-
-    <footer class="footer">
-        <p>Roots &copy; 2026 — Growing Together</p>
-    </footer>
-
-    <script src="../scripts/scripts.js"></script>
+<div id="footer-root"></div>
+<div id="toggle-root"></div>
+<script src="https://unpkg.com/react@18/umd/react.production.min.js" crossorigin></script>
+<script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js" crossorigin></script>
+<script src="../scripts/shared-components.js"></script>
+<script>
+  var mountDiv = document.createElement('div');
+  document.body.appendChild(mountDiv);
+  ReactDOM.createRoot(mountDiv).render(
+    React.createElement(RootsStore.StoreProvider, null,
+      React.createElement(RootsComponents.ScrollGradient),
+      ReactDOM.createPortal(React.createElement(RootsComponents.Navbar),        document.getElementById('navbar-root')),
+      ReactDOM.createPortal(React.createElement(RootsComponents.Footer),        document.getElementById('footer-root')),
+      ReactDOM.createPortal(React.createElement(RootsComponents.LowDataToggle), document.getElementById('toggle-root'))
+    )
+  );
+</script>
 </body>
 </html>

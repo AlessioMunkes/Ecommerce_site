@@ -1,178 +1,534 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Roots</title>
-    <link rel="Stylesheet" href="../styles/styles.css" />
+  <meta charset="UTF-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Roots — Township Farmers Collective</title>
+  <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@400;600;700&family=Lora:ital,wght@0,400;0,500;0,600;1,400&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            parchment: { 50:'#fdf8f0', 100:'#f7eed8', 200:'#eedfc0', 300:'#e0c99a' },
+            bark:      { 700:'#5c3d1e', 800:'#3d2810', 900:'#261808' },
+            moss:      { 400:'#7aad5a', 600:'#4a7c35', 700:'#345c24', 800:'#1e3a14' },
+            soil:      { 600:'#8b6340', 700:'#6b4a28', 800:'#4a3018' },
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    /* ── Base ── */
+    html { scroll-behavior: smooth; }
+    body {
+      background-color: #f7eed8;
+      color: #3d2810;
+      font-family: 'Lora', Georgia, serif;
+      overflow-x: hidden;
+    }
+    body.low-data { background: #c9b686 !important; }
+    body.low-data img { display: none !important; }
+
+    /* ── Scrollbar ── */
+    ::-webkit-scrollbar { width: 6px; }
+    ::-webkit-scrollbar-track { background: #eedfc0; }
+    ::-webkit-scrollbar-thumb { background: #4a7c35; border-radius: 3px; }
+
+    /* ── Hero ── */
+    .hero-wrap {
+      position: relative;
+      min-height: 92vh;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+    }
+    .hero-bg {
+      position: absolute;
+      inset: -20% 0;
+      width: 100%;
+      height: 140%;
+      object-fit: cover;
+      object-position: center 40%;
+      will-change: transform;
+      filter: brightness(0.42) saturate(0.85);
+    }
+    .hero-overlay {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(135deg,
+        rgba(58,35,12,0.75) 0%,
+        rgba(30,58,20,0.45) 55%,
+        rgba(58,35,12,0.2) 100%);
+    }
+
+    /* ── Parallax section bg ── */
+    .parallax-section {
+      position: relative;
+      overflow: hidden;
+    }
+    .parallax-bg {
+      position: absolute;
+      inset: -18% 0;
+      width: 100%;
+      height: 136%;
+      object-fit: cover;
+      will-change: transform;
+    }
+    .parallax-dim {
+      position: absolute;
+      inset: 0;
+    }
+
+    /* ── Panel images with parallax ── */
+    .panel-wrap {
+      position: relative;
+      border-radius: 20px;
+      overflow: hidden;
+      box-shadow: 0 20px 56px rgba(58,35,12,0.2);
+    }
+    .panel-wrap img {
+      width: 100%;
+      height: 420px;
+      object-fit: cover;
+      display: block;
+      transform: scale(1.14);
+      will-change: transform;
+    }
+
+    /* ── Grain texture ── */
+    .grain::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)' opacity='0.03'/%3E%3C/svg%3E");
+      pointer-events: none;
+      z-index: 1;
+    }
+
+    /* ── Scrolling tape ── */
+    .tape-wrap { overflow: hidden; background: linear-gradient(135deg,#345c24,#4a7c35); padding:12px 0; }
+    .tape-inner { display:inline-flex; animation:scrollTape 24s linear infinite; white-space:nowrap; }
+    .tape-item  { font-family:'Caveat',cursive; font-size:20px; color:rgba(253,248,240,0.88); padding:0 28px; }
+    .tape-dot   { color:rgba(253,248,240,0.35); font-size:18px; }
+    @keyframes scrollTape { from{transform:translateX(0)} to{transform:translateX(-50%)} }
+
+    /* ── Step circles ── */
+    .step-circle {
+      width:46px; height:46px; border-radius:50%;
+      background:linear-gradient(135deg,#345c24,#7aad5a);
+      display:flex; align-items:center; justify-content:center;
+      font-family:'Caveat',cursive; font-size:22px; font-weight:700; color:#fdf8f0;
+      box-shadow:0 4px 14px rgba(52,92,36,0.35); flex-shrink:0;
+    }
+
+    /* ── Leaf bullets ── */
+    .leaf-li { display:flex; align-items:flex-start; gap:10px; font-family:'Lora',serif; font-size:15px; line-height:1.65; padding:4px 0; }
+    .leaf-li::before { content:'•'; font-size:14px; margin-top:2px; flex-shrink:0; }
+
+    /* ── Stat cards ── */
+    .stat-card {
+      border-radius:16px; padding:18px; text-align:center;
+      backdrop-filter:blur(8px);
+      background:rgba(253,248,240,0.12);
+      border:1px solid rgba(253,248,240,0.2);
+    }
+
+    /* ── Tag pill ── */
+    .tag-pill {
+      display:inline-block; font-family:'DM Sans',sans-serif;
+      font-size:11px; font-weight:600; letter-spacing:0.12em; text-transform:uppercase;
+      background:rgba(122,173,90,0.16); color:#345c24;
+      border:1px solid rgba(122,173,90,0.35); padding:6px 16px; border-radius:50px;
+    }
+
+    /* ── Buttons ── */
+    .btn-primary {
+      display:inline-block; background:linear-gradient(135deg,#345c24,#4a7c35);
+      color:#fdf8f0; font-family:'DM Sans',sans-serif; font-weight:600; font-size:15px;
+      padding:14px 32px; border-radius:50px; text-decoration:none;
+      transition:transform 0.2s, box-shadow 0.2s;
+      box-shadow:0 4px 16px rgba(52,92,36,0.28); letter-spacing:0.01em;
+    }
+    .btn-primary:hover { transform:translateY(-2px); box-shadow:0 8px 24px rgba(52,92,36,0.4); }
+    .btn-outline {
+      display:inline-block; border:2px solid rgba(92,61,30,0.3); color:#3d2810;
+      font-family:'DM Sans',sans-serif; font-weight:600; font-size:15px;
+      padding:12px 30px; border-radius:50px; text-decoration:none;
+      transition:border-color 0.2s, background 0.2s, transform 0.2s;
+    }
+    .btn-outline:hover { border-color:#4a7c35; background:rgba(74,124,53,0.07); transform:translateY(-2px); }
+    .btn-outline-light {
+      display:inline-block; border:2px solid rgba(253,248,240,0.3); color:#fdf8f0;
+      font-family:'DM Sans',sans-serif; font-weight:600; font-size:15px;
+      padding:12px 30px; border-radius:50px; text-decoration:none;
+      transition:border-color 0.2s, background 0.2s, transform 0.2s;
+    }
+    .btn-outline-light:hover { border-color:rgba(168,219,120,0.7); background:rgba(122,173,90,0.1); transform:translateY(-2px); }
+
+    /* ── Fade-up animations ── */
+    @keyframes fadeUp { from{opacity:0;transform:translateY(28px)} to{opacity:1;transform:translateY(0)} }
+    .fade-up   { animation:fadeUp 0.85s ease both; }
+    .fade-up-2 { animation:fadeUp 0.85s 0.15s ease both; }
+    .fade-up-3 { animation:fadeUp 0.85s 0.30s ease both; }
+
+    /* ── Scroll reveal ── */
+    .reveal { opacity:0; transform:translateY(36px); transition:opacity 0.75s ease, transform 0.75s ease; }
+    .reveal.revealed { opacity:1; transform:translateY(0); }
+
+    /* ── Section backgrounds ── */
+    .bg-parchment { background-color:#fdf8f0; }
+    .bg-linen     { background-color:#f0e6cc; }
+
+    /* ── Navbar/footer colour overrides ── */
+    #navbar-root header {
+      background:rgba(247,238,216,0.9) !important;
+      border-bottom:1px solid rgba(92,61,30,0.12) !important;
+      backdrop-filter:blur(10px) !important;
+    }
+    #navbar-root .text-white   { color:#3d2810 !important; }
+    #navbar-root .text-gray-300 { color:#6b4a28 !important; }
+    #navbar-root .text-green-400 { color:#4a7c35 !important; }
+    #navbar-root .bg-green-400  { background:#4a7c35 !important; }
+    #navbar-root .text-black    { color:#fdf8f0 !important; }
+    #navbar-root .hover\:text-white:hover { color:#3d2810 !important; }
+    #navbar-root .hover\:bg-white\/10:hover { background:rgba(92,61,30,0.08) !important; }
+    #navbar-root .bg-green-800\/60 { background:rgba(74,124,53,0.15) !important; }
+    #navbar-root .border-white\/10 { border-color:rgba(92,61,30,0.1) !important; }
+    #navbar-root .bg-black\/50 { background:rgba(247,238,216,0.9) !important; }
+
+    #footer-root footer { background:#261808 !important; border-top:1px solid rgba(122,173,90,0.15) !important; }
+    #footer-root * { color:#c4b49a !important; }
+    #footer-root .text-green-400 { color:#7aad5a !important; }
+
+    #toggle-root button {
+      background:rgba(247,238,216,0.92) !important;
+      border-color:rgba(92,61,30,0.2) !important;
+    }
+    #toggle-root .text-gray-500 { color:#8b6340 !important; }
+    #toggle-root .text-gray-400 { color:#6b4a28 !important; }
+  </style>
 </head>
 <body>
 
-    <!-- NAVBAR -->
-    <header class="header">
-        <div class="header-brand">
-            <h3><a href="index.html">Roots</a></h3>
-        </div>
-        <input type="checkbox" id="nav-toggle" class="nav-toggle">
-        <label for="nav-toggle" class="hamburger">
-            <span></span>
-            <span></span>
-            <span></span>
-        </label>
-        <nav class="links">
-            <a href="index.html">Home</a>
-            <a href="produce_products.html">Products</a>
-            <a href="newsletter.html">Newsletter</a>
-            <a href="about_us.html">About Us</a>
-            <a href="contact_us.html">Contact Us</a>
-            <a href="wishlist.html">Wishlist</a>
-            <a href="cart.html">Shopping Cart</a>
-        </nav>
-    </header>
+<div id="navbar-root"></div>
 
-    <!-- TITLE CARD -->
-    <div class="title-container">
-        <h1>Roots</h1>
+<!-- ══════════════════════════════════
+     HERO
+══════════════════════════════════ -->
+<section class="hero-wrap grain" id="hero-section">
+  <img id="heroBg" src="../media/farm-homepage.jpg" alt="Community farm" class="hero-bg">
+  <div class="hero-overlay"></div>
+
+  <div class="relative w-full max-w-7xl mx-auto px-6 sm:px-10 py-28" style="z-index:2;">
+    <div class="max-w-2xl">
+      <span class="fade-up" style="display:inline-block;font-family:'DM Sans',sans-serif;font-size:11px;font-weight:600;letter-spacing:0.12em;text-transform:uppercase;background:rgba(122,173,90,0.22);color:#c6e8a8;border:1px solid rgba(122,173,90,0.35);padding:6px 16px;border-radius:50px;margin-bottom:24px;">Sustainable Farming</span>
+      <h1 class="fade-up-2" style="font-family:'Caveat',cursive;font-size:clamp(54px,7.5vw,88px);font-weight:700;color:#fdf8f0;line-height:1.08;margin-bottom:20px;">
+        Grown with love,<br>
+        <span style="color:#a8db78;">Built Together.</span>
+      </h1>
+      <p class="fade-up-2" style="font-family:'Lora',serif;font-size:17px;color:rgba(253,248,240,0.8);line-height:1.85;margin-bottom:10px;">
+        Welcome to Roots — fresh, locally-grown produce and farming tools, supporting sustainable township community agriculture across Cape Town.
+      </p>
+      <p class="fade-up-2" style="font-family:'Lora',serif;font-size:15px;color:rgba(253,248,240,0.6);line-height:1.7;margin-bottom:36px;">
+        Every purchase flows back to the farmers who grew it. Small farmers earn 100% of their profits so they can build and expand.
+      </p>
+      <div class="fade-up-3" style="display:flex;flex-wrap:wrap;gap:12px;">
+        <a href="produce_products.html" class="btn-primary">Shop Produce</a>
+        <a href="produce_products.html?filter=equipment" class="btn-outline-light">Shop Equipment</a>
+      </div>
     </div>
 
-    <!-- =============================================
-         HERO SECTION
-         Left: subheading + text + Shop Produce btn
-         Right: image + Shop Equipment btn
-         ============================================= -->
-    <section class="section-container hero-section">
-        <div class="hero-text-col">
-            <h2 class="section-subheading">Intro Subheading</h2>
-            <p>Welcome to Roots! Here you can shop for fresh, locally-grown produce and farming equipment to get you started!.</p>
-            <p>We offer a variety of services to support your farming journey and we're dedicated to making things work for you!.</p>
-            <a href="produce_products.html" class="btn btn-primary">Shop Produce</a>
-        </div>
-        <div class="hero-img-col">
-            <img src="../media/farm-homepage.jpg" class="image" alt="Small farm">
-            <a href="produce_products.html?filter=equipment" class="btn btn-primary">Shop Equipment</a>
-        </div>
-    </section>
+    <!-- Floating stat chips -->
+    <div style="position:absolute;bottom:40px;right:40px;display:flex;gap:12px;" class="hidden lg:flex fade-up-3">
+      <div class="stat-card">
+        <div style="font-family:'Caveat',cursive;font-size:38px;font-weight:700;color:#a8db78;line-height:1;">300+</div>
+        <div style="font-family:'DM Sans',sans-serif;font-size:10px;letter-spacing:0.1em;text-transform:uppercase;color:rgba(253,248,240,0.6);margin-top:3px;">Active farmers</div>
+      </div>
+      <div class="stat-card">
+        <div style="font-family:'Caveat',cursive;font-size:38px;font-weight:700;color:#a8db78;line-height:1;">14</div>
+        <div style="font-family:'DM Sans',sans-serif;font-size:10px;letter-spacing:0.1em;text-transform:uppercase;color:rgba(253,248,240,0.6);margin-top:3px;">Townships</div>
+      </div>
+    </div>
+  </div>
+</section>
 
-    <section class="produce-section">
-        <div class="section-title-card">Our farm produce</div>
-        <div class="section-container produce-layout">
-            <div class="produce-img-col">
-                <img src="../media/produce-homepage.jpg" class="image" alt="Fresh produce">
-            </div>
-            <div class="produce-text-col">
-                <h2 class="section-subheading">Fresh and grown in local communities</h2>
-                <p>All our food products listed are grown in local communities with love and care, all while supporting sustainable agriculture.</p>
-                <p>Our farmers are supported by your purchase where they receive a fair, proportional share of every sale. Small farmers earn back 100% of their profits.</p>
-                <p>When you make a purchase you help support the local economy and contribute to the sustainability of our farming communities.</p>
-                <a href="produce_products.html" class="btn btn-primary">Shop Produce</a>
-            </div>
-        </div>
-    </section>
+<!-- ══════════════════════════════════
+     SCROLLING TAPE
+══════════════════════════════════ -->
+<div class="tape-wrap">
+  <div class="tape-inner">
+    <span class="tape-item">Fresh from local communities</span><span class="tape-dot">·</span>
+    <span class="tape-item">Community grown</span><span class="tape-dot">·</span>
+    <span class="tape-item">Fair trade always</span><span class="tape-dot">·</span>
+    <span class="tape-item">Township roots</span><span class="tape-dot">·</span>
+    <span class="tape-item">Food security</span><span class="tape-dot">·</span>
+    <span class="tape-item">Naturally grown</span><span class="tape-dot">·</span>
+    <span class="tape-item">Cape Town initiative</span><span class="tape-dot">·</span>
+    <span class="tape-item">Fresh from local communities</span><span class="tape-dot">·</span>
+    <span class="tape-item">Community grown</span><span class="tape-dot">·</span>
+    <span class="tape-item">Fair trade always</span><span class="tape-dot">·</span>
+    <span class="tape-item">Township roots</span><span class="tape-dot">·</span>
+    <span class="tape-item">Food security</span><span class="tape-dot">·</span>
+    <span class="tape-item">Naturally grown</span><span class="tape-dot">·</span>
+    <span class="tape-item">Cape Town initiative</span><span class="tape-dot">·</span>
+  </div>
+</div>
 
-    <!-- =============================================
-         EQUIPMENT SECTION
-         Title card centred above
-         Left: text + button | Right: image
-         ============================================= -->
-    <section class="equipment-section">
-        <div class="section-title-card">Looking to get started?</div>
-        <div class="section-container equipment-layout">
-            <div class="equipment-text-col">
-                <h2 class="section-subheading">Tools for Your Farm</h2>
-                <p>We provide a wide range of tools and equipment to help you succeed in your farming journey.</p>
-                <p>We are building our selection to cover a wide range from planters to, PPE and hand held tools.</p>
-                <a href="produce_products.html?filter=equipment" class="btn btn-primary">Shop Equipment</a>
-            </div>
-            <div class="equipment-img-col">
-                <img src="../media/equipment-home-page.jpg" class="image" alt="Farming equipment">
-            </div>
-        </div>
-    </section>
+<!-- ══════════════════════════════════
+     HOW IT WORKS
+══════════════════════════════════ -->
+<section class="bg-parchment py-20 px-4 sm:px-8">
+  <div class="max-w-5xl mx-auto">
+    <div class="text-center mb-14 reveal">
+      <span class="tag-pill" style="margin-bottom:14px;display:inline-block;">How it works</span>
+      <h2 style="font-family:'Caveat',cursive;font-size:clamp(36px,5vw,52px);font-weight:700;color:#3d2810;line-height:1.15;">From plot to plate</h2>
+    </div>
+    <div class="grid grid-cols-2 sm:grid-cols-4 gap-8">
+      <div class="flex flex-col items-center text-center gap-3 reveal">
+        <div class="step-circle">1</div>
+        <p style="font-family:'Lora',serif;font-size:14px;color:#6b4a28;line-height:1.55;">Join a collective in your community</p>
+      </div>
+      <div class="flex flex-col items-center text-center gap-3 reveal" style="transition-delay:0.1s">
+        <div class="step-circle">2</div>
+        <p style="font-family:'Lora',serif;font-size:14px;color:#6b4a28;line-height:1.55;">Contribute your harvest each season</p>
+      </div>
+      <div class="flex flex-col items-center text-center gap-3 reveal" style="transition-delay:0.2s">
+        <div class="step-circle">3</div>
+        <p style="font-family:'Lora',serif;font-size:14px;color:#6b4a28;line-height:1.55;">We sell collectively on your behalf</p>
+      </div>
+      <div class="flex flex-col items-center text-center gap-3 reveal" style="transition-delay:0.3s">
+        <div class="step-circle">4</div>
+        <p style="font-family:'Lora',serif;font-size:14px;color:#6b4a28;line-height:1.55;">You earn your fair proportional share</p>
+      </div>
+    </div>
+  </div>
+</section>
 
-        <section class="farmer-signup-section">
-        <div class="section-title-card">Grow With Us</div>
-        <div class="section-container farmer-signup-layout">
- 
-            <div class="farmer-signup-text-col">
-                <h2 class="section-subheading">Become a Producer</h2>
-                <p>Are you a farmer or part of a township farming community? Partner with roots and start earning a fair, proportional share of every sale whilst being exposed to wide range od customers.</p>
-                <p>We handle the selling whilst you focus on growing and sustaining. Submit your application and one of our team members will be in touch within 48 hours.</p>
- 
-                <div class="farmer-signup-text-col">
-                        <p>• Proportional payouts - earn exactly what you contributenly<br>
-                        • Access to equipment at community prices<br>
-                        • No upfront fees - free to join and list your produce<br>
-                        • Support from our team every step of the way</p>
-                </div>
- 
-                <a href="contact_us.html#become-a-seller" class="btn btn-primary farmer-signup-btn">
-                    Apply to Sell on Roots
-                </a>
-            </div>
- 
-            <div class="farmer-signup-img-col">
-                <img src="../media/become-producer-homepage.jpg" class="image" alt="Township farmer">
-                <div class="farmer-signup-stat-strip">
-                    <div class="signup-stat">
-                        <span class="signup-stat-num">300+</span>
-                        <span class="signup-stat-label">Active farmers</span>
-                    </div>
-                    <div class="signup-stat-divider"></div>
-                    <div class="signup-stat">
-                        <span class="signup-stat-num">14</span>
-                        <span class="signup-stat-label">Townships</span>
-                    </div>
-                    <div class="signup-stat-divider"></div>
-                    <div class="signup-stat">
-                        <span class="signup-stat-num">R0</span>
-                        <span class="signup-stat-label">To join</span>
-                    </div>
-                </div>
-            </div>
- 
+<!-- ══════════════════════════════════
+     PRODUCE — image left parallax
+══════════════════════════════════ -->
+<section class="bg-linen py-20 px-4 sm:px-8">
+  <div class="max-w-7xl mx-auto">
+    <div class="text-center mb-14 reveal">
+      <span class="tag-pill" style="margin-bottom:14px;display:inline-block;">Our Farm Produce</span>
+      <h2 style="font-family:'Caveat',cursive;font-size:clamp(36px,5vw,52px);font-weight:700;color:#3d2810;">Fresh from local communities</h2>
+    </div>
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-14 items-center">
+      <div class="panel-wrap reveal">
+        <img data-parallax="0.14" src="../media/produce-homepage.jpg" alt="Fresh produce">
+        <div style="position:absolute;bottom:18px;left:18px;background:rgba(253,248,240,0.93);border-radius:12px;padding:9px 16px;border:1px solid rgba(122,173,90,0.3);">
+          <span style="font-family:'Caveat',cursive;font-size:18px;color:#345c24;font-weight:600;">Harvested fresh, daily ✓</span>
         </div>
-    </section>
+      </div>
+      <div class="reveal" style="transition-delay:0.15s;">
+        <h3 style="font-family:'Caveat',cursive;font-size:clamp(28px,3.5vw,40px);font-weight:700;color:#3d2810;margin-bottom:16px;">Community-grown at fair prices</h3>
+        <p style="font-family:'Lora',serif;font-size:16px;color:#6b4a28;line-height:1.82;margin-bottom:12px;">All our food products are grown in local communities with love and care, supporting sustainable agriculture across Cape Town's townships.</p>
+        <p style="font-family:'Lora',serif;font-size:16px;color:#6b4a28;line-height:1.82;margin-bottom:12px;">Our farmers receive a fair, proportional share of every sale — small farmers earn back 100% of their profits.</p>
+        <p style="font-family:'Lora',serif;font-size:16px;color:#6b4a28;line-height:1.82;margin-bottom:28px;">When you buy from Roots, you support the local economy and help farming communities thrive.</p>
+        <a href="produce_products.html" class="btn-primary">Shop Produce</a>
+      </div>
+    </div>
+  </div>
+</section>
 
-    <!-- =============================================
-         NEWSLETTER SECTION
-         Left: subheading + text | Right: image + link btn
-         ============================================= -->
-    <section class="newsletter-section">
-        <div class="section-container newsletter-layout">
-            <div class="newsletter-text-col">
-                <h2 class="section-subheading">Impact Newsletter</h2>
-                <p>Learn about our communities that provide, how they are making progress and any latest news happening.</p>
-                <p>Our newsletter serves as a tool for you to make use of and connect with farmers in different areas. It also serves as a platform for sharing updates, success stories and any educational tips.</p>
-                <p>Read it here on the webpage or sign up to receive a montly copy.</p>
-            </div>
-            <div class="newsletter-img-col">
-                <img src="../media/impact-homepage.jpg" class="image" alt="Newsletter">
-                <a href="newsletter.html" class="btn btn-primary">Newsletter Page</a>
-            </div>
+<!-- ══════════════════════════════════
+     EQUIPMENT — image right parallax
+══════════════════════════════════ -->
+<section class="bg-parchment py-20 px-4 sm:px-8">
+  <div class="max-w-7xl mx-auto">
+    <div class="text-center mb-14 reveal">
+      <span class="tag-pill" style="margin-bottom:14px;display:inline-block;">Looking to get started?</span>
+      <h2 style="font-family:'Caveat',cursive;font-size:clamp(36px,5vw,52px);font-weight:700;color:#3d2810;">Tools for Your Farm</h2>
+    </div>
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-14 items-center">
+      <div class="reveal">
+        <h3 style="font-family:'Caveat',cursive;font-size:clamp(28px,3.5vw,40px);font-weight:700;color:#3d2810;margin-bottom:16px;">Everything you need to grow</h3>
+        <p style="font-family:'Lora',serif;font-size:16px;color:#6b4a28;line-height:1.82;margin-bottom:12px;">We provide a wide range of tools and equipment to help you succeed in your farming journey.</p>
+        <p style="font-family:'Lora',serif;font-size:16px;color:#6b4a28;line-height:1.82;margin-bottom:28px;">From planters to PPE and hand-held tools — we're building our selection to cover everything at community prices.</p>
+        <a href="produce_products.html?filter=equipment" class="btn-primary">Shop Equipment</a>
+      </div>
+      <div class="panel-wrap reveal" style="transition-delay:0.15s;">
+        <img data-parallax="0.14" src="../media/equipment-home-page.jpg" alt="Farming equipment">
+        <div style="position:absolute;top:18px;right:18px;background:rgba(38,24,8,0.82);border-radius:12px;padding:9px 16px;">
+          <span style="font-family:'Caveat',cursive;font-size:16px;color:#a8db78;font-weight:600;">Community prices </span>
         </div>
-    </section>
+      </div>
+    </div>
+  </div>
+</section>
 
-    <!-- =============================================
-         CONTACT / SUGGESTIONS SECTION
-         Left: image + Contact Us btn | Right: subheading + text
-         ============================================= -->
-    <section class="contact-section">
-        <div class="section-container contact-layout">
-            <div class="contact-img-col">
-                <img src="../media/contact-homepage.jpeg" class="image" alt="Contact us">
-                <a href="contact_us.html" class="btn btn-primary">Contact Us</a>
-            </div>
-            <div class="contact-text-col">
-                <h2 class="section-subheading">Any Suggestions?</h2>
-                <p>Any enquiries you'd like to make can be submitted through the contact form or by calling us.</p>
-                <p>You can send through any recommendations or problems you might be experiencing with us..</p>
-                <p>Feel free to get in touch and we are happy to always help!</p>
-            </div>
+<!-- ══════════════════════════════════
+     BECOME A PRODUCER — dark parallax bg
+══════════════════════════════════ -->
+<section class="parallax-section grain py-24 px-4 sm:px-8" id="producerSection">
+  <img id="producerBg" src="../media/become-producer-homepage.jpg" alt="" class="parallax-bg" style="filter:brightness(0.18) saturate(0.5);">
+  <div class="parallax-dim" style="background:linear-gradient(135deg,rgba(38,24,8,0.88),rgba(26,58,20,0.78));"></div>
+
+  <div class="relative max-w-7xl mx-auto" style="z-index:2;">
+    <div class="text-center mb-14 reveal">
+      <span style="display:inline-block;font-family:'DM Sans',sans-serif;font-size:11px;font-weight:600;letter-spacing:0.12em;text-transform:uppercase;background:rgba(122,173,90,0.15);color:#a8db78;border:1px solid rgba(122,173,90,0.3);padding:6px 16px;border-radius:50px;margin-bottom:14px;">Grow With Us</span>
+      <h2 style="font-family:'Caveat',cursive;font-size:clamp(38px,5.5vw,58px);font-weight:700;color:#fdf8f0;line-height:1.1;">Become a Producer</h2>
+    </div>
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-14 items-center">
+      <div class="reveal">
+        <p style="font-family:'Lora',serif;font-size:16px;color:rgba(253,248,240,0.78);line-height:1.85;margin-bottom:14px;">Are you a farmer or part of a township farming community? Partner with Roots and start earning a fair, proportional share of every sale.</p>
+        <p style="font-family:'Lora',serif;font-size:16px;color:rgba(253,248,240,0.78);line-height:1.85;margin-bottom:24px;">We handle the selling while you focus on growing. Submit your application and our team will be in touch within 48 hours.</p>
+        <ul style="list-style:none;padding:0;margin-bottom:32px;display:flex;flex-direction:column;gap:8px;">
+          <li class="leaf-li" style="color:rgba(253,248,240,0.72);">Proportional payouts — earn exactly what you contribute</li>
+          <li class="leaf-li" style="color:rgba(253,248,240,0.72);">Access to equipment at community prices</li>
+          <li class="leaf-li" style="color:rgba(253,248,240,0.72);">No upfront fees — free to join and list your produce</li>
+          <li class="leaf-li" style="color:rgba(253,248,240,0.72);">Support from our team every step of the way</li>
+        </ul>
+        <a href="contact_us.html#become-a-seller" class="btn-primary">Apply to Sell on Roots</a>
+      </div>
+      <div class="reveal" style="transition-delay:0.15s;display:flex;flex-direction:column;gap:14px;">
+        <div style="border-radius:18px;overflow:hidden;box-shadow:0 20px 48px rgba(0,0,0,0.4);">
+          <img src="../media/become-producer-homepage.jpg" alt="Township farmer" style="width:100%;height:280px;object-fit:cover;display:block;">
         </div>
-    </section>
-    <footer class="footer">
-            <p>Roots 2026</p>
-    </footer>
-    <script src="../scripts/scripts.js"></script>
+        <div class="grid grid-cols-3 gap-3">
+          <div class="stat-card">
+            <div style="font-family:'Caveat',cursive;font-size:34px;font-weight:700;color:#a8db78;line-height:1;">300+</div>
+            <div style="font-family:'DM Sans',sans-serif;font-size:10px;letter-spacing:0.08em;text-transform:uppercase;color:rgba(253,248,240,0.5);margin-top:4px;">Active farmers</div>
+          </div>
+          <div class="stat-card">
+            <div style="font-family:'Caveat',cursive;font-size:34px;font-weight:700;color:#a8db78;line-height:1;">14</div>
+            <div style="font-family:'DM Sans',sans-serif;font-size:10px;letter-spacing:0.08em;text-transform:uppercase;color:rgba(253,248,240,0.5);margin-top:4px;">Townships</div>
+          </div>
+          <div class="stat-card">
+            <div style="font-family:'Caveat',cursive;font-size:34px;font-weight:700;color:#a8db78;line-height:1;">R0</div>
+            <div style="font-family:'DM Sans',sans-serif;font-size:10px;letter-spacing:0.08em;text-transform:uppercase;color:rgba(253,248,240,0.5);margin-top:4px;">To join</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════
+     NEWSLETTER
+══════════════════════════════════ -->
+<section class="bg-linen py-20 px-4 sm:px-8">
+  <div class="max-w-7xl mx-auto">
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-14 items-center">
+      <div class="reveal">
+        <span class="tag-pill" style="margin-bottom:20px;display:inline-block;">Stay Informed</span>
+        <h2 style="font-family:'Caveat',cursive;font-size:clamp(32px,4.5vw,50px);font-weight:700;color:#3d2810;margin-bottom:16px;">Impact Newsletter</h2>
+        <p style="font-family:'Lora',serif;font-size:16px;color:#6b4a28;line-height:1.82;margin-bottom:12px;">Learn about our communities, how they are making progress, and the latest news from the farms.</p>
+        <p style="font-family:'Lora',serif;font-size:16px;color:#6b4a28;line-height:1.82;margin-bottom:12px;">Our newsletter connects you with farmers in different areas, sharing updates, success stories, and growing tips.</p>
+        <p style="font-family:'Lora',serif;font-size:14px;font-style:italic;color:#8b6340;margin-bottom:28px;">Read it on the webpage or sign up to receive a monthly copy.</p>
+        <a href="newsletter.html" class="btn-primary">Newsletter Page</a>
+      </div>
+      <div class="panel-wrap reveal" style="transition-delay:0.15s;">
+        <img data-parallax="0.12" src="../media/impact-homepage.jpg" alt="Newsletter">
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════
+     CONTACT
+══════════════════════════════════ -->
+<section class="bg-parchment py-20 px-4 sm:px-8">
+  <div class="max-w-7xl mx-auto">
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-14 items-center">
+      <div class="panel-wrap reveal">
+        <img data-parallax="0.12" src="../media/contact-homepage.jpeg" alt="Contact us">
+      </div>
+      <div class="reveal" style="transition-delay:0.15s;">
+        <span class="tag-pill" style="margin-bottom:20px;display:inline-block;">Get In Touch</span>
+        <h2 style="font-family:'Caveat',cursive;font-size:clamp(32px,4.5vw,50px);font-weight:700;color:#3d2810;margin-bottom:16px;">Any Suggestions?</h2>
+        <p style="font-family:'Lora',serif;font-size:16px;color:#6b4a28;line-height:1.82;margin-bottom:12px;">Any enquiries can be submitted through the contact form or by calling us directly.</p>
+        <p style="font-family:'Lora',serif;font-size:16px;color:#6b4a28;line-height:1.82;margin-bottom:12px;">Send through any recommendations or problems you might be experiencing.</p>
+        <p style="font-family:'Lora',serif;font-size:14px;font-style:italic;color:#8b6340;margin-bottom:28px;">We are always happy to help to improve the experience for our community.</p>
+        <a href="contact_us.html" class="btn-primary">Contact Us</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div id="footer-root"></div>
+<div id="toggle-root"></div>
+
+<!-- React + shared -->
+<script src="https://unpkg.com/react@18/umd/react.production.min.js" crossorigin></script>
+<script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js" crossorigin></script>
+<script src="../scripts/shared-components.js"></script>
+<script>
+  var mountDiv = document.createElement('div');
+  document.body.appendChild(mountDiv);
+  ReactDOM.createRoot(mountDiv).render(
+    React.createElement(RootsStore.StoreProvider, null,
+      ReactDOM.createPortal(React.createElement(RootsComponents.Navbar),        document.getElementById('navbar-root')),
+      ReactDOM.createPortal(React.createElement(RootsComponents.Footer),        document.getElementById('footer-root')),
+      ReactDOM.createPortal(React.createElement(RootsComponents.LowDataToggle), document.getElementById('toggle-root'))
+    )
+  );
+</script>
+
+<!-- Parallax + Reveal -->
+<script>
+(function() {
+  var lowData = function() { return document.body.classList.contains('low-data'); };
+
+  /* Hero parallax */
+  var heroBg = document.getElementById('heroBg');
+  function heroParallax() {
+    if (lowData() || !heroBg) return;
+    heroBg.style.transform = 'translateY(' + (window.pageYOffset * 0.38) + 'px)';
+  }
+
+  /* Producer section parallax */
+  var producerBg  = document.getElementById('producerBg');
+  var producerSec = document.getElementById('producerSection');
+  function producerParallax() {
+    if (lowData() || !producerBg || !producerSec) return;
+    var rect   = producerSec.getBoundingClientRect();
+    var offset = (rect.top + rect.height / 2 - window.innerHeight / 2) * 0.22;
+    producerBg.style.transform = 'translateY(' + offset + 'px)';
+  }
+
+  /* Panel images parallax */
+  var panels = document.querySelectorAll('.panel-wrap img[data-parallax]');
+  function panelParallax() {
+    if (lowData()) return;
+    panels.forEach(function(img) {
+      var factor = parseFloat(img.dataset.parallax) || 0.12;
+      var wrap   = img.closest('.panel-wrap');
+      if (!wrap) return;
+      var rect   = wrap.getBoundingClientRect();
+      var center = rect.top + rect.height / 2 - window.innerHeight / 2;
+      img.style.transform = 'translateY(' + (center * factor) + 'px) scale(1.14)';
+    });
+  }
+
+  /* Scroll reveal */
+  var reveals = document.querySelectorAll('.reveal');
+  if ('IntersectionObserver' in window) {
+    var io = new IntersectionObserver(function(entries) {
+      entries.forEach(function(e) {
+        if (e.isIntersecting) { e.target.classList.add('revealed'); io.unobserve(e.target); }
+      });
+    }, { threshold: 0.1 });
+    reveals.forEach(function(el) { io.observe(el); });
+  } else {
+    reveals.forEach(function(el) { el.classList.add('revealed'); });
+  }
+
+  /* Combined scroll handler */
+  function onScroll() {
+    heroParallax();
+    producerParallax();
+    panelParallax();
+  }
+
+  window.addEventListener('scroll', onScroll, { passive: true });
+  window.addEventListener('resize', onScroll, { passive: true });
+
+  /* Init on load */
+  onScroll();
+})();
+</script>
 </body>
 </html>
