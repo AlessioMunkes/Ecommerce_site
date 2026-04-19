@@ -226,8 +226,19 @@ function validateDelivery() {
         if (!pc)                         { setError('postalCode', 'Postal code is required');          ok = false; }
         else if (!/^\d{4}$/.test(pc))    { setError('postalCode', 'Enter a 4-digit postal code');     ok = false; }
     }
+    if (!ok) {
+        setTimeout(function() {
+            var firstError = document.querySelector('.field-error');
+            if (firstError && firstError.previousElementSibling) {
+                firstError.previousElementSibling.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                firstError.previousElementSibling.focus({ preventScroll: true });
+            }
+        }, 50);
+        return;
+    }
 
-    if (ok) goToStep(3);
+    goToStep(3);
+
 }
 
 /* ----------------------------------------------------------
@@ -312,7 +323,10 @@ function generateQR() {
    VALIDATE STEP 3 — PAYMENT
 ---------------------------------------------------------- */
 function validatePayment() {
-    if (activePayTab === 'card') {
+    var cardNameInput = document.getElementById('cardName');
+    var isCardTabVisible = cardNameInput && cardNameInput.offsetParent !== null;
+
+    if (isCardTabVisible) {
         var ids = ['cardName', 'cardNumber', 'cardExpiry', 'cardCVV'];
         clearAll(ids);
         var ok = true;
@@ -321,7 +335,7 @@ function validatePayment() {
 
         var numEl = document.getElementById('cardNumber');
         var num   = numEl ? numEl.value.replace(/\s/g, '') : '';
-        if (!num)             { setError('cardNumber', 'Card number is required');                  ok = false; }
+        if (!num)                   { setError('cardNumber', 'Card number is required');                  ok = false; }
         else if (num.length !== 16) { setError('cardNumber', 'Enter a valid 16-digit card number'); ok = false; }
 
         var expEl = document.getElementById('cardExpiry');
@@ -338,12 +352,26 @@ function validatePayment() {
 
         var cvvEl = document.getElementById('cardCVV');
         var cvv   = cvvEl ? cvvEl.value : '';
-        if (!cvv)                       { setError('cardCVV', 'CVV is required');                     ok = false; }
+        if (!cvv)                        { setError('cardCVV', 'CVV is required');                     ok = false; }
         else if (!/^\d{3,4}$/.test(cvv)) { setError('cardCVV', 'Enter a valid 3 or 4-digit CVV');    ok = false; }
 
-        if (!ok) return;
+        if (!ok) {
+            // Auto-scroll and focus the first missing/invalid input
+            setTimeout(function() {
+                var firstError = document.querySelector('.field-error');
+                if (firstError && firstError.previousElementSibling) {
+                    // Scroll to the error
+                    firstError.previousElementSibling.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                    // Click into the input box
+                    firstError.previousElementSibling.focus({ preventScroll: true });
+                }
+            }, 50);
+            
+            return; // Stop here if there are errors
+        }
     }
 
+    // If card tab is hidden (EFT/Wallet) OR if card is valid, proceed to step 4!
     goToStep(4);
 }
 
@@ -388,7 +416,7 @@ function renderReview() {
     } else {
         deliveryHTML =
             rlRow('Method',  'Collection (Free)') +
-            rlRow('Address', '12 Harvest Road, Khayelitsha, CT');
+            rlRow('Address', '12 Harvest Road, Epping, CT');
     }
     deliveryHTML +=
         rlRow('Contact', (document.getElementById('firstName') ? document.getElementById('firstName').value : '') + ' ' +
@@ -439,6 +467,10 @@ function placeOrder() {
             if (termsLabel) { termsLabel.after(span); }
             else { termsCheck.parentElement.after(span); }
         }
+        setTimeout(function() {
+                var termsError = document.querySelector('.terms-error');
+                if (termsError) termsError.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            }, 50);
         return;
     }
 

@@ -548,7 +548,7 @@ function renderReview() {
     } else {
         deliveryHTML =
             rlRow('Method', 'Collection (Free)') +
-            rlRow('Address', '12 Harvest Road, Khayelitsha, CT');
+            rlRow('Address', '12 Harvest Road, Epping, CT');
     }
     deliveryHTML +=
         rlRow('Contact', document.getElementById('firstName').value + ' ' + document.getElementById('lastName').value) +
@@ -649,8 +649,7 @@ const PRODUCTS = {
             { label: 'Origin',  value: 'Khayelitsha, CT' },
         ],
         farmer: {
-            name:       'Khayelitsha Greens Collective',
-            collective: 'Roots Collective',
+            name:       'Khayelitsha Greens Farm',
             location:   'Khayelitsha, Cape Town',
             note:       'A community of 18 small-plot farmers pooling their harvests since 2021 — known for their chemical-free growing practices and consistent year-round supply.',
         },
@@ -692,9 +691,8 @@ const PRODUCTS = {
         ],
         farmer: {
             name:       'Mitchells Plain Growers',
-            collective: 'Roots Collective',
             location:   'Mitchells Plain, Cape Town',
-            note:       'A family-led collective of 11 plots specialising in tomatoes and peppers, using rainwater harvesting and natural compost to keep their produce clean and affordable.',
+            note:       'A family-led farm of 11 plots specialising in tomatoes and peppers, using rainwater harvesting and natural compost to keep their produce clean and affordable.',
         },
         description: `
             <p>Sun-ripened Roma and round tomatoes grown on open plots in Mitchells Plain. These tomatoes are picked at peak ripeness and delivered within 24 hours — meaning you get full flavour, not the pale, early-picked tomatoes typical of supermarkets.</p>
@@ -734,9 +732,8 @@ const PRODUCTS = {
         ],
         farmer: {
             name:       'Gugulethu Citrus Growers',
-            collective: 'Roots Collective',
             location:   'Gugulethu, Cape Town',
-            note:       'This collective has been growing Eureka lemons since 2019, using grey water irrigation and organic compost to produce juicy, thick-skinned lemons year-round.',
+            note:       'This farm has been growing Eureka lemons since 2019, using grey water irrigation and organic compost to produce juicy, thick-skinned lemons year-round.',
         },
         description: `
             <p>Bright, juicy Eureka lemons grown on community plots in Gugulethu. Each kilogram contains approximately 6–8 full-sized lemons with thick, fragrant skins and minimal seeds — ideal for both juice and zest.</p>
@@ -776,9 +773,8 @@ const PRODUCTS = {
         ],
         farmer: {
             name:       'Langa Community Gardens',
-            collective: 'Roots Collective',
             location:   'Langa, Cape Town',
-            note:       'One of the oldest community garden networks in Cape Town, the Langa collective has been growing squash and pumpkins for over a decade using traditional composting methods.',
+            note:       'One of the oldest community garden networks in Cape Town, Langa has been growing squash and pumpkins for over a decade using traditional composting methods.',
         },
         description: `
             <p>Sweet, dense butternuts grown on community plots in Langa. Each one is harvested by hand once fully mature, resulting in a deep orange flesh with a naturally sweet, nutty flavour.</p>
@@ -817,13 +813,12 @@ const PRODUCTS = {
             { label: 'Origin',   value: 'Khayelitsha, CT' },
         ],
         farmer: {
-            name:       'Khayelitsha Grain Collective',
-            collective: 'Roots Collective',
+            name:       'Khayelitsha Grain',
             location:   'Khayelitsha, Cape Town',
-            note:       'This collective revived traditional sorghum cultivation in the Western Cape, growing red sorghum using drought-resistant methods and minimal water inputs.',
+            note:       'This farm revived traditional sorghum cultivation in the Western Cape, growing red sorghum using drought-resistant methods and minimal water inputs.',
         },
         description: `
-            <p>Whole grain red sorghum, a traditional South African staple with deep cultural roots. Grown by the Khayelitsha Grain Collective using drought-resistant cultivation methods passed down through generations, this sorghum is naturally gluten-free and highly nutritious.</p>
+            <p>Whole grain red sorghum, a traditional South African staple with deep cultural roots. Grown by Khayelitsha Grain using drought-resistant cultivation methods passed down through generations, this sorghum is naturally gluten-free and highly nutritious.</p>
             <p>Use to make traditional porridge (ting), fermented sorghum beer, or as a high-fibre substitute for rice. Can also be ground into flour for baking. Sorghum has a mildly earthy, slightly sweet flavour and a satisfying texture.</p>
             <p>Storage: store in an airtight container in a cool, dry place. Keeps for up to 12 months. Once cooked, refrigerate and consume within 3 days.</p>
         `,
@@ -860,7 +855,6 @@ const PRODUCTS = {
         ],
         farmer: {
             name:       'Roots Seed Initiative',
-            collective: 'Roots Collective',
             location:   'Cape Town',
             note:       'Seeds are selected and packaged by the Roots Seed Initiative — a programme that sources open-pollinated, non-GMO varieties suitable for small-plot township growing conditions.',
         },
@@ -902,9 +896,8 @@ const PRODUCTS = {
         ],
         farmer: {
             name:       'Roots Equipment Store',
-            collective: 'Roots Collective',
             location:   'Cape Town',
-            note:       'Equipment sourced in bulk by the Roots collective and sold at community pricing — no retail markup, just the cost of getting the right tools into the right hands.',
+            note:       'Equipment sourced in bulk by Roots and sold at community pricing — no retail markup, just the cost of getting the right tools into the right hands.',
         },
         description: `
             <p>Durable nitrile-coated cotton gardening gloves designed for everyday small-plot farming tasks. The nitrile palm coating provides excellent grip on wet and dry surfaces while protecting against thorns, soil abrasion, and minor cuts. The breathable cotton back keeps hands cool during long working sessions.</p>
@@ -943,9 +936,8 @@ const PRODUCTS = {
         ],
         farmer: {
             name:       'Roots Equipment Store',
-            collective: 'Roots Collective',
             location:   'Cape Town',
-            note:       'Sourced through a bulk community purchase programme — this hoe is the same model used daily across Roots collective plots in Khayelitsha and Mitchells Plain.',
+            note:       'Sourced through a bulk community purchase programme — this hoe is the same model used daily across plots in Khayelitsha and Mitchells Plain.',
         },
         description: `
             <p>A sturdy, full-length garden hoe with a forged steel head and smooth hardwood handle — the essential tool for breaking soil, making furrows, and clearing weeds between rows. The 15 cm steel blade is thick enough to cut through compacted township soil without bending.</p>
@@ -984,12 +976,11 @@ const PRODUCTS = {
         ],
         farmer: {
             name:       'Gugulethu Grain Growers',
-            collective: 'Roots Collective',
             location:   'Gugulethu, Cape Town',
-            note:       'A smaller specialist grain collective focused exclusively on white sorghum, using traditional low-irrigation growing methods developed over many seasons.',
+            note:       'A smaller specialist grain farm focused exclusively on white sorghum, using traditional low-irrigation growing methods developed over many seasons.',
         },
         description: `
-            <p>Premium white sorghum grain, grown using traditional low-input methods by the Gugulethu Grain Growers collective. White sorghum has a milder, sweeter flavour than red varieties, making it more versatile in both savoury and sweet applications.</p>
+            <p>Premium white sorghum grain, grown using traditional low-input methods by the Gugulethu Grain Growers. White sorghum has a milder, sweeter flavour than red varieties, making it more versatile in both savoury and sweet applications.</p>
             <p>Use for traditional porridge, flatbreads, baked goods, or as a nutritious gluten-free side grain. White sorghum flour is increasingly popular in health-conscious baking. It cooks similarly to rice but with a chewier, more satisfying texture.</p>
             <p>Storage: store in an airtight container in a cool, dry pantry. Shelf life is 12+ months when stored correctly. Cooked sorghum keeps in the fridge for up to 4 days.</p>
         `,
@@ -1025,9 +1016,8 @@ const PRODUCTS = {
         ],
         farmer: {
             name:       'Nyanga Community Farm',
-            collective: 'Roots Collective',
             location:   'Nyanga, Cape Town',
-            note:       'A 24-plot collective in Nyanga growing cabbages year-round using rainwater collection and natural pest control — no synthetic chemicals used on any plot.',
+            note:       'A 24-plot in Nyanga growing cabbages year-round using rainwater collection and natural pest control — no synthetic chemicals used on any plot.',
         },
         description: `
             <p>Dense, crisp cabbages harvested fresh from community plots in Nyanga. We grow a mix of drumhead (smooth-leaf) and savoy (crinkle-leaf) varieties depending on the season, both known for their firm texture and full flavour.</p>
@@ -1159,7 +1149,7 @@ function renderFarmerCard(p) {
         <div class="farmer-info">
             <span class="farmer-label">Grown by</span>
             <span class="farmer-name">${p.farmer.name}</span>
-            <span class="farmer-collective">${p.farmer.collective} &middot; ${p.farmer.location}</span>
+
             <p class="farmer-note">${p.farmer.note}</p>
         </div>`;
 }

@@ -26,8 +26,7 @@ var PRODUCTS = {
             { label: 'Origin',  value: 'Khayelitsha, CT' },
         ],
         farmer: {
-            name:       'Khayelitsha Greens Collective',
-            collective: 'Roots Collective',
+            name:       'Khayelitsha Greens',
             location:   'Khayelitsha, Cape Town',
             note:       'A community of 18 small-plot farmers pooling their harvests since 2021 — known for their chemical-free growing practices and consistent year-round supply.',
         },
@@ -65,9 +64,8 @@ var PRODUCTS = {
         ],
         farmer: {
             name:       'Mitchells Plain Growers',
-            collective: 'Roots Collective',
             location:   'Mitchells Plain, Cape Town',
-            note:       'A family-led collective of 11 plots specialising in tomatoes and peppers, using rainwater harvesting and natural compost to keep their produce clean and affordable.',
+            note:       'A family-led farm of 11 plots specialising in tomatoes and peppers, using rainwater harvesting and natural compost to keep their produce clean and affordable.',
         },
         description: 'Sun-ripened Roma and round tomatoes grown on open plots in Mitchells Plain. Picked at peak ripeness and delivered within 24 hours — full flavour guaranteed. Perfect for sauces, salads, braises, and braai side dishes. Storage: room temperature until fully ripe, then refrigerate and use within 3 days.',
         nutrition: [
@@ -103,9 +101,8 @@ var PRODUCTS = {
         ],
         farmer: {
             name:       'Gugulethu Citrus Growers',
-            collective: 'Roots Collective',
             location:   'Gugulethu, Cape Town',
-            note:       'This collective has been growing Eureka lemons since 2019, using grey water irrigation and organic compost to produce juicy, thick-skinned lemons year-round.',
+            note:       'This farm has been growing Eureka lemons since 2019, using grey water irrigation and organic compost to produce juicy, thick-skinned lemons year-round.',
         },
         description: 'Bright, juicy Eureka lemons grown on community plots in Gugulethu. Each kilogram contains approximately 6–8 full-sized lemons with thick, fragrant skins and minimal seeds — ideal for both juice and zest. Use in cooking, baking, drinks, and home remedies. Storage: room temperature for 1 week, or refrigerated in a sealed bag for up to 3 weeks.',
         nutrition: [
@@ -141,9 +138,8 @@ var PRODUCTS = {
         ],
         farmer: {
             name:       'Langa Community Gardens',
-            collective: 'Roots Collective',
             location:   'Langa, Cape Town',
-            note:       'One of the oldest community garden networks in Cape Town, the Langa collective has been growing squash and pumpkins for over a decade using traditional composting methods.',
+            note:       'One of the oldest community garden networks in Cape Town, the Langa garden has been growing squash and pumpkins for over a decade using traditional composting methods.',
         },
         description: 'Sweet, dense butternuts grown on community plots in Langa. Each one is harvested by hand once fully mature, resulting in a deep orange flesh with a naturally sweet, nutty flavour. Exceptional roasted whole, cubed in soups and stews, or mashed as a side. An excellent source of Vitamin A and fibre.',
         nutrition: [
@@ -179,7 +175,6 @@ var PRODUCTS = {
         ],
         farmer: {
             name:       'Paarl Valley Grain Co.',
-            collective: 'Roots Collective',
             location:   'Paarl, Western Cape',
             note:       'A small grain producer in the Paarl Valley using heritage maize varieties and stone-grinding techniques to produce a full-flavour meal with a natural coarse texture.',
         },
@@ -215,9 +210,8 @@ var PRODUCTS = {
         ],
         farmer: {
             name:       'Stellenbosch Heritage Grains',
-            collective: 'Roots Collective',
             location:   'Stellenbosch, Western Cape',
-            note:       'Specialising in heritage grain varieties, this small collective grows red sorghum using traditional dry-farming methods with no irrigation and no synthetic inputs.',
+            note:       'Specialising in heritage grain varieties, this small farm grows red sorghum using traditional dry-farming methods with no irrigation and no synthetic inputs.',
         },
         description: 'Traditionally processed red sorghum from heritage varieties grown in Stellenbosch. Used to make umqombothi, porridge, and flatbreads. Gluten-free and high in antioxidants. A staple grain with deep roots in South African food culture.',
         nutrition: [
@@ -251,7 +245,6 @@ var PRODUCTS = {
         ],
         farmer: {
             name:       'Roots Seed Library',
-            collective: 'Roots Collective',
             location:   'Cape Town, Western Cape',
             note:       'Our community seed library sources, saves, and distributes open-pollinated seeds from local growers — supporting food sovereignty and biodiversity across township gardens.',
         },
@@ -284,8 +277,7 @@ var PRODUCTS = {
             { label: 'Origin',   value: 'South Africa' },
         ],
         farmer: {
-            name:       'Roots Tools Collective',
-            collective: 'Roots Collective',
+            name:       'Roots Tools',
             location:   'Cape Town, Western Cape',
             note:       'We source durable, locally made hand tools from South African manufacturers and distribute them directly to community gardeners at fair prices.',
         },
@@ -319,9 +311,8 @@ var PRODUCTS = {
         ],
         farmer: {
             name:       'Nyanga Community Farm',
-            collective: 'Roots Collective',
             location:   'Nyanga, Cape Town',
-            note:       'A 24-plot collective in Nyanga growing cabbages year-round using rainwater collection and natural pest control — no synthetic chemicals used on any plot.',
+            note:       'A 24-plot farm in Nyanga growing cabbages year-round using rainwater collection and natural pest control — no synthetic chemicals used on any plot.',
         },
         description: 'Dense, crisp cabbages harvested fresh from community plots in Nyanga. A South African kitchen essential — perfect for coleslaw, braised dishes, stews, vetkoek fillings, and boontjiesop. Storage: keep whole in the fridge crisper for up to 2 weeks. Once cut, wrap tightly and use within 4 days.',
         nutrition: [
