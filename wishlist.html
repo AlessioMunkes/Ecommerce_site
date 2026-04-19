@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Shopping Cart — Roots</title>
+  <title>Wishlist — Roots</title>
   <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@400;600;700&family=Lora:ital,wght@0,400;0,500;0,600;1,400&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
   <script src="https://cdn.tailwindcss.com"></script>
   <script>
@@ -112,26 +112,37 @@
 
 <script src="https://unpkg.com/react@18/umd/react.production.min.js" crossorigin></script>
 <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js" crossorigin></script>
-<script src="../scripts/shared-components.js"></script>
+<script src="scripts/shared-components.js"></script>
 <script>
 var e             = React.createElement;
+var useState      = React.useState;
 var StoreProvider = RootsStore.StoreProvider;
 var useStore      = RootsStore.useStore;
 
-function CartApp() {
+function WishlistApp() {
   var store = useStore();
-  var cart       = store.cart;
-  var cartTotal  = store.cartTotal;
-  var removeFromCart = store.removeFromCart;
-  var setQty         = store.setQty;
-  var clearCart      = store.clearCart;
+  var wishlist            = store.wishlist;
+  var addToCart           = store.addToCart;
+  var removeFromWishlist  = store.removeFromWishlist;
+  var movedState = useState(null);
+  var movedId    = movedState[0];
+  var setMovedId = movedState[1];
+
+  function moveToCart(item) {
+    addToCart(item, 1);
+    setMovedId(item.id);
+    setTimeout(function() {
+      removeFromWishlist(item.id);
+      setMovedId(null);
+    }, 900);
+  }
 
   /* Empty state */
-  if (cart.length === 0) {
+  if (wishlist.length === 0) {
     return e('div', { className: 'flex-1 flex flex-col items-center justify-center px-4 py-24 text-center' },
-      e('div', { className: 'w-20 h-20 rounded-full bg-moss-50 border border-moss-200 flex items-center justify-center text-4xl font-black text-moss-600 mx-auto mb-6 shadow-sm font-sans' }, '0'),
-      e('h2', { className: 'font-caveat text-4xl font-bold text-bark-800 mb-3' }, 'Your cart is empty'),
-      e('p', { className: 'font-serif text-[15px] text-soil-700 mb-8 max-w-sm mx-auto leading-relaxed' }, 'Add some community-grown products to get started.'),
+      e('div', { className: 'w-20 h-20 rounded-full bg-moss-50 border border-moss-200 flex items-center justify-center text-4xl font-black text-moss-600 mx-auto mb-6 shadow-sm' }, '★'),
+      e('h2', { className: 'font-caveat text-4xl font-bold text-bark-800 mb-3' }, 'Your wishlist is empty'),
+      e('p', { className: 'font-serif text-[15px] text-soil-700 mb-8 max-w-sm mx-auto leading-relaxed' }, 'Save items while browsing products — click the star on any product card.'),
       e('a', { 
         href: 'produce_products.html', 
         className: 'inline-flex items-center justify-center bg-gradient-to-br from-moss-700 to-moss-600 text-parchment-50 font-sans font-bold uppercase tracking-widest text-[13px] px-8 py-3.5 rounded-full transition-all shadow-md hover:shadow-lg hover:-translate-y-0.5' 
@@ -142,67 +153,32 @@ function CartApp() {
   /* Populated state */
   return e('div', { className: 'max-w-3xl mx-auto w-full px-4 sm:px-6 py-12 pb-24' },
     e('div', { className: 'text-center mb-10' },
-      e('span', { className: 'tag-pill mb-4' }, 'Your Order'),
-      e('h1', { className: 'font-caveat text-[clamp(42px,5vw,56px)] font-bold text-bark-800 mb-2 leading-none' }, 'Shopping Cart'),
-      e('a', { href: 'produce_products.html', className: 'inline-block mt-2 text-[11px] font-sans font-bold uppercase tracking-widest text-moss-600 hover:text-moss-700 hover:underline underline-offset-4 transition-colors' }, '← Continue Shopping')
+      e('span', { className: 'tag-pill mb-4' }, 'Saved Items'),
+      e('h1', { className: 'font-caveat text-[clamp(42px,5vw,56px)] font-bold text-bark-800 mb-2 leading-none' }, 'My Wishlist'),
+      e('a', { href: 'cart.html', className: 'inline-block mt-2 text-[11px] font-sans font-bold uppercase tracking-widest text-moss-600 hover:text-moss-700 hover:underline underline-offset-4 transition-colors' }, 'View Cart →')
     ),
-
-    /* Items */
-    e('div', { className: 'flex flex-col gap-4 mb-8' },
-      cart.map(function(item) {
-        var lineTotal = (item.price * item.qty).toFixed(2);
-        return e('div', { key: item.id, className: 'bg-white border border-soil-600/15 rounded-[20px] p-5 flex flex-col sm:flex-row items-start sm:items-center gap-5 hover:border-moss-400/40 shadow-sm transition-all' },
+    e('div', { className: 'flex flex-col gap-4' },
+      wishlist.map(function(item) {
+        var isMoved = movedId === item.id;
+        return e('div', { key: item.id, className: 'bg-white border border-soil-600/15 rounded-[20px] p-5 flex items-center gap-5 hover:border-moss-400/40 shadow-sm transition-all' },
           e('div', { className: 'flex-1 min-w-0' },
             e('p', { className: 'text-[16px] font-bold text-bark-800 font-sans truncate leading-tight' }, item.name),
-            e('p', { className: 'text-[13px] text-soil-600 mt-1 font-sans font-medium' }, 'R' + parseFloat(item.price).toFixed(2) + ' each')
+            e('p', { className: 'text-moss-700 font-black text-lg mt-1 font-sans' }, 'R' + parseFloat(item.price).toFixed(2))
           ),
-          
-          e('div', { className: 'flex items-center gap-4 w-full sm:w-auto justify-between sm:justify-end' },
-            e('div', { className: 'flex items-center rounded-xl overflow-hidden border border-soil-600/20 bg-parchment-50 shadow-inner shrink-0' },
-              e('button', {
-                onClick: function() { item.qty <= 1 ? removeFromCart(item.id) : setQty(item.id, item.qty - 1); },
-                className: 'w-9 h-9 flex items-center justify-center text-soil-600 hover:bg-moss-100 hover:text-moss-700 transition-colors font-bold text-lg'
-              }, '−'),
-              e('span', { className: 'w-10 text-center text-sm font-bold text-bark-800 border-x border-soil-600/20 leading-9 bg-white font-sans' }, item.qty),
-              e('button', {
-                onClick: function() { setQty(item.id, item.qty + 1); },
-                className: 'w-9 h-9 flex items-center justify-center text-soil-600 hover:bg-moss-100 hover:text-moss-700 transition-colors font-bold text-lg'
-              }, '+')
-            ),
-            e('span', { className: 'text-lg font-black text-moss-700 sm:w-24 text-right shrink-0 font-sans' }, 'R' + lineTotal),
+          e('div', { className: 'flex items-center gap-2.5 shrink-0' },
             e('button', {
-              onClick: function() { removeFromCart(item.id); },
-              className: 'w-10 h-10 flex items-center justify-center rounded-full text-soil-500 hover:text-red-600 hover:bg-red-50 transition-colors text-xl font-bold bg-parchment-50 border border-soil-600/10 shrink-0 ml-2 sm:ml-0',
+              onClick: function() { moveToCart(item); },
+              className: 'px-5 py-2.5 rounded-full text-[11px] font-bold uppercase tracking-widest transition-all font-sans shadow-sm ' +
+                (isMoved ? 'bg-moss-700 text-parchment-50 transform -translate-y-0.5' : 'bg-gradient-to-br from-moss-700 to-moss-600 text-parchment-50 hover:-translate-y-0.5 hover:shadow-md')
+            }, isMoved ? 'Added!' : 'Add to Cart'),
+            e('button', {
+              onClick: function() { removeFromWishlist(item.id); },
+              className: 'w-10 h-10 flex items-center justify-center rounded-full text-soil-500 hover:text-red-600 hover:bg-red-50 transition-colors text-xl font-bold bg-parchment-50 border border-soil-600/10',
               title: 'Remove'
             }, '×')
           )
         );
       })
-    ),
-
-    /* Summary */
-    e('div', { className: 'bg-parchment-50 border border-soil-600/15 rounded-[24px] p-6 sm:p-8 shadow-[0_8px_24px_rgba(58,35,12,0.04)] relative overflow-hidden' },
-      /* Inner grain texture for the summary box */
-      e('div', { className: 'absolute inset-0 pointer-events-none opacity-50', style: { backgroundImage: 'url("data:image/svg+xml,%3Csvg xmlns=\'http://www.w3.org/2000/svg\' width=\'300\' height=\'300\'%3E%3Cfilter id=\'n\'%3E%3CfeTurbulence type=\'fractalNoise\' baseFrequency=\'0.85\' numOctaves=\'4\' stitchTiles=\'stitch\'/%3E%3C/filter%3E%3Crect width=\'300\' height=\'300\' filter=\'url(%23n)\' opacity=\'0.03\'/%3E%3C/svg%3E")'} }),
-      
-      e('div', { className: 'relative z-10' },
-        e('div', { className: 'flex justify-between text-[15px] font-sans text-soil-700 mb-3' },
-          e('span', null, 'Subtotal'), e('span', { className: 'font-semibold text-bark-800' }, 'R' + cartTotal.toFixed(2))
-        ),
-        e('div', { className: 'flex justify-between font-black text-bark-800 text-2xl border-t border-soil-600/10 pt-4 mt-4 font-sans items-center' },
-          e('span', null, 'Total'), e('span', { className: 'text-moss-700 text-3xl' }, 'R' + cartTotal.toFixed(2))
-        ),
-        e('div', { className: 'flex flex-col sm:flex-row gap-4 mt-8' },
-          e('button', {
-            onClick: clearCart,
-            className: 'px-6 py-3.5 rounded-full border-2 border-red-200 text-red-600 text-[11px] font-bold uppercase tracking-widest hover:bg-red-50 hover:border-red-300 transition-all font-sans text-center'
-          }, 'Clear Cart'),
-          e('a', {
-            href: 'checkout.html',
-            className: 'flex-1 bg-gradient-to-br from-moss-700 to-moss-600 text-parchment-50 text-[13px] font-bold uppercase tracking-widest rounded-full py-3.5 text-center shadow-md hover:shadow-lg hover:-translate-y-0.5 transition-all font-sans'
-          }, 'Proceed to Checkout')
-        )
-      )
     )
   );
 }
@@ -216,7 +192,7 @@ ReactDOM.createRoot(document.getElementById('app-root')).render(
     ReactDOM.createPortal(e(RootsComponents.Navbar),        navRoot),
     ReactDOM.createPortal(e(RootsComponents.Footer),        footRoot),
     ReactDOM.createPortal(e(RootsComponents.LowDataToggle), toggleRoot),
-    e(CartApp)
+    e(WishlistApp)
   )
 );
 </script>
