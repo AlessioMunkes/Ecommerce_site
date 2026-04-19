@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About Us</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Lora&family=Caveat&family=DM+Sans&display=swap" rel="stylesheet">
+    <style>
+        body {
+            background-color: #E7D6B5; /* warm parchment */
+            font-family: 'Lora', serif;
+            scroll-behavior: smooth;
+        }
+        button {
+            background-color: #8B6A4A; /* soil */
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        button:hover {
+            background-color: #5C4B3C; /* bark */
+        }
+        /* Parallax effect */
+        .parallax {
+            background-image: url('parallax-background.jpg');
+            height: 500px;
+            background-attachment: fixed;
+            background-position: center;
+            background-repeat: no-repeat;
+            background-size: cover;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>About Us</h1>
+    </header>
+    <section class="parallax"></section>
+    <section>
+        <h2>Our Story</h2>
+        <p>Welcome to our site!</p>
+        <button>Learn More</button>
+    </section>
+    <footer>
+        <p>&copy; 2026 Ecommerce Site</p>
+    </footer>
+</body>
+</html>
